@@ -1,6 +1,5 @@
-import React from 'react';
 import { ArrowRight, Play, Mic, Brain, Shield, BarChart3 } from 'lucide-react';
-import PrimaryButton from "@/common/PrimaryButton";
+import Button from "@/common/Button";
 import micHeroImg from "@/assets/microphone.png";
 import farSystemsLogo from "@/assets/banner logo.png";
 import MicrophoneAcousticVisualizer from "./MicrophoneAcousticVisualizer";
@@ -36,7 +35,7 @@ const Banner = () => {
         {/* Left Column: Headlines & Call-to-Actions */}
         <div className="lg:col-span-4 flex flex-col gap-8 sm:gap-12 lg:gap-18 order-1">
 
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[42px] xl:text-5xl font-bold uppercase tracking-tight leading-[1.35] sm:leading-[1.4]">
+          <h1 className="text-2xl py-4 sm:text-3xl md:text-4xl lg:text-[42px] xl:text-5xl font-bold uppercase tracking-tight leading-[1.35] sm:leading-[1.4]">
             <span className="block text-white">VOICE INTELLIGENCE.</span>
             <span className="block text-gradient">REAL VISIBILITY.</span>
             <span className="block text-white">MEANINGFUL IMPACT.</span>
@@ -50,16 +49,16 @@ const Banner = () => {
           </div>
 
           <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 sm:gap-4 pt-2">
-            <PrimaryButton
+            <Button
               variant="primary"
               size="lg"
               className="text-black! h-12! sm:h-13! w-full sm:w-auto justify-center"
               rightIcon={<ArrowRight size={16} className="text-black stroke-[2.5]" />}
             >
               EXPLORE SOLUTIONS
-            </PrimaryButton>
+            </Button>
 
-            <PrimaryButton
+            <Button
               variant="outline"
               size="lg"
               className="h-12! sm:h-13! w-full sm:w-auto justify-center"
@@ -70,7 +69,7 @@ const Banner = () => {
               }
             >
               WATCH OVERVIEW
-            </PrimaryButton>
+            </Button>
           </div>
 
         </div>
@@ -123,7 +122,6 @@ const Banner = () => {
             </div>
           </div>
         </div>
-
       </div>
     </section>
   );

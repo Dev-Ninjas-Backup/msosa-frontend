@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { ChevronDown, Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import CommonWrapper from "@/common/CommonWrapper";
-import PrimaryButton from "@/common/PrimaryButton";
+import Button from "@/common/Button";
 import logo from "@/assets/logo.png";
 
 const Navbar: React.FC = () => {
@@ -170,18 +170,14 @@ const Navbar: React.FC = () => {
 
             <div className="flex items-center gap-2 xl:gap-4">
               <Link to="/login">
-                <PrimaryButton variant="outline" size="lg">
+                <Button variant="outline" size="lg">
                   LOGIN
-                </PrimaryButton>
+                </Button>
               </Link>
               <Link to="/register">
-                <PrimaryButton
-                  variant="primary"
-                  size="lg"
-                  className="text-black!"
-                >
+                <Button variant="primary" size="lg" className="text-black!">
                   GET STARTED
-                </PrimaryButton>
+                </Button>
               </Link>
             </div>
           </div>
@@ -315,20 +311,14 @@ const Navbar: React.FC = () => {
 
             <div className="flex flex-col gap-3">
               <Link to="/login" onClick={closeMobileMenu}>
-                <PrimaryButton
-                  variant="outline"
-                  className="w-full border-secondary-brand text-primary-brand hover:text-white hover:bg-white/5"
-                >
+                <Button variant="outline" fullWidth>
                   LOGIN
-                </PrimaryButton>
+                </Button>
               </Link>
               <Link to="/register" onClick={closeMobileMenu}>
-                <PrimaryButton
-                  variant="primary"
-                  className="w-full text-[#000000]"
-                >
+                <Button variant="primary" fullWidth className="text-black!">
                   GET STARTED
-                </PrimaryButton>
+                </Button>
               </Link>
             </div>
           </nav>

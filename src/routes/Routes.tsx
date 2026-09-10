@@ -70,6 +70,14 @@ const routes = createBrowserRouter([
     ),
   },
   {
+    path: "/signup",
+    element: (
+      <Suspense fallback={<AuthSkeleton />}>
+        <Register />
+      </Suspense>
+    ),
+  },
+  {
     path: "/forgot-password",
     element: (
       <Suspense fallback={<AuthSkeleton />}>

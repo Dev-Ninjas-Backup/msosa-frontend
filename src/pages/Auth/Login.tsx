@@ -3,8 +3,9 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { KeyRound, Eye, EyeOff, Loader2 } from "lucide-react";
+import { KeyRound, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
+import Button from "@/common/Button";
 import toplightImg from "@/assets/toplight.png";
 
 // Inline SVG for Google logo
@@ -143,8 +144,7 @@ export default function LoginPage() {
                   Password
                 </label>
                 <Link
-                  // to="/forgot-password"
-                  to="/login"
+                  to="/forgot-password"
                   className="text-primary-brand text-xs font-medium hover:underline transition-colors"
                 >
                   Forgot password?
@@ -192,21 +192,16 @@ export default function LoginPage() {
             </div>
           </div>
 
-          {/* Sign In Button */}
-          <button
+          <Button
             type="submit"
-            disabled={isSubmitting}
-            className="w-full h-13 bg-brand-gradient hover:opacity-95 text-black text-base font-semibold uppercase tracking-wider rounded-xl shadow-[0px_0px_20px_0px_rgba(197,160,89,0.25)] flex items-center justify-center gap-2 cursor-pointer transition-all duration-200 active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed"
+            variant="primary"
+            size="xl"
+            fullWidth
+            isLoading={isSubmitting}
+            className="uppercase tracking-wider rounded-xl!"
           >
-            {isSubmitting ? (
-              <>
-                <Loader2 className="size-5 animate-spin text-black" />
-                <span>Signing in...</span>
-              </>
-            ) : (
-              <span>Sign In</span>
-            )}
-          </button>
+            {isSubmitting ? "Signing in..." : "Sign In"}
+          </Button>
         </form>
 
         {/* Footer Link */}

@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { FaPlay } from "react-icons/fa";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import ReactCalendar from "react-calendar";
-import PrimaryButton from "@/common/PrimaryButton";
+import Button from "@/common/Button";
 
 interface FilterDatePickerProps {
   startDate: Date;
@@ -120,7 +120,7 @@ export function FilterDatePicker({
           </div>
 
           <div className="mt-3 flex gap-2">
-            <PrimaryButton
+            <Button
               variant="outline"
               className="flex-1 h-10 rounded-lg text-sm font-semibold border border-gray-200 text-primary-text"
               onClick={() => {
@@ -129,8 +129,8 @@ export function FilterDatePicker({
               }}
             >
               Reset
-            </PrimaryButton>
-            <PrimaryButton
+            </Button>
+            <Button
               variant="primary"
               className="flex-1 h-10 text-sm font-semibold bg-brand-gradient hover:opacity-90 text-white shadow-sm rounded-lg"
               onClick={() => {
@@ -141,7 +141,7 @@ export function FilterDatePicker({
               }}
             >
               Apply
-            </PrimaryButton>
+            </Button>
           </div>
 
           <style>{`
