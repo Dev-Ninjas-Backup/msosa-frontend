@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Pagination from "@/common/Pagination";
+import Input from "@/ui/Input";
 
 // ============================================
 // 📦 Type Definitions
@@ -332,17 +333,18 @@ const DynamicTable = <T extends Record<string, unknown>>({
 
         <div className="flex items-center gap-3 ml-auto">
           {searchable && (
-            <div className="relative w-full max-w-[280px]">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <input
+            <div className="w-full max-w-[280px]">
+              <Input
                 type="text"
+                variant="search"
                 placeholder={searchPlaceholder}
                 value={searchQuery}
                 onChange={(e) => {
                   setSearchQuery(e.target.value);
                   setCurrentPage(1);
                 }}
-                className="w-full pl-10 pr-4 py-2 bg-light-bg border border-border rounded-lg text-sm focus:outline-none focus:ring-4 focus:ring-primary-brand/10 focus:bg-primary-bg text-primary-text transition-all"
+                leftIcon={<Search className="h-4 w-4 text-gray-400" />}
+                className="focus:ring-4 focus:ring-primary-brand/10 focus:bg-primary-bg"
               />
             </div>
           )}

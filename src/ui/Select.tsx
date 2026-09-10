@@ -4,6 +4,7 @@ import { FaCaretDown } from "react-icons/fa";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 import Button from "@/ui/Button";
+import Input from "@/ui/Input";
 import {
   Popover,
   PopoverContent,
@@ -146,8 +147,9 @@ const Select = ({
         {searchable && (
           <div className="flex items-center border-b border-border px-3 h-10">
             <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
-            <input
-              className="flex h-full w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-secondary-text text-primary-text"
+            <Input
+              variant="soft"
+              className="h-full border-0 shadow-none bg-transparent px-0 focus-visible:ring-0 focus-visible:border-transparent"
               placeholder={searchPlaceholder}
               value={search}
               onChange={(e) => setSearch(e.target.value)}

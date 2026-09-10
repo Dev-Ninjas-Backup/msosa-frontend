@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Check, ChevronsUpDown, Search, X } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/ui/Popover";
 import Button from "@/ui/Button";
+import Input from "@/ui/Input";
 import { cn } from "@/lib/utils";
 import type { Option } from "./FieldTypes";
 
@@ -101,8 +102,9 @@ export const MultiSelectField = ({
       >
         <div className="flex items-center border-b border-border px-3 h-10">
           <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
-          <input
-            className="flex h-full w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-secondary-text text-primary-text disabled:cursor-not-allowed disabled:opacity-50"
+          <Input
+            variant="soft"
+            className="h-full border-0 shadow-none bg-transparent px-0 focus-visible:ring-0 focus-visible:border-transparent"
             placeholder="Search..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}

@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import Button from "@/ui/Button";
+import Input from "@/ui/Input";
 import AuthFooter from "./AuthFooter";
 import toplightImg from "@/assets/toplight.png";
 
@@ -274,13 +275,13 @@ export default function ForgotPasswordPage() {
                       <label className="text-xs font-semibold uppercase tracking-[0.1em] text-white/60">
                         Corporate Email Address
                       </label>
-                      <input
+                      <Input
                         type="email"
+                        variant="auth"
                         required
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="admin@organization.com"
-                        className="w-full h-13 px-4 bg-white/10 rounded-[10px] border border-white/10 text-white text-base outline-none focus:border-primary-brand/60 focus:ring-1 focus:ring-primary-brand/40 transition-all"
                       />
                     </div>
 
@@ -352,12 +353,13 @@ export default function ForgotPasswordPage() {
                       </label>
                       <div className="flex gap-2 sm:gap-3 md:gap-4 w-full">
                         {otp.map((digit, idx) => (
-                          <input
+                          <Input
                             key={idx}
                             ref={(el) => {
                               otpRefs.current[idx] = el;
                             }}
                             type="text"
+                            variant="otp"
                             inputMode="numeric"
                             autoComplete="one-time-code"
                             maxLength={1}
@@ -367,7 +369,6 @@ export default function ForgotPasswordPage() {
                             }
                             onKeyDown={(e) => handleOtpKeyDown(idx, e)}
                             onPaste={idx === 0 ? handleOtpPaste : undefined}
-                            className="flex-1 min-w-0 h-12 sm:h-14 md:h-16 rounded-[10px] bg-white/10 border border-white/10 text-center text-lg sm:text-xl font-bold text-white outline-none focus:border-primary-brand/60 focus:ring-1 focus:ring-primary-brand/40 transition-all"
                             aria-label={`Digit ${idx + 1}`}
                           />
                         ))}
@@ -440,62 +441,62 @@ export default function ForgotPasswordPage() {
                       <label className="text-xs font-semibold uppercase tracking-[0.1em] text-white/60">
                         New Password
                       </label>
-                      <div className="relative">
-                        <input
-                          type={showPassword ? "text" : "password"}
-                          required
-                          value={newPassword}
-                          onChange={(e) => setNewPassword(e.target.value)}
-                          placeholder="••••••••••••"
-                          className="w-full h-13 px-4 pr-12 bg-white/10 rounded-[10px] border border-white/10 text-white text-base outline-none focus:border-primary-brand/60 focus:ring-1 focus:ring-primary-brand/40 transition-all"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setShowPassword((v) => !v)}
-                          className="absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white cursor-pointer bg-transparent border-0 p-1"
-                          aria-label={
-                            showPassword ? "Hide password" : "Show password"
-                          }
-                        >
-                          {showPassword ? (
-                            <EyeOff className="size-4.5" />
-                          ) : (
-                            <Eye className="size-4.5" />
-                          )}
-                        </button>
-                      </div>
+                      <Input
+                        type={showPassword ? "text" : "password"}
+                        variant="auth"
+                        required
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        placeholder="••••••••••••"
+                        rightIcon={
+                          <button
+                            type="button"
+                            onClick={() => setShowPassword((v) => !v)}
+                            className="text-white/50 hover:text-white cursor-pointer bg-transparent border-0 p-1"
+                            aria-label={
+                              showPassword ? "Hide password" : "Show password"
+                            }
+                          >
+                            {showPassword ? (
+                              <EyeOff className="size-4.5" />
+                            ) : (
+                              <Eye className="size-4.5" />
+                            )}
+                          </button>
+                        }
+                      />
                     </div>
 
                     <div className="flex flex-col gap-1.5">
                       <label className="text-xs font-semibold uppercase tracking-[0.1em] text-white/60">
                         Confirm Password
                       </label>
-                      <div className="relative">
-                        <input
-                          type={showConfirmPassword ? "text" : "password"}
-                          required
-                          value={confirmPassword}
-                          onChange={(e) => setConfirmPassword(e.target.value)}
-                          placeholder="••••••••••••"
-                          className="w-full h-13 px-4 pr-12 bg-white/10 rounded-[10px] border border-white/10 text-white text-base outline-none focus:border-primary-brand/60 focus:ring-1 focus:ring-primary-brand/40 transition-all"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setShowConfirmPassword((v) => !v)}
-                          className="absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white cursor-pointer bg-transparent border-0 p-1"
-                          aria-label={
-                            showConfirmPassword
-                              ? "Hide password"
-                              : "Show password"
-                          }
-                        >
-                          {showConfirmPassword ? (
-                            <EyeOff className="size-4.5" />
-                          ) : (
-                            <Eye className="size-4.5" />
-                          )}
-                        </button>
-                      </div>
+                      <Input
+                        type={showConfirmPassword ? "text" : "password"}
+                        variant="auth"
+                        required
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        placeholder="••••••••••••"
+                        rightIcon={
+                          <button
+                            type="button"
+                            onClick={() => setShowConfirmPassword((v) => !v)}
+                            className="text-white/50 hover:text-white cursor-pointer bg-transparent border-0 p-1"
+                            aria-label={
+                              showConfirmPassword
+                                ? "Hide password"
+                                : "Show password"
+                            }
+                          >
+                            {showConfirmPassword ? (
+                              <EyeOff className="size-4.5" />
+                            ) : (
+                              <Eye className="size-4.5" />
+                            )}
+                          </button>
+                        }
+                      />
                       <p className="text-xs text-white/50 mt-1">
                         Use 8+ characters with a mix of letters and numbers.
                       </p>

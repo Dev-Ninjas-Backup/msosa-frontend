@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { KeyRound, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import Button from "@/ui/Button";
+import Input from "@/ui/Input";
 import toplightImg from "@/assets/toplight.png";
 
 // Inline SVG for Google logo
@@ -127,13 +128,13 @@ export default function LoginPage() {
               <label className="text-white/60 text-xs font-semibold uppercase tracking-wider">
                 Email Address
               </label>
-              <input
+              <Input
                 type="email"
+                variant="auth"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full h-13 px-4 bg-white/10 hover:bg-white/[0.13] focus:bg-white/[0.14] rounded-xl border border-white/10 text-white text-base font-normal outline-none focus:border-primary-brand/60 focus:ring-1 focus:ring-primary-brand/40 transition-all duration-200"
               />
             </div>
 
@@ -150,28 +151,28 @@ export default function LoginPage() {
                   Forgot password?
                 </Link>
               </div>
-              <div className="relative w-full">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full h-13 px-4 pr-12 bg-white/10 hover:bg-white/[0.13] focus:bg-white/[0.14] rounded-xl border border-white/10 text-white text-base font-normal outline-none focus:border-primary-brand/60 focus:ring-1 focus:ring-primary-brand/40 transition-all duration-200"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  aria-label={showPassword ? "Hide password" : "Show password"}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors cursor-pointer p-1"
-                >
-                  {showPassword ? (
-                    <EyeOff className="size-4.5" />
-                  ) : (
-                    <Eye className="size-4.5" />
-                  )}
-                </button>
-              </div>
+              <Input
+                type={showPassword ? "text" : "password"}
+                variant="auth"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                rightIcon={
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    className="text-white/50 hover:text-white transition-colors cursor-pointer p-1 bg-transparent border-0"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="size-4.5" />
+                    ) : (
+                      <Eye className="size-4.5" />
+                    )}
+                  </button>
+                }
+              />
             </div>
 
             {/* Remember Me Checkbox */}

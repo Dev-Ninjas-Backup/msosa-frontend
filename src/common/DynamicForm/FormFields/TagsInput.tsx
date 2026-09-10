@@ -1,5 +1,6 @@
 import { useState, KeyboardEvent, useRef, useEffect } from "react";
 import { X } from "lucide-react";
+import Input from "@/ui/Input";
 
 interface TagsInputProps {
   value: string[];
@@ -118,9 +119,10 @@ const TagsInput = ({
           </span>
         ))}
 
-        <input
+        <Input
           ref={inputRef}
           type="text"
+          variant="ghost"
           value={inputValue}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
@@ -129,7 +131,7 @@ const TagsInput = ({
           disabled={
             disabled || (maxTags !== undefined && value.length >= maxTags)
           }
-          className="flex-1 min-w-[120px] outline-none bg-transparent disabled:cursor-not-allowed text-primary-text placeholder:text-secondary-text"
+          className="flex-1 min-w-[120px] h-auto border-0 border-b-0 px-0"
         />
       </div>
 

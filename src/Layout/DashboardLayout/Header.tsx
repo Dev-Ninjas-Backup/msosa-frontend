@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import Input from "@/ui/Input";
 
 interface HeaderProps {
   title?: string;
@@ -148,16 +149,14 @@ const Header = ({ title, description, onMenuClick }: HeaderProps) => {
           {/* Search Input */}
           <div className="static sm:relative flex items-center h-full" ref={searchRef}>
             {/* Desktop Search */}
-            <div className="relative w-60 hidden lg:block transition-all duration-300">
-              <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                <Search className="size-5 text-slate-400" />
-              </span>
-              <input
+            <div className="w-60 hidden lg:block transition-all duration-300">
+              <Input
                 type="text"
+                variant="search"
                 value={searchVal}
                 onChange={(e) => setSearchVal(e.target.value)}
                 placeholder="Search..."
-                className="w-full pl-9 pr-4 h-11 bg-light-bg border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/5 focus:border-blue-500 transition-all text-primary-text placeholder:text-slate-400"
+                leftIcon={<Search className="size-5 text-slate-400" />}
               />
             </div>
 
@@ -172,17 +171,15 @@ const Header = ({ title, description, onMenuClick }: HeaderProps) => {
             {/* Mobile/Tablet Search Popover */}
             {isSearchOpen && (
               <div className="absolute left-0 right-0 sm:left-auto sm:right-0 top-full mt-2 sm:mt-7 w-auto sm:w-72 bg-primary-bg border border-border rounded-lg p-2 z-50 shadow-lg animate-in fade-in zoom-in-95 duration-100 lg:hidden">
-                <div className="relative">
-                  <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                    <Search className="w-5 h-5 text-slate-400" />
-                  </span>
-                  <input
-                    type="text"
-                    placeholder="Search..."
-                    autoFocus
-                    className="w-full pl-9 pr-4 py-2 bg-light-bg border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/5 focus:border-blue-500 transition-all text-primary-text placeholder:text-slate-400"
-                  />
-                </div>
+                <Input
+                  type="text"
+                  variant="search"
+                  value={searchVal}
+                  onChange={(e) => setSearchVal(e.target.value)}
+                  placeholder="Search..."
+                  autoFocus
+                  leftIcon={<Search className="w-5 h-5 text-slate-400" />}
+                />
               </div>
             )}
           </div>

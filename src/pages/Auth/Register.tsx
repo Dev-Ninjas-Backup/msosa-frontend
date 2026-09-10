@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import Button from "@/ui/Button";
+import Input from "@/ui/Input";
 import AuthFooter from "./AuthFooter";
 import toplightImg from "@/assets/toplight.png";
 
@@ -74,11 +75,10 @@ function getPasswordStrength(password: string): number {
   return Math.min(score, 4);
 }
 
-const fieldClass =
-  "w-full h-13 px-4 bg-white/10 rounded-xl border border-white/10 text-white text-base outline-none focus:border-primary-brand/60 focus:ring-1 focus:ring-primary-brand/40 transition-all";
 const labelClass =
   "text-xs font-semibold uppercase tracking-[0.1em] text-white/60";
-const selectClass = `${fieldClass} appearance-none pr-10 text-sm cursor-pointer`;
+const selectClass =
+  "w-full h-13 px-4 bg-white/10 rounded-xl border border-white/10 text-white text-sm outline-none focus:border-primary-brand/60 focus:ring-1 focus:ring-primary-brand/40 transition-all appearance-none pr-10 cursor-pointer";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -312,24 +312,24 @@ export default function RegisterPage() {
                       <div className="flex flex-col gap-5">
                         <div className="flex flex-col gap-1.5">
                           <label className={labelClass}>Full Name</label>
-                          <input
+                          <Input
                             type="text"
+                            variant="auth"
                             required
                             value={fullName}
                             onChange={(e) => setFullName(e.target.value)}
                             placeholder="Julian Vane"
-                            className={fieldClass}
                           />
                         </div>
                         <div className="flex flex-col gap-1.5">
                           <label className={labelClass}>Email Address</label>
-                          <input
+                          <Input
                             type="email"
+                            variant="auth"
                             required
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="julian@example.com"
-                            className={fieldClass}
                           />
                         </div>
                       </div>
@@ -343,26 +343,26 @@ export default function RegisterPage() {
                           <label className={labelClass}>
                             Organization Name
                           </label>
-                          <input
+                          <Input
                             type="text"
+                            variant="auth"
                             required
                             value={orgName}
                             onChange={(e) => setOrgName(e.target.value)}
                             placeholder="Encounters Corp"
-                            className={fieldClass}
                           />
                         </div>
                         <div className="flex flex-col gap-1.5">
                           <label className={labelClass}>
                             Administrator Name
                           </label>
-                          <input
+                          <Input
                             type="text"
+                            variant="auth"
                             required
                             value={adminName}
                             onChange={(e) => setAdminName(e.target.value)}
                             placeholder="Alex Rivera"
-                            className={fieldClass}
                           />
                         </div>
                       </div>
@@ -371,13 +371,13 @@ export default function RegisterPage() {
                         <label className={labelClass}>
                           Business Email Address
                         </label>
-                        <input
+                        <Input
                           type="email"
+                          variant="auth"
                           required
                           value={businessEmail}
                           onChange={(e) => setBusinessEmail(e.target.value)}
                           placeholder="admin@organization.com"
-                          className={fieldClass}
                         />
                       </div>
                     </div>
@@ -390,30 +390,30 @@ export default function RegisterPage() {
                         ? "Account Password"
                         : "Password"}
                     </label>
-                    <div className="relative">
-                      <input
-                        type={showPassword ? "text" : "password"}
-                        required
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="••••••••"
-                        className={`${fieldClass} pr-12`}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword((v) => !v)}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white cursor-pointer bg-transparent border-0 p-1"
-                        aria-label={
-                          showPassword ? "Hide password" : "Show password"
-                        }
-                      >
-                        {showPassword ? (
-                          <EyeOff className="size-4.5" />
-                        ) : (
-                          <Eye className="size-4.5" />
-                        )}
-                      </button>
-                    </div>
+                    <Input
+                      type={showPassword ? "text" : "password"}
+                      variant="auth"
+                      required
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="••••••••"
+                      rightIcon={
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword((v) => !v)}
+                          className="text-white/50 hover:text-white cursor-pointer bg-transparent border-0 p-1"
+                          aria-label={
+                            showPassword ? "Hide password" : "Show password"
+                          }
+                        >
+                          {showPassword ? (
+                            <EyeOff className="size-4.5" />
+                          ) : (
+                            <Eye className="size-4.5" />
+                          )}
+                        </button>
+                      }
+                    />
                     <div className="flex gap-1.5 pt-1">
                       {[0, 1, 2, 3].map((i) => (
                         <div
@@ -555,12 +555,13 @@ export default function RegisterPage() {
                     <label className={labelClass}>6-Digit Secure Code</label>
                     <div className="flex gap-2 sm:gap-3 md:gap-4 w-full">
                       {otp.map((digit, idx) => (
-                        <input
+                        <Input
                           key={idx}
                           ref={(el) => {
                             otpRefs.current[idx] = el;
                           }}
                           type="text"
+                          variant="otp"
                           inputMode="numeric"
                           autoComplete="one-time-code"
                           maxLength={1}
@@ -568,7 +569,6 @@ export default function RegisterPage() {
                           onChange={(e) => handleOtpChange(idx, e.target.value)}
                           onKeyDown={(e) => handleOtpKeyDown(idx, e)}
                           onPaste={idx === 0 ? handleOtpPaste : undefined}
-                          className="flex-1 min-w-0 h-12 sm:h-14 md:h-16 rounded-[10px] bg-white/10 border border-white/10 text-center text-lg sm:text-xl font-bold text-white outline-none focus:border-primary-brand/60 focus:ring-1 focus:ring-primary-brand/40 transition-all"
                           aria-label={`Digit ${idx + 1}`}
                         />
                       ))}

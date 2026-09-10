@@ -4,6 +4,7 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { Popover, PopoverContent, PopoverTrigger } from "@/ui/Popover";
 import Button from "@/ui/Button";
+import Input from "@/ui/Input";
 import { Label } from "@/ui/Label";
 import { cn } from "@/lib/utils";
 
@@ -133,11 +134,11 @@ export const DateTimePicker = ({
           </div>
           <div className="flex items-center justify-between pt-3 border-t border-border">
             <Label className="text-xs font-bold text-secondary-text uppercase tracking-wider">Select Time</Label>
-            <input
+            <Input
               type="time"
               value={timeValue}
               onChange={handleTimeChange}
-              className="h-9 px-3 rounded-lg border border-border bg-light-bg text-sm font-semibold focus:outline-none focus:ring-4 focus:ring-primary-brand/10 text-primary-text"
+              className="h-9 w-auto px-3 rounded-lg border border-border bg-light-bg text-sm font-semibold focus:ring-4 focus:ring-primary-brand/10"
             />
           </div>
           <Button className="w-full h-10 font-semibold rounded-lg" onClick={() => setOpen(false)}>Done</Button>
