@@ -19,6 +19,10 @@ const pageMeta: Record<string, { title: string; description: string }> = {
     title: "Checkout",
     description: "Complete your Blueprint purchase securely.",
   },
+  "Checkout Success": {
+    title: "Purchase Complete",
+    description: "Your Blueprint is ready — continue your reflection journey.",
+  },
   "Reflection Room": {
     title: "Reflection Room™",
     description: "Take a deep breath. Share what's on your mind.",
@@ -73,19 +77,23 @@ const ConsumerLayout = ({ config }: ConsumerLayoutProps) => {
     (activeItem && pageMeta[activeItem.label]) ||
     pageMeta.Dashboard;
 
-  const isCheckout = location.pathname.includes("/checkout");
+  const isCheckoutSuccess = location.pathname.includes("/checkout/success");
+  const isCheckout =
+    location.pathname.includes("/checkout") && !isCheckoutSuccess;
   const isReportDetail = /\/report\/[^/]+$/.test(location.pathname);
   const isProfile = location.pathname.includes("/profile");
-  const headerMeta = isCheckout
-    ? pageMeta.Checkout
-    : isReportDetail
-      ? {
-          title: "Report Details",
-          description: "Deep dive into your delivered Blueprint narrative.",
-        }
-      : isProfile
-        ? pageMeta.Profile
-        : meta;
+  const headerMeta = isCheckoutSuccess
+    ? pageMeta["Checkout Success"]
+    : isCheckout
+      ? pageMeta.Checkout
+      : isReportDetail
+        ? {
+            title: "Report Details",
+            description: "Deep dive into your delivered Blueprint narrative.",
+          }
+        : isProfile
+          ? pageMeta.Profile
+          : meta;
 
   const isReflectionRoom = location.pathname.includes("/reflection-room");
 

@@ -55,6 +55,7 @@ const NotFound = () => {
             type="button"
             onClick={() => navigate(-1)}
             variant="secondary"
+            className=" h-12! sm:h-13! w-full sm:w-auto justify-center"
           >
             <ArrowLeft className="size-4.5" />
             <span>Go Back</span>

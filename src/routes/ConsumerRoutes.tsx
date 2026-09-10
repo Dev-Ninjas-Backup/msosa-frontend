@@ -21,7 +21,11 @@ const Blueprint = Loadable(
   AdminSkeleton
 );
 const Checkout = Loadable(
-  lazy(() => import("@/pages/Consumer/Blueprint/Checkout")),
+  lazy(() => import("@/pages/Consumer/Checkout")),
+  AdminSkeleton
+);
+const CheckoutSuccess = Loadable(
+  lazy(() => import("@/pages/Consumer/CheckoutSuccess")),
   AdminSkeleton
 );
 const ReflectionRoom = Loadable(
@@ -73,9 +77,12 @@ export const consumerRoutes = [
         element: <Blueprint />,
       },
       {
-        // nested under blueprint — hidden from sidebar (no name)
-        path: "blueprint/checkout",
+        path: "checkout",
         element: <Checkout />,
+      },
+      {
+        path: "checkout/success",
+        element: <CheckoutSuccess />,
       },
       {
         name: "Reflection Room",
@@ -100,7 +107,6 @@ export const consumerRoutes = [
         element: <Continuum />,
       },
       {
-        // Profile via sidebar user card — not a primary nav item
         path: "profile",
         element: <Profile />,
       },

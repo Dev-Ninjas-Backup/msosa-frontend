@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { Download, Filter, Search } from "lucide-react";
 import AnimatedContainer from "@/common/AnimatedContainer";
-import Button from "@/ui/Button";
 import Input from "@/ui/Input";
+import Card from "@/pages/Consumer/Dashboard/Card";
 import { cn } from "@/lib/utils";
 
 const STATS = [
@@ -40,30 +40,32 @@ const THEMES = [
   },
 ] as const;
 
+const ghostBtn =
+  "h-9 px-4 rounded-lg border border-white/15 bg-white/5 hover:bg-white/10 text-primary-text text-xs font-medium transition-colors cursor-pointer";
+const goldBtn =
+  "h-9 px-4 rounded-lg bg-[#F5C542] hover:bg-[#e8b93a] text-black text-xs font-semibold transition-colors cursor-pointer border-0";
+
 const Report = () => {
   return (
-    <div className="space-y-5 sm:space-y-6 lg:space-y-8 pb-4">
+    <div className="space-y-5 sm:space-y-6 pb-6">
       <AnimatedContainer delay={0.05}>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
           {STATS.map((stat) => (
-            <div
-              key={stat.label}
-              className="rounded-xl border border-white/10 bg-light-bg/50 p-4"
-            >
-              <p className="text-xs text-muted-blue">{stat.label}</p>
+            <Card key={stat.label} className="p-4">
+              <p className="text-xs text-secondary-text">{stat.label}</p>
               <p className="mt-2 font-playfair text-xl sm:text-2xl text-primary-text">
                 {stat.value}
               </p>
-            </div>
+            </Card>
           ))}
         </div>
       </AnimatedContainer>
 
-      <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_280px] gap-5 lg:gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_300px] 2xl:grid-cols-[minmax(0,1fr)_320px] gap-5 lg:gap-6">
         <AnimatedContainer delay={0.1}>
-          <div className="rounded-2xl border border-white/10 bg-light-bg/50 p-4 sm:p-6">
+          <Card className="p-4 sm:p-5 lg:p-6">
             <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-5">
-              <h2 className="font-playfair text-xl sm:text-2xl text-primary-text flex-1">
+              <h2 className="font-playfair text-xl text-primary-text flex-1">
                 Report Library
               </h2>
               <div className="flex items-center gap-2 w-full sm:w-auto">
@@ -71,19 +73,22 @@ const Report = () => {
                   <Input
                     variant="search"
                     placeholder="Search reports..."
-                    leftIcon={<Search className="size-4 text-muted-blue" />}
+                    leftIcon={<Search className="size-4 text-secondary-text" />}
                   />
                 </div>
-                <Button variant="secondary" size="sm" leftIcon={<Filter className="size-3.5" />}>
-                  Filter
-                </Button>
+                <button type="button" className={ghostBtn}>
+                  <span className="inline-flex items-center gap-1.5">
+                    <Filter className="size-3.5" />
+                    Filter
+                  </span>
+                </button>
               </div>
             </div>
 
             <div className="overflow-x-auto -mx-1 px-1">
               <table className="w-full min-w-[640px] text-left text-sm">
                 <thead>
-                  <tr className="border-b border-white/10 text-xs uppercase tracking-wide text-muted-blue">
+                  <tr className="border-b border-white/[0.08] text-xs uppercase tracking-wide text-secondary-text">
                     <th className="py-3 pr-3 font-medium">Report Name</th>
                     <th className="py-3 pr-3 font-medium">Category</th>
                     <th className="py-3 pr-3 font-medium">Completion</th>
@@ -95,11 +100,13 @@ const Report = () => {
                   {REPORTS.map((report) => (
                     <tr
                       key={report.id}
-                      className="border-b border-white/5 last:border-0"
+                      className="border-b border-white/[0.05] last:border-0"
                     >
                       <td className="py-4 pr-3">
-                        <p className="text-primary-text font-medium">{report.name}</p>
-                        <p className="text-xs text-muted-blue mt-0.5">
+                        <p className="text-primary-text font-medium">
+                          {report.name}
+                        </p>
+                        <p className="text-xs text-secondary-text mt-0.5">
                           {report.category}
                         </p>
                       </td>
@@ -108,14 +115,16 @@ const Report = () => {
                           {report.tag}
                         </span>
                       </td>
-                      <td className="py-4 pr-3 text-secondary-text">{report.date}</td>
+                      <td className="py-4 pr-3 text-secondary-text">
+                        {report.date}
+                      </td>
                       <td className="py-4 pr-3">
                         <span
                           className={cn(
                             "text-xs font-medium",
                             report.status === "Delivered"
                               ? "text-emerald-400"
-                              : "text-muted-blue"
+                              : "text-secondary-text"
                           )}
                         >
                           {report.status}
@@ -124,18 +133,20 @@ const Report = () => {
                       <td className="py-4">
                         <div className="flex items-center gap-2">
                           <Link to={`/consumer/report/${report.id}`}>
-                            <Button variant="secondary" size="sm">
+                            <button type="button" className={ghostBtn}>
                               View
-                            </Button>
+                            </button>
                           </Link>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            aria-label="Download"
-                            className="h-9 w-9"
+                          <button
+                            type="button"
+                            aria-label="Download PDF"
+                            className={goldBtn}
                           >
-                            <Download className="size-4" />
-                          </Button>
+                            <span className="inline-flex items-center gap-1.5">
+                              <Download className="size-3.5" />
+                              PDF
+                            </span>
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -145,16 +156,16 @@ const Report = () => {
             </div>
 
             <div className="mt-5 flex justify-center">
-              <Button variant="secondary" size="sm">
+              <button type="button" className={ghostBtn}>
                 Load More History
-              </Button>
+              </button>
             </div>
-          </div>
+          </Card>
         </AnimatedContainer>
 
         <div className="space-y-5">
           <AnimatedContainer delay={0.12} direction="left">
-            <div className="rounded-2xl border border-white/10 bg-light-bg/50 p-4 sm:p-5">
+            <Card className="p-4 sm:p-5">
               <h3 className="font-playfair text-lg text-primary-text mb-4">
                 Continuity Themes
               </h3>
@@ -162,30 +173,30 @@ const Report = () => {
                 {THEMES.map((t) => (
                   <li
                     key={t.theme}
-                    className="rounded-lg border border-white/10 bg-black/30 p-3"
+                    className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-3"
                   >
                     <p className="text-sm text-primary-text">{t.theme}</p>
-                    <p className="text-xs text-muted-blue mt-1">{t.report}</p>
+                    <p className="text-xs text-secondary-text mt-1">{t.report}</p>
                   </li>
                 ))}
               </ul>
-            </div>
+            </Card>
           </AnimatedContainer>
 
           <AnimatedContainer delay={0.15} direction="left">
-            <div className="rounded-2xl border border-white/10 bg-light-bg/50 p-4 sm:p-5">
+            <Card className="p-4 sm:p-5">
               <h3 className="font-playfair text-lg text-primary-text mb-2">
                 Next Actions
               </h3>
               <p className="text-sm text-secondary-text mb-4">
                 Professional Evolution Report
               </p>
-              <Link to="/consumer/report/relationship-v2">
-                <Button variant="outline" size="sm" fullWidth>
+              <Link to="/consumer/report/relationship-v2" className="block">
+                <button type="button" className={`${ghostBtn} w-full`}>
                   Go to section
-                </Button>
+                </button>
               </Link>
-            </div>
+            </Card>
           </AnimatedContainer>
         </div>
       </div>

@@ -26,7 +26,10 @@ const ConsumerSidebar = ({
       );
     }
     if (item.path === "/consumer/blueprint") {
-      return location.pathname.startsWith("/consumer/blueprint");
+      return (
+        location.pathname.startsWith("/consumer/blueprint") ||
+        location.pathname.startsWith("/consumer/checkout")
+      );
     }
     if (item.path === "/consumer/report") {
       return location.pathname.startsWith("/consumer/report");
