@@ -75,7 +75,7 @@ export const founderRoutes = [
         element: <Navigate to="/founder/dashboard" replace />,
       },
       {
-        name: "Dashboard™",
+        name: "Founder Control Center™",
         path: "dashboard",
         icon: <LayoutDashboard />,
         element: <Dashboard />,

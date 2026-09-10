@@ -1,0 +1,160 @@
+import { useState, useRef } from "react";
+import { Outlet, useLocation } from "react-router-dom";
+import { Menu } from "lucide-react";
+import ConsumerSidebar from "./ConsumerSidebar";
+import ConsumerHeader from "./ConsumerHeader";
+import { menuGenerator } from "@/utils/Generator/MenuGenerator";
+import useSmoothScroll from "@/hooks/useSmoothScroll";
+
+const pageMeta: Record<string, { title: string; description: string }> = {
+  Dashboard: {
+    title: "Welcome back, Sarah.",
+    description: "You are currently working on FuturePath Blueprint™.",
+  },
+  Blueprints: {
+    title: "Blueprint Marketplace",
+    description: "",
+  },
+  Checkout: {
+    title: "Checkout",
+    description: "Complete your Blueprint purchase securely.",
+  },
+  "Reflection Room": {
+    title: "Reflection Room™",
+    description: "Take a deep breath. Share what's on your mind.",
+  },
+  Reports: {
+    title: "Reports",
+    description: "Your delivered narratives and reflection analyses.",
+  },
+  Continuum: {
+    title: "FRC™ Continuum",
+    description: "Longitudinal data from your reflection journey.",
+  },
+  Profile: {
+    title: "Profile",
+    description: "Manage your personal details and preferences.",
+  },
+};
+
+type ConsumerLayoutProps = {
+  config: any[];
+};
+
+const ConsumerLayout = ({ config }: ConsumerLayoutProps) => {
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const location = useLocation();
+  const menu = menuGenerator(config);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  useSmoothScroll(scrollContainerRef.current);
+
+  const findActiveItem = (items: any[]): any => {
+    for (const item of items) {
+      if (item.path === location.pathname) return item;
+      if (item.children) {
+        const found = findActiveItem(item.children);
+        if (found) return found;
+      }
+    }
+    for (const item of items) {
+      if (
+        item.path &&
+        item.path !== "/consumer" &&
+        location.pathname.startsWith(item.path)
+      ) {
+        return item;
+      }
+    }
+    return null;
+  };
+
+  const activeItem = findActiveItem(menu);
+  const meta =
+    (activeItem && pageMeta[activeItem.label]) ||
+    pageMeta.Dashboard;
+
+  const isCheckout = location.pathname.includes("/checkout");
+  const isReportDetail = /\/report\/[^/]+$/.test(location.pathname);
+  const isProfile = location.pathname.includes("/profile");
+  const headerMeta = isCheckout
+    ? pageMeta.Checkout
+    : isReportDetail
+      ? {
+          title: "Report Details",
+          description: "Deep dive into your delivered Blueprint narrative.",
+        }
+      : isProfile
+        ? pageMeta.Profile
+        : meta;
+
+  const isReflectionRoom = location.pathname.includes("/reflection-room");
+
+  return (
+    <div className="flex h-screen overflow-hidden bg-primary-bg">
+      <ConsumerSidebar
+        isMobileOpen={isMobileOpen}
+        setIsMobileOpen={setIsMobileOpen}
+        menu={menu}
+      />
+
+      {isMobileOpen && (
+        <button
+          type="button"
+          aria-label="Close menu"
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden border-0 cursor-pointer"
+          onClick={() => setIsMobileOpen(false)}
+        />
+      )}
+
+      <div
+        ref={scrollContainerRef}
+        className="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto"
+      >
+        {!isReflectionRoom && (
+          <ConsumerHeader
+            title={headerMeta.title}
+            description={headerMeta.description}
+            onMenuClick={() => setIsMobileOpen(true)}
+          />
+        )}
+
+        {isReflectionRoom && (
+          <div className="lg:hidden sticky top-0 z-30 flex items-center gap-2 px-4 py-3 bg-primary-bg/90 backdrop-blur-md border-b border-white/5">
+            <button
+              type="button"
+              aria-label="Open menu"
+              onClick={() => setIsMobileOpen(true)}
+              className="p-2 -ml-2 rounded-lg text-secondary-text hover:text-primary-text border-0 bg-transparent cursor-pointer"
+            >
+              <Menu className="size-6" />
+            </button>
+            <span className="font-playfair text-lg text-primary-text">
+              Reflection Room™
+            </span>
+          </div>
+        )}
+
+        <main
+          className={
+            isReflectionRoom
+              ? "flex-1 px-3 sm:px-4 lg:px-6 py-3 sm:py-4"
+              : "flex-1 px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8"
+          }
+        >
+          <Outlet />
+        </main>
+
+        {!isReflectionRoom && (
+          <footer className="px-4 sm:px-6 lg:px-8 py-4 border-t border-white/5">
+            <p className="text-[11px] sm:text-xs text-muted-blue text-center sm:text-left">
+              FAR Systems™ uses enterprise-grade encryption. Your personal
+              reflection data is private and secure.
+            </p>
+          </footer>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default ConsumerLayout;

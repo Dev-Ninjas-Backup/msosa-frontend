@@ -52,7 +52,7 @@ export default function LoginPage() {
     setTimeout(() => {
       setIsSubmitting(false);
       toast.success("Welcome back! Login successful.");
-      navigate("/founder/dashboard");
+      navigate("/consumer/dashboard");
     }, 1000);
   };
 

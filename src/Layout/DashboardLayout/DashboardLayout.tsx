@@ -8,6 +8,8 @@ import useSmoothScroll from "@/hooks/useSmoothScroll";
 
 const routeDescriptions: Record<string, string> = {
   "Overview": "Welcome back to your reseller dashboard.",
+  "Founder Control Center™": "Founder Operating System for the FAR Platform Engine™",
+  "Dashboard™": "Founder Operating System for the FAR Platform Engine™",
   "Dynamic Table": "Manage database records using a powerful dynamic table.",
   "Dynamic Form": "Build and submit validation-ready dynamic forms.",
   "Employees": "Manage staff records, roles, and profiles.",

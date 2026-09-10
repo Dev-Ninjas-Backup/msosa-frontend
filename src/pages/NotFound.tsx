@@ -51,14 +51,14 @@ const NotFound = () => {
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-3 w-full pt-2">
-          <button
+          <Button
             type="button"
             onClick={() => navigate(-1)}
-            className="flex-1 h-13 px-6 bg-white/10 hover:bg-white/15 rounded-xl border border-white/10 flex items-center justify-center gap-2.5 text-white text-sm font-medium transition-all duration-200 cursor-pointer active:scale-[0.98]"
+            variant="secondary"
           >
             <ArrowLeft className="size-4.5" />
             <span>Go Back</span>
-          </button>
+          </Button>
 
           <Button
               variant="primary"

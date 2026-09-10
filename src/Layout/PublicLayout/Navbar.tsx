@@ -58,9 +58,9 @@ const Navbar: React.FC = () => {
             </span>
           </Link>
 
-          {/* Desktop nav links — center, slightly left */}
+          {/* Desktop nav — xl+ only (laptop uses hamburger to avoid overflow) */}
           <nav
-            className="absolute left-[40%] xl:left-[48%] top-1/2 -translate-x-1/2 -translate-y-1/2 hidden lg:flex items-center gap-4 xl:gap-5"
+            className="absolute left-[48%] top-1/2 -translate-x-1/2 -translate-y-1/2 hidden xl:flex items-center gap-5"
             aria-label="Main navigation"
           >
             <div className="relative" ref={solutionsRef}>
@@ -157,18 +157,18 @@ const Navbar: React.FC = () => {
             </Link>
           </nav>
 
-          {/* Desktop CTAs (right) */}
-          <div className="hidden lg:flex items-center gap-3 xl:gap-5 shrink-0 z-10">
+          {/* Desktop CTAs — xl+ only */}
+          <div className="hidden xl:flex items-center gap-5 shrink-0 z-10">
             <a
               href="https://www.farsystems.ai"
-              className="hidden xl:inline text-primary-brand text-sm font-medium tracking-wider hover:opacity-80 transition-opacity"
+              className="text-primary-brand text-sm font-medium tracking-wider hover:opacity-80 transition-opacity"
             >
               www.farsystems.ai
             </a>
 
-            <div className="hidden xl:block w-px h-6 bg-border" />
+            <div className="w-px h-6 bg-border" />
 
-            <div className="flex items-center gap-2 xl:gap-4">
+            <div className="flex items-center gap-4">
               <Link to="/login">
                 <Button variant="outline" size="lg">
                   LOGIN
@@ -182,12 +182,12 @@ const Navbar: React.FC = () => {
             </div>
           </div>
 
-          {/* Hamburger — mobile + tablet */}
+          {/* Hamburger — mobile, tablet, laptop */}
           <button
             type="button"
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
             onClick={() => setIsMenuOpen((open) => !open)}
-            className="border-0 bg-transparent p-2 text-white lg:hidden shrink-0 z-10"
+            className="border-0 bg-transparent p-2 text-white xl:hidden shrink-0 z-10"
           >
             {isMenuOpen ? (
               <X className="h-6 w-6" />
@@ -197,10 +197,10 @@ const Navbar: React.FC = () => {
           </button>
         </div>
 
-        {/* Mobile / tablet menu */}
+        {/* Collapsed menu — below xl */}
         {isMenuOpen && (
           <nav
-            className="border-t border-white/10 py-4 flex flex-col gap-4 lg:hidden"
+            className="border-t border-white/10 py-4 flex flex-col gap-4 xl:hidden"
             aria-label="Mobile navigation"
           >
             <div className="flex flex-col gap-1">
