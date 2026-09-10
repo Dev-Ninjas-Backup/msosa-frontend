@@ -98,14 +98,14 @@ export default function LoginPage() {
           <div className="flex flex-col sm:flex-row items-center gap-4 w-full">
             <button
               type="button"
-              className="flex-1 w-full h-13 px-4 bg-white/10 hover:bg-white/15 rounded-xl border border-white/10 flex items-center justify-center gap-3 text-white text-base font-medium transition-all duration-200 cursor-pointer active:scale-[0.98]"
+              className="flex-1 w-full h-13 px-4 py-3 bg-white/10 hover:bg-white/15 rounded-xl border border-white/10 flex items-center justify-center gap-3 text-white text-base font-medium transition-all duration-200 cursor-pointer active:scale-[0.98]"
             >
               <GoogleIcon />
               <span>Google</span>
             </button>
             <button
               type="button"
-              className="flex-1 w-full h-13 px-4 bg-white/10 hover:bg-white/15 rounded-xl border border-white/10 flex items-center justify-center gap-3 text-white text-base font-medium transition-all duration-200 cursor-pointer active:scale-[0.98]"
+              className="flex-1 w-full h-13 px-4 py-3 bg-white/10 hover:bg-white/15 rounded-xl border border-white/10 flex items-center justify-center gap-3 text-white text-base font-medium transition-all duration-200 cursor-pointer active:scale-[0.98]"
             >
               <AppleIcon />
               <span>Apple</span>

@@ -223,11 +223,11 @@ export default function RegisterPage() {
                     <p className="text-base sm:text-lg font-medium text-white">
                       I am gonna join as...
                     </p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-2 gap-3">
                       <button
                         type="button"
                         onClick={() => setAccountType("individual")}
-                        className={`flex flex-col items-start gap-2.5 px-6 py-7 rounded-2xl bg-white/10 text-left transition-all cursor-pointer border ${
+                        className={`flex flex-col items-start gap-2.5 px-6 py-3 md:py-7 rounded-2xl bg-white/10 text-left transition-all cursor-pointer border ${
                           accountType === "individual"
                             ? "border-primary-brand"
                             : "border-transparent hover:border-white/20"
@@ -255,7 +255,7 @@ export default function RegisterPage() {
                       <button
                         type="button"
                         onClick={() => setAccountType("enterprise")}
-                        className={`flex flex-col items-start gap-2.5 px-6 py-7 rounded-2xl bg-white/10 text-left transition-all cursor-pointer border ${
+                        className={`flex flex-col items-start gap-2.5 px-6 py-3 md:py-7 rounded-2xl bg-white/10 text-left transition-all cursor-pointer border ${
                           accountType === "enterprise"
                             ? "border-primary-brand"
                             : "border-transparent hover:border-white/20"
@@ -287,14 +287,14 @@ export default function RegisterPage() {
                       <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                         <button
                           type="button"
-                          className="flex-1 h-13 px-4 bg-white/10 hover:bg-white/15 rounded-xl border border-white/10 flex items-center justify-center gap-3 text-white text-base font-medium transition-all cursor-pointer active:scale-[0.98]"
+                          className="flex-1 h-13 px-4 py-3 bg-white/10 hover:bg-white/15 rounded-xl border border-white/10 flex items-center justify-center gap-3 text-white text-base font-medium transition-all cursor-pointer active:scale-[0.98]"
                         >
                           <GoogleIcon />
                           <span>Google</span>
                         </button>
                         <button
                           type="button"
-                          className="flex-1 h-13 px-4 bg-white/10 hover:bg-white/15 rounded-xl border border-white/10 flex items-center justify-center gap-3 text-white text-base font-medium transition-all cursor-pointer active:scale-[0.98]"
+                          className="flex-1 h-13 px-4 py-3 bg-white/10 hover:bg-white/15 rounded-xl border border-white/10 flex items-center justify-center gap-3 text-white text-base font-medium transition-all cursor-pointer active:scale-[0.98]"
                         >
                           <AppleIcon />
                           <span>Apple</span>
