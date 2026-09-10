@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
 import { Outlet, useLocation } from "react-router-dom";
-import { Menu } from "lucide-react";
 import ConsumerSidebar from "./ConsumerSidebar";
 import ConsumerHeader from "./ConsumerHeader";
 import { menuGenerator } from "@/utils/Generator/MenuGenerator";
@@ -50,7 +49,7 @@ const ConsumerLayout = ({ config }: ConsumerLayoutProps) => {
   const location = useLocation();
   const menu = menuGenerator(config);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  useSmoothScroll(scrollContainerRef.current);
+  useSmoothScroll(scrollContainerRef);
 
   const findActiveItem = (items: any[]): any => {
     for (const item of items) {
@@ -97,6 +96,14 @@ const ConsumerLayout = ({ config }: ConsumerLayoutProps) => {
 
   const isReflectionRoom = location.pathname.includes("/reflection-room");
 
+  if (isReflectionRoom) {
+    return (
+      <div className="h-screen overflow-hidden bg-black">
+        <Outlet />
+      </div>
+    );
+  }
+
   return (
     <div className="flex h-screen overflow-hidden bg-primary-bg">
       <ConsumerSidebar
@@ -116,50 +123,27 @@ const ConsumerLayout = ({ config }: ConsumerLayoutProps) => {
 
       <div
         ref={scrollContainerRef}
-        className="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto"
+        className="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto overscroll-contain"
       >
-        {!isReflectionRoom && (
+        {/* Single content child required by Lenis nested wrapper */}
+        <div className="flex min-h-full flex-col">
           <ConsumerHeader
             title={headerMeta.title}
             description={headerMeta.description}
             onMenuClick={() => setIsMobileOpen(true)}
           />
-        )}
 
-        {isReflectionRoom && (
-          <div className="lg:hidden sticky top-0 z-30 flex items-center gap-2 px-4 py-3 bg-primary-bg/90 backdrop-blur-md border-b border-white/5">
-            <button
-              type="button"
-              aria-label="Open menu"
-              onClick={() => setIsMobileOpen(true)}
-              className="p-2 -ml-2 rounded-lg text-secondary-text hover:text-primary-text border-0 bg-transparent cursor-pointer"
-            >
-              <Menu className="size-6" />
-            </button>
-            <span className="font-playfair text-lg text-primary-text">
-              Reflection Room™
-            </span>
-          </div>
-        )}
+          <main className="flex-1 px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
+            <Outlet />
+          </main>
 
-        <main
-          className={
-            isReflectionRoom
-              ? "flex-1 px-3 sm:px-4 lg:px-6 py-3 sm:py-4"
-              : "flex-1 px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8"
-          }
-        >
-          <Outlet />
-        </main>
-
-        {!isReflectionRoom && (
           <footer className="px-4 sm:px-6 lg:px-8 py-4 border-t border-white/5">
             <p className="text-[11px] sm:text-xs text-muted-blue text-center sm:text-left">
               FAR Systems™ uses enterprise-grade encryption. Your personal
               reflection data is private and secure.
             </p>
           </footer>
-        )}
+        </div>
       </div>
     </div>
   );

@@ -44,7 +44,7 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
   };
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  useSmoothScroll(scrollContainerRef.current);
+  useSmoothScroll(scrollContainerRef);
 
   const activeItem = findActiveItem(menu);
   const title = activeItem ? activeItem.label : "Overview";
@@ -68,21 +68,23 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
       {/* 2. Main Content Area */}
       <div
         ref={scrollContainerRef}
-        className="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto"
+        className="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto overscroll-contain"
       >
-        <Header
-          title={title}
-          description={description}
-          onMenuClick={() => setIsMobileOpen(true)}
-        />
+        {/* Single content child required by Lenis nested wrapper */}
+        <div className="flex min-h-full flex-col">
+          <Header
+            title={title}
+            description={description}
+            onMenuClick={() => setIsMobileOpen(true)}
+          />
 
-        <main className="flex-1 px-4 sm:px-6 py-4 sm:py-6">
-          {/* Breadcrumbs (Optional) */}
-          <div className="mb-4">
-            <Breadcrumbs config={config} />
-          </div>
-          <Outlet />
-        </main>
+          <main className="flex-1 px-4 sm:px-6 py-4 sm:py-6">
+            <div className="mb-4">
+              <Breadcrumbs config={config} />
+            </div>
+            <Outlet />
+          </main>
+        </div>
       </div>
     </div>
   );
