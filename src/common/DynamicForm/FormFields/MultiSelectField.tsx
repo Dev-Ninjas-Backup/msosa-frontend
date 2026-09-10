@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Check, ChevronsUpDown, Search, X } from "lucide-react";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/ui/Popover";
+import Button from "@/ui/Button";
 import { cn } from "@/lib/utils";
 import type { Option } from "./FieldTypes";
 
@@ -41,7 +41,7 @@ export const MultiSelectField = ({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
+          variant="soft"
           role="combobox"
           aria-expanded={open}
           className={cn(

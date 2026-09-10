@@ -12,7 +12,7 @@ import {
   UserPlus,
 } from "lucide-react";
 import { toast } from "sonner";
-import Button from "@/common/Button";
+import Button from "@/ui/Button";
 import AuthFooter from "./AuthFooter";
 import toplightImg from "@/assets/toplight.png";
 

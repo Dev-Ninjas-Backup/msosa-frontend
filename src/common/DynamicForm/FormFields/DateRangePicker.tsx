@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Calendar as CalendarIcon, X, Info } from "lucide-react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import { Button } from "@/components/ui/button";
+import Button from "@/ui/Button";
 import { cn } from "@/lib/utils";
 
 interface DateRangePickerProps {
@@ -37,7 +37,7 @@ export const DateRangePicker = ({
   return (
     <div className={cn("relative w-full", className)}>
       <Button
-        variant="outline"
+        variant="soft"
         className={cn(
           "w-full justify-start h-11 px-4 bg-light-bg border-border font-normal hover:bg-light-bg/80 transition-all text-left flex items-center gap-2 rounded-lg text-primary-text",
           error && "border-red-500",
@@ -112,7 +112,7 @@ export const DateRangePicker = ({
 
           <div className="mt-4 flex gap-2">
             <Button
-              variant="outline"
+              variant="soft"
               className="flex-1 h-9 text-xs border border-border rounded-lg text-primary-text hover:bg-light-bg"
               onClick={() => {
                 onChange([null, null]);

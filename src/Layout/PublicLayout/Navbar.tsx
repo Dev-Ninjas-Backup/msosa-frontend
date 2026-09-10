@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { ChevronDown, Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import CommonWrapper from "@/common/CommonWrapper";
-import Button from "@/common/Button";
+import Button from "@/ui/Button";
 import logo from "@/assets/logo.png";
 
 const Navbar: React.FC = () => {
@@ -60,7 +60,7 @@ const Navbar: React.FC = () => {
 
           {/* Desktop nav links — center, slightly left */}
           <nav
-            className="absolute left-[40%] xl:left-[42%] top-1/2 -translate-x-1/2 -translate-y-1/2 hidden lg:flex items-center gap-4 xl:gap-5"
+            className="absolute left-[40%] xl:left-[48%] top-1/2 -translate-x-1/2 -translate-y-1/2 hidden lg:flex items-center gap-4 xl:gap-5"
             aria-label="Main navigation"
           >
             <div className="relative" ref={solutionsRef}>

@@ -2,9 +2,9 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "@/ui/Popover";
 
-const userPopover = () => {
+const UserPopover = () => {
   return (
     <Popover>
       <PopoverTrigger>Open</PopoverTrigger>
@@ -13,4 +13,4 @@ const userPopover = () => {
   );
 };
 
-export default userPopover;
+export default UserPopover;

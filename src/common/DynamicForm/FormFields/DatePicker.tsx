@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Calendar as CalendarIcon } from "lucide-react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@/ui/Popover";
+import Button from "@/ui/Button";
+import { Label } from "@/ui/Label";
 import { cn } from "@/lib/utils";
 
 // ============================================
@@ -33,7 +33,7 @@ export const DatePicker = ({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
+          variant="soft"
           className={cn(
             "w-full justify-start h-11 px-4 bg-light-bg border-border font-normal hover:bg-light-bg/80 transition-all text-left rounded-lg text-primary-text",
             error && "border-red-500",
@@ -100,7 +100,7 @@ export const DateTimePicker = ({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
+          variant="soft"
           className={cn(
             "w-full justify-start h-11 px-4 bg-light-bg border-border font-normal hover:bg-light-bg/80 transition-all text-left rounded-lg text-primary-text",
             error && "border-red-500",

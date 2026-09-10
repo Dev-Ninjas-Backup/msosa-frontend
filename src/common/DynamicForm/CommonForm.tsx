@@ -19,10 +19,10 @@ import { ColorPicker } from "./FormFields/ColorPicker";
 import { CheckboxField, CheckboxGroupField } from "./FormFields/CheckboxField";
 import { RadioField } from "./FormFields/RadioField";
 import type { FieldConfig } from "./FormFields/FieldTypes";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+import Input from "@/ui/Input";
+import Textarea from "@/ui/Textarea";
+import { Label } from "@/ui/Label";
+import Button from "@/ui/Button";
 import { cn } from "@/lib/utils";
 import { FileUpload } from "./FormFields/FileUpload";
 import { Tooltip } from "@/common/Tooltip";
@@ -613,10 +613,10 @@ const CommonForm = <T extends Record<string, unknown>>({
         {showResetButton && (
           <Button
             type="button"
-            variant="outline"
+            variant="soft"
             onClick={() => reset(formDefaultValues as DefaultValues<T>)}
             disabled={loading || isSubmitting}
-            className="px-8 h-11 rounded-lg font-semibold border-border hover:bg-light-bg transition-all active:scale-[0.98] text-primary-text"
+            className="px-8 h-11 rounded-lg font-semibold"
           >
             {resetButtonText}
           </Button>

@@ -1,4 +1,4 @@
-import { Label } from "@/components/ui/label";
+import { Label } from "@/ui/Label";
 import { cn } from "@/lib/utils";
 
 interface ToggleProps {

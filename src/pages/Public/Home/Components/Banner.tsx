@@ -1,5 +1,5 @@
 import { ArrowRight, Play, Mic, Brain, Shield, BarChart3 } from 'lucide-react';
-import Button from "@/common/Button";
+import Button from "@/ui/Button";
 import micHeroImg from "@/assets/microphone.png";
 import farSystemsLogo from "@/assets/banner logo.png";
 import MicrophoneAcousticVisualizer from "./MicrophoneAcousticVisualizer";

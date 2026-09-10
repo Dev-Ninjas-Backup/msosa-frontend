@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { AlertTriangle, CheckCircle, Info, ShieldAlert, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import Button from "@/ui/Button";
 
 interface ConfirmModalProps {
   isOpen: boolean;
@@ -115,7 +115,7 @@ export default function ConfirmModal({
         <div className="mt-4 flex gap-3">
           <Button
             type="button"
-            variant="outline"
+            variant="soft"
             onClick={onClose}
             disabled={loading}
             className="flex-1 rounded-xl h-11 border-gray-200 dark:border-slate-800 hover:bg-gray-50 dark:hover:bg-slate-800 text-slate-700 dark:text-gray-300 font-bold text-xs"

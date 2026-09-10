@@ -5,7 +5,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { KeyRound, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
-import Button from "@/common/Button";
+import Button from "@/ui/Button";
 import toplightImg from "@/assets/toplight.png";
 
 // Inline SVG for Google logo

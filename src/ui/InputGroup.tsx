@@ -2,9 +2,9 @@ import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
+import Button from "@/ui/Button"
+import Input from "@/ui/Input"
+import Textarea from "@/ui/Textarea"
 
 function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
@@ -132,6 +132,7 @@ function InputGroupInput({
 }: React.ComponentProps<"input">) {
   return (
     <Input
+      variant="soft"
       data-slot="input-group-control"
       className={cn(
         "flex-1 rounded-none border-0 bg-transparent shadow-none focus-visible:ring-0 dark:bg-transparent",
@@ -148,6 +149,7 @@ function InputGroupTextarea({
 }: React.ComponentProps<"textarea">) {
   return (
     <Textarea
+      variant="soft"
       data-slot="input-group-control"
       className={cn(
         "flex-1 resize-none rounded-none border-0 bg-transparent py-3 shadow-none focus-visible:ring-0 dark:bg-transparent",

@@ -1,11 +1,12 @@
 import { ReactNode, forwardRef, ButtonHTMLAttributes } from "react";
+import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /**
- * Shared branded Button — use this for all CTAs across the app.
- * Prefer variants (primary | outline | ghost | …) + sizes instead of one-off button styles.
+ * Single source of truth for buttons.
+ * import Button from "@/ui/Button";
  */
 const buttonVariants = cva(
   "group relative inline-flex items-center justify-center gap-3 whitespace-nowrap rounded-lg text-base font-medium transition-all duration-300 ease-out focus:outline-none disabled:pointer-events-none disabled:opacity-50 active:scale-95 transform cursor-pointer! overflow-hidden select-none",
@@ -18,13 +19,14 @@ const buttonVariants = cva(
           "text-primary-brand bg-[linear-gradient(to_right,#77530a,#F0D448,#D4AF37,#77530a,#F0D448,#77530a)] bg-[length:250%_100%] bg-left hover:bg-right shadow-[0_4px_16px_rgba(0,0,0,0.5)] hover:shadow-[0_0_25px_rgba(212,175,55,0.4)]",
         secondary:
           "bg-white/5 border border-white/10 text-white hover:bg-white/10",
+        soft: "bg-light-bg border border-border text-primary-text font-normal hover:bg-light-bg/80 shadow-none active:scale-100",
         ghost:
           "bg-transparent text-white font-semibold uppercase tracking-[0.08em] hover:bg-white/5",
         danger:
           "bg-red-600 text-white border border-red-600 hover:bg-red-700 shadow-sm",
         success:
           "bg-emerald-600 text-white border border-emerald-600 hover:bg-emerald-700 shadow-sm",
-        link: "bg-transparent text-white font-medium underline-offset-4 hover:underline px-0! h-auto!",
+        link: "bg-transparent text-white font-medium underline-offset-4 hover:underline px-0! h-auto! active:scale-100",
       },
       size: {
         sm: "h-9 px-4 text-xs",
@@ -51,6 +53,7 @@ export interface ButtonProps
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
   isLoading?: boolean;
+  asChild?: boolean;
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -66,6 +69,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       className,
       children,
       disabled,
+      asChild = false,
       ...props
     },
     ref
@@ -74,6 +78,19 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const showRightIcon = rightIcon && !isLoading;
     const isPrimary = variant === "primary";
     const isOutline = variant === "outline";
+    const Comp = asChild ? Slot : "button";
+
+    if (asChild) {
+      return (
+        <Comp
+          ref={ref}
+          className={cn(buttonVariants({ variant, size, fullWidth, className }))}
+          {...props}
+        >
+          {children}
+        </Comp>
+      );
+    }
 
     return (
       <button

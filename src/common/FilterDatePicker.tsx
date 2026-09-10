@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { Calendar as CalendarIcon, Info, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { FaPlay } from "react-icons/fa";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/ui/Popover";
 import ReactCalendar from "react-calendar";
-import Button from "@/common/Button";
+import Button from "@/ui/Button";
 
 interface FilterDatePickerProps {
   startDate: Date;
