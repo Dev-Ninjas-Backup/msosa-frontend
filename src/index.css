@@ -1,0 +1,520 @@
+/* =======================
+   📦 Font Imports
+========================== */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+@font-face {
+  font-family: "Inter";
+  src: url("./assets/fonts/Inter-VariableFont_opsz,wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+html,
+body {
+  font-family: var(--font-inter);
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* =======================
+   📦 Tailwind Import
+========================== */
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+/* =======================
+   🌈 Root Design Tokens
+========================== */
+
+/* FAR SYSTEMS™ */
+
+:root {
+  --font-inter: "Inter", sans-serif;
+  --font-playfair: "Playfair Display", serif;
+  --primary-bg: #000307;
+  --light-bg: #0f172a;
+  --primary-brand: #D4AF37;
+  --secondary-brand: #C5A059;
+  --primary-text: #FFFFFF;
+  --secondary-text: #9CA3AF;
+
+  --border-color: rgba(255, 255, 255, 0.1);
+  --border-active-color: #FBBF24;
+  --border-secondary-color: rgba(212, 175, 55, 0.3);
+
+  --bg-stripe-1: #0f172a;
+  --bg-stripe-2: #020617;
+
+  --primary-green: #22C55E;
+  --primary-purple: #A855F7;
+  --primary-orange: #F97316;
+  --light-blue: #3B82F6;
+
+  --popover: 222.2 84% 4.9%;
+  --popover-foreground: 210 40% 98%;
+
+  --button-gradient: linear-gradient(180deg, #F0D448 0%, #BB7C12 100%);
+  --text-gradient: linear-gradient(180deg, #FFE669 0%, #9D680E 63.47%);
+  --brand-gradient: linear-gradient(180deg, #F0D448 0%, #BB7C12 100%);
+  --muted-blue: #94A3B8;
+
+  /* Status Colors */
+  --status-success: #169E7B;
+  --status-danger: #DA4352;
+  --status-warning: #DB940C;
+  --status-success-alt: #0DD825;
+
+  /* Surface tokens */
+  --Greyscale-500: #0f172a;
+  --Greyscale-400: #94a3b8;
+  --Secondary-100: #f8fafc;
+}
+
+
+
+
+/* =======================
+   🎨 Tailwind Theme Configuration
+========================== */
+@theme {
+  /* Colors */
+  --color-primary-bg: var(--primary-bg);
+  --color-light-bg: var(--light-bg);
+  --color-primary-brand: var(--primary-brand);
+  --color-secondary-brand: var(--secondary-brand);
+  --color-primary-text: var(--primary-text);
+  --color-secondary-text: var(--secondary-text);
+  --color-border: var(--border-color);
+
+  --color-primary-green: var(--primary-green);
+  --color-primary-purple: var(--primary-purple);
+  --color-primary-orange: var(--primary-orange);
+  --color-light-blue: var(--light-blue);
+  --color-light-green: var(--light-green);
+  --color-primary-red: var(--primary-red);
+  --color-primary-yellow: var(--primary-yellow);
+  --color-stripe-1: var(--bg-stripe-1);
+  --color-stripe-2: var(--bg-stripe-2);
+
+  --color-border-active: var(--border-active-color);
+  --color-border-secondary: var(--border-secondary-color);
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  /* Custom Sidebar & Layout Styles */
+  --color-muted-blue: var(--muted-blue);
+  --background-image-brand-gradient: var(--brand-gradient);
+
+  /* Status & Brand Color Tokens */
+  --color-status-success: var(--status-success);
+  --color-status-danger: var(--status-danger);
+  --color-status-warning: var(--status-warning);
+  --color-status-success-alt: var(--status-success-alt);
+
+  /* Fonts */
+  --font-playfair: "Playfair Display", serif;
+
+  /* Greyscale & Surface */
+  --color-greyscale-500: var(--Greyscale-500);
+  --color-greyscale-400: var(--Greyscale-400);
+  --color-secondary-100: var(--Secondary-100);
+}
+
+/* =======================
+   ✨ Base Styles
+========================== */
+@layer base {
+
+  html,
+  body {
+    font-family: var(--font-main);
+    background-color: var(--primary-bg);
+    color: var(--primary-text);
+    line-height: var(--leading-normal);
+  }
+
+  /* Focus visibility overrides */
+  *:focus,
+  *:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Typography Hierarchy */
+  h1 {
+    font-size: clamp(var(--text-3xl), 3vw + 1rem, var(--text-4xl));
+    font-weight: 600;
+    line-height: var(--leading-tight);
+  }
+
+  h2 {
+    font-size: clamp(var(--text-xl), 2vw + 0.5rem, var(--text-2xl));
+    font-weight: 600;
+    line-height: var(--leading-snug);
+  }
+
+  h3 {
+    font-size: clamp(var(--text-lg), 2vw + 0.25rem, var(--text-xl));
+    font-weight: 500;
+    line-height: var(--leading-snug);
+  }
+
+  h4 {
+    font-size: var(--text-lg);
+    font-weight: 500;
+  }
+
+  h5 {
+    font-size: var(--text-base);
+    font-weight: 400;
+  }
+
+  h6 {
+    font-size: var(--text-sm);
+    font-weight: 400;
+    color: var(--secondary-text);
+  }
+
+  p {
+    font-size: var(--text-base);
+    font-weight: 500;
+    line-height: var(--leading-relaxed);
+  }
+
+  /* ── Typography Utilities (from alexjlouis design system) ── */
+  .text-body {
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .text-button {
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 24px;
+    letter-spacing: 0.01em;
+  }
+
+  .text-small {
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .text-paragraph {
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 28px;
+    letter-spacing: 0.005em;
+  }
+
+  .text-title {
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 24px;
+    letter-spacing: 0.18px;
+    word-wrap: break-word;
+    color: var(--Greyscale-400, #8188A2);
+  }
+
+  .text-table {
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    word-wrap: break-word;
+    color: var(--Secondary-100, #2B353D);
+  }
+
+  .text-card {
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    word-wrap: break-word;
+    color: var(--Secondary-100, #2B353D);
+  }
+}
+
+/* =======================
+   🧩 Component Styles
+========================== */
+@layer components {
+  .custom-checkbox {
+    @apply appearance-none h-4 w-4 border-2 rounded cursor-pointer transition-all duration-200;
+    border-color: var(--primary-blue);
+  }
+
+  .custom-checkbox:checked {
+    background-color: var(--primary-blue);
+    box-shadow: 0 0 0 4px var(--light-green);
+  }
+
+  .custom-checkbox-gold {
+    @apply appearance-none h-4 w-4 border rounded cursor-pointer transition-all duration-200;
+    border-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  .custom-checkbox-gold:checked {
+    background-color: var(--primary-brand);
+    border-color: var(--primary-brand);
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='black' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .custom-checkbox-red {
+    @apply appearance-none h-4 w-4 border-2 rounded cursor-pointer transition-all duration-200;
+    border-color: var(--primary-red);
+  }
+
+  .custom-checkbox-red:checked {
+    background-color: var(--primary-red);
+    box-shadow: 0 0 0 4px var(--light-red);
+  }
+}
+
+/* Custom Utilities for Sidebar & Buttons */
+.bg-brand-gradient {
+  background-image: var(--brand-gradient);
+}
+
+.text-muted-blue {
+  color: var(--muted-blue);
+}
+
+.bg-primary-bg {
+  background-color: var(--primary-bg);
+}
+
+/* ============================================================
+   🎨 Custom Gradients (Text & Button)
+   ============================================================ */
+.text-gradient {
+  background: var(--text-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}
+
+.btn-gradient {
+  background: var(--button-gradient);
+  box-shadow: 0px 0px 20px var(--border-secondary-color);
+  border-radius: 8px;
+  color: #fff;
+  border: none;
+}
+
+
+/* ============================================================
+   SURFACE UTILITY — white card bg + configurable shadow
+   ============================================================ */
+.surface {
+  background: var(--Greyscale-500, white);
+}
+
+.surface[class*="shadow-"] {
+  --sx: 0px;
+  --sy: 0px;
+  --sblur: 14px;
+  --sspread: 0px;
+  --scolor: rgba(130, 136, 162, 0.12);
+  box-shadow: var(--sx) var(--sy) var(--sblur) var(--sspread) var(--scolor);
+}
+
+.surface.shadow-all {
+  --sx: 0px;
+  --sy: 0px;
+  --sblur: 14px;
+}
+
+.surface.shadow-t {
+  --sx: 0px;
+  --sy: -6px;
+  --sblur: 14px;
+}
+
+.surface.shadow-b {
+  --sx: 0px;
+  --sy: 6px;
+  --sblur: 14px;
+}
+
+.surface.shadow-l {
+  --sx: -6px;
+  --sy: 0px;
+  --sblur: 14px;
+}
+
+.surface.shadow-r {
+  --sx: 6px;
+  --sy: 0px;
+  --sblur: 14px;
+}
+
+.surface.shadow-tl {
+  --sx: -6px;
+  --sy: -6px;
+  --sblur: 14px;
+}
+
+.surface.shadow-tr {
+  --sx: 6px;
+  --sy: -6px;
+  --sblur: 14px;
+}
+
+.surface.shadow-bl {
+  --sx: -6px;
+  --sy: 6px;
+  --sblur: 14px;
+}
+
+.surface.shadow-rb {
+  --sx: 6px;
+  --sy: 6px;
+  --sblur: 14px;
+}
+
+
+
+/* Status color text utilities */
+.text-status-success {
+  color: var(--status-success);
+}
+
+.text-status-danger {
+  color: var(--status-danger);
+}
+
+.text-status-warning {
+  color: var(--status-warning);
+}
+
+.text-secondary-text {
+  color: var(--secondary-text);
+}
+
+/* ========================================================
+   💅 Custom Premium Scrollbar Styles (All Scrollable Areas)
+   ======================================================== */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(47, 101, 200, 0.4) transparent;
+}
+
+/* Webkit browser engines (Chrome, Safari, Edge, etc.) */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(47, 101, 200, 0.4);
+  /* Primary theme blue #2F65C8 at 40% opacity */
+  border-radius: 9999px;
+  transition: background 0.2s ease-in-out;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(47, 101, 200, 0.8);
+  /* Primary theme blue #2F65C8 at 80% opacity */
+}
+
+/* ========================================================
+   📝 Dynamic Form Inputs & Selects & Calendar Backgrounds
+   ======================================================== */
+/* Change background of all text inputs, textareas, selects, and pickers inside forms to primary-bg */
+form input:not([type="checkbox"]):not([type="radio"]),
+form textarea,
+form select,
+form button.bg-light-bg,
+form .bg-light-bg {
+  background-color: var(--primary-bg) !important;
+}
+
+/* Ensure focus states are clean and don't revert to white bg */
+form input:not([type="checkbox"]):not([type="radio"]):focus,
+form textarea:focus,
+form select:focus {
+  background-color: var(--primary-bg) !important;
+  /* matches focus:bg-primary-bg */
+}
+
+/* Calendar Popover and Calendar component styling */
+.custom-calendar-wrapper,
+.react-calendar {
+  background-color: var(--primary-bg) !important;
+}
+
+/* Calendar Width Constraint to match trigger field exactly */
+.react-calendar {
+  width: 100% !important;
+  max-width: 100% !important;
+  border: none !important;
+  font-family: inherit !important;
+}
+
+.custom-calendar-wrapper {
+  background-color: var(--primary-bg) !important;
+  width: 100% !important;
+}
+
+/* Standardize react-calendar inner components */
+.react-calendar__navigation {
+  background-color: var(--primary-bg) !important;
+}
+
+.react-calendar__viewContainer {
+  background-color: var(--primary-bg) !important;
+}
+
+.react-calendar__tile {
+  background-color: var(--primary-bg) !important;
+}
+
+.react-calendar__tile:hover {
+  background-color: rgba(47, 101, 200, 0.1) !important;
+  border-radius: 6px;
+}
+
+.react-calendar__tile--active,
+.react-calendar__tile--hasActive {
+  background: var(--brand-gradient) !important;
+  color: white !important;
+  border-radius: 6px;
+}
