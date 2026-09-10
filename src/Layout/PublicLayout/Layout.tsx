@@ -10,7 +10,7 @@ const Layout: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col bg-primary-bg overflow-x-hidden">
       <Navbar />
-      <main className="bg-primary-bg flex-1 pb-20 md:pb-0 -mt-22">
+      <main className="bg-primary-bg flex-1 pb-16 sm:pb-20 lg:pb-0 -mt-16 sm:-mt-20 lg:-mt-22">
         <Outlet />
       </main>
       <Footer />

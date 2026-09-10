@@ -28,185 +28,186 @@ const Navbar: React.FC = () => {
 
   const closeMobileMenu = () => setIsMenuOpen(false);
 
+  const navLinkClass =
+    "text-sm font-medium tracking-wider text-primary-text hover:text-primary-brand transition-colors whitespace-nowrap";
+
   return (
     <header className="sticky top-0 z-40 bg-transparent text-primary-text border-none">
       <CommonWrapper className="">
-        <div className="flex h-22 items-center justify-between">
+        <div className="relative flex h-16 sm:h-20 lg:h-22 items-center justify-between gap-3">
           {/* Logo */}
-          <Link to="/" className="group flex items-center gap-3 no-underline">
+          <Link
+            to="/"
+            className="group flex items-center gap-2 sm:gap-3 no-underline shrink-0 min-w-0 z-10"
+          >
             <img
               src={logo}
               alt="FAR SYSTEMS Logo"
-              className="size-15 object-contain transition-transform duration-300 group-hover:scale-105"
+              className="size-10 sm:size-12 lg:size-15 object-contain transition-transform duration-300 group-hover:scale-105 shrink-0"
             />
-            <span className="leading-none flex flex-col justify-center">
-              <span className="block text-2xl font-bold tracking-[0.1em] text-gradient">
+            <span className="leading-none flex flex-col justify-center min-w-0">
+              <span className="block text-lg sm:text-xl lg:text-2xl font-bold tracking-[0.1em] text-gradient truncate">
                 FAR SYSTEMS
                 <sup className="ml-0.5 text-[10px] tracking-normal text-primary-brand">
                   TM
                 </sup>
               </span>
-              <span className="mt-1 block text-[10px] font-normal tracking-[0.2em] text-secondary-text uppercase leading-[15px]">
+              <span className="mt-1 hidden xl:block text-[10px] font-normal tracking-[0.2em] text-secondary-text uppercase leading-[15px] max-w-[280px]">
                 Building Visibility Systems for Individuals and Organizations.
               </span>
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* Desktop nav links — center, slightly left */}
           <nav
-            className="hidden items-center gap-6 md:flex"
+            className="absolute left-[40%] xl:left-[42%] top-1/2 -translate-x-1/2 -translate-y-1/2 hidden lg:flex items-center gap-4 xl:gap-5"
             aria-label="Main navigation"
           >
-            {/* Navigation Links */}
-            <div className="flex items-center gap-5">
-              {/* Solutions Dropdown */}
-              <div className="relative" ref={solutionsRef}>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsSolutionsOpen((prev) => !prev);
-                    setIsResourcesOpen(false);
-                  }}
-                  className="flex items-center gap-1 text-sm font-medium tracking-wider text-primary-text hover:text-primary-brand transition-colors"
-                >
-                  SOLUTIONS
-                  <ChevronDown
-                    className={`h-4 w-4 transition-transform duration-200 ${
-                      isSolutionsOpen ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
-
-                {isSolutionsOpen && (
-                  <div className="absolute top-full left-0 mt-2 w-48 rounded-md border border-white/10 bg-black/95 py-2 shadow-lg backdrop-blur-sm z-50">
-                    <Link
-                      to="/solutions/individual"
-                      className="block px-4 py-2 text-sm text-primary-text hover:bg-white/5 hover:text-primary-brand"
-                      onClick={() => setIsSolutionsOpen(false)}
-                    >
-                      For Individuals
-                    </Link>
-                    <Link
-                      to="/solutions/organization"
-                      className="block px-4 py-2 text-sm text-primary-text hover:bg-white/5 hover:text-primary-brand"
-                      onClick={() => setIsSolutionsOpen(false)}
-                    >
-                      For Organizations
-                    </Link>
-                  </div>
-                )}
-              </div>
-
-              <Link
-                to="/platform"
-                className="text-sm font-medium tracking-wider text-primary-text hover:text-primary-brand transition-colors"
+            <div className="relative" ref={solutionsRef}>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsSolutionsOpen((prev) => !prev);
+                  setIsResourcesOpen(false);
+                }}
+                className={`flex items-center gap-1 ${navLinkClass}`}
               >
-                PLATFORM
-              </Link>
+                SOLUTIONS
+                <ChevronDown
+                  className={`h-4 w-4 transition-transform duration-200 ${
+                    isSolutionsOpen ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
 
-              <Link
-                to="/about"
-                className="text-sm font-medium tracking-wider text-primary-text hover:text-primary-brand transition-colors"
-              >
-                ABOUT US
-              </Link>
-
-              {/* Resources Dropdown */}
-              <div className="relative" ref={resourcesRef}>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsResourcesOpen((prev) => !prev);
-                    setIsSolutionsOpen(false);
-                  }}
-                  className="flex items-center gap-1 text-sm font-medium tracking-wider text-primary-text hover:text-primary-brand transition-colors"
-                >
-                  RESOURCES
-                  <ChevronDown
-                    className={`h-4 w-4 transition-transform duration-200 ${
-                      isResourcesOpen ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
-
-                {isResourcesOpen && (
-                  <div className="absolute top-full left-0 mt-2 w-48 rounded-md border border-white/10 bg-black/95 py-2 shadow-lg backdrop-blur-sm z-50">
-                    <Link
-                      to="/resources/blog"
-                      className="block px-4 py-2 text-sm text-primary-text hover:bg-white/5 hover:text-primary-brand"
-                      onClick={() => setIsResourcesOpen(false)}
-                    >
-                      Blog
-                    </Link>
-                    <Link
-                      to="/resources/docs"
-                      className="block px-4 py-2 text-sm text-primary-text hover:bg-white/5 hover:text-primary-brand"
-                      onClick={() => setIsResourcesOpen(false)}
-                    >
-                      Documentation
-                    </Link>
-                    <Link
-                      to="/resources/support"
-                      className="block px-4 py-2 text-sm text-primary-text hover:bg-white/5 hover:text-primary-brand"
-                      onClick={() => setIsResourcesOpen(false)}
-                    >
-                      Support
-                    </Link>
-                  </div>
-                )}
-              </div>
-
-              <Link
-                to="/pricing"
-                className="text-sm font-medium tracking-wider text-primary-text hover:text-primary-brand transition-colors"
-              >
-                PRICING
-              </Link>
+              {isSolutionsOpen && (
+                <div className="absolute top-full left-0 mt-2 w-48 rounded-md border border-white/10 bg-black/95 py-2 shadow-lg backdrop-blur-sm z-50">
+                  <Link
+                    to="/solutions/individual"
+                    className="block px-4 py-2 text-sm text-primary-text hover:bg-white/5 hover:text-primary-brand"
+                    onClick={() => setIsSolutionsOpen(false)}
+                  >
+                    For Individuals
+                  </Link>
+                  <Link
+                    to="/solutions/organization"
+                    className="block px-4 py-2 text-sm text-primary-text hover:bg-white/5 hover:text-primary-brand"
+                    onClick={() => setIsSolutionsOpen(false)}
+                  >
+                    For Organizations
+                  </Link>
+                </div>
+              )}
             </div>
 
-            <div className="w-px h-6 bg-border" />
+            <Link to="/platform" className={navLinkClass}>
+              PLATFORM
+            </Link>
 
+            <Link to="/about" className={navLinkClass}>
+              ABOUT US
+            </Link>
+
+            <div className="relative" ref={resourcesRef}>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsResourcesOpen((prev) => !prev);
+                  setIsSolutionsOpen(false);
+                }}
+                className={`flex items-center gap-1 ${navLinkClass}`}
+              >
+                RESOURCES
+                <ChevronDown
+                  className={`h-4 w-4 transition-transform duration-200 ${
+                    isResourcesOpen ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+
+              {isResourcesOpen && (
+                <div className="absolute top-full left-0 mt-2 w-48 rounded-md border border-white/10 bg-black/95 py-2 shadow-lg backdrop-blur-sm z-50">
+                  <Link
+                    to="/resources/blog"
+                    className="block px-4 py-2 text-sm text-primary-text hover:bg-white/5 hover:text-primary-brand"
+                    onClick={() => setIsResourcesOpen(false)}
+                  >
+                    Blog
+                  </Link>
+                  <Link
+                    to="/resources/docs"
+                    className="block px-4 py-2 text-sm text-primary-text hover:bg-white/5 hover:text-primary-brand"
+                    onClick={() => setIsResourcesOpen(false)}
+                  >
+                    Documentation
+                  </Link>
+                  <Link
+                    to="/resources/support"
+                    className="block px-4 py-2 text-sm text-primary-text hover:bg-white/5 hover:text-primary-brand"
+                    onClick={() => setIsResourcesOpen(false)}
+                  >
+                    Support
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            <Link to="/pricing" className={navLinkClass}>
+              PRICING
+            </Link>
+          </nav>
+
+          {/* Desktop CTAs (right) */}
+          <div className="hidden lg:flex items-center gap-3 xl:gap-5 shrink-0 z-10">
             <a
               href="https://www.farsystems.ai"
-              className="text-primary-brand text-sm font-medium tracking-wider hover:opacity-80 transition-opacity"
+              className="hidden xl:inline text-primary-brand text-sm font-medium tracking-wider hover:opacity-80 transition-opacity"
             >
               www.farsystems.ai
             </a>
 
-            <div className="flex items-center gap-4">
+            <div className="hidden xl:block w-px h-6 bg-border" />
+
+            <div className="flex items-center gap-2 xl:gap-4">
               <Link to="/login">
                 <PrimaryButton variant="outline" size="lg">
                   LOGIN
                 </PrimaryButton>
               </Link>
               <Link to="/register">
-                <PrimaryButton variant="primary" size="lg" className="text-black!">
+                <PrimaryButton
+                  variant="primary"
+                  size="lg"
+                  className="text-black!"
+                >
                   GET STARTED
                 </PrimaryButton>
               </Link>
             </div>
-          </nav>
+          </div>
 
-          {/* Hamburger Button (same as before) */}
+          {/* Hamburger — mobile + tablet */}
           <button
             type="button"
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
             onClick={() => setIsMenuOpen((open) => !open)}
-            className="border-0 bg-transparent p-2 text-white md:hidden"
+            className="border-0 bg-transparent p-2 text-white lg:hidden shrink-0 z-10"
           >
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            {isMenuOpen ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
           </button>
         </div>
 
-        {/* Mobile Menu (same structure as before + navigation links) */}
+        {/* Mobile / tablet menu */}
         {isMenuOpen && (
           <nav
-            className="border-t border-white/10 py-4 flex flex-col gap-4 md:hidden"
+            className="border-t border-white/10 py-4 flex flex-col gap-4 lg:hidden"
             aria-label="Mobile navigation"
           >
-            {/* Navigation Links for Mobile */}
-            <div className="flex flex-col gap-1 px-2">
-              {/* Solutions */}
+            <div className="flex flex-col gap-1">
               <div>
                 <button
                   type="button"
@@ -256,7 +257,6 @@ const Navbar: React.FC = () => {
                 ABOUT US
               </Link>
 
-              {/* Resources */}
               <div>
                 <button
                   type="button"
@@ -308,12 +308,12 @@ const Navbar: React.FC = () => {
 
             <a
               href="https://www.farsystems.ai"
-              className="text-primary-brand text-sm font-medium tracking-wider hover:opacity-80 transition-opacity px-2"
+              className="text-primary-brand text-sm font-medium tracking-wider hover:opacity-80 transition-opacity"
             >
               www.farsystems.ai
             </a>
 
-            <div className="flex flex-col gap-3 px-2">
+            <div className="flex flex-col gap-3">
               <Link to="/login" onClick={closeMobileMenu}>
                 <PrimaryButton
                   variant="outline"
@@ -323,7 +323,10 @@ const Navbar: React.FC = () => {
                 </PrimaryButton>
               </Link>
               <Link to="/register" onClick={closeMobileMenu}>
-                <PrimaryButton variant="primary" className="w-full text-[#000000]">
+                <PrimaryButton
+                  variant="primary"
+                  className="w-full text-[#000000]"
+                >
                   GET STARTED
                 </PrimaryButton>
               </Link>

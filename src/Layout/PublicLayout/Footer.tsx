@@ -25,7 +25,7 @@ const Footer: React.FC = () => {
                     className="text-secondary-text shrink-0"
                     strokeWidth={1.75}
                   />
-                  <span className="text-secondary-text text-sm font-semibold uppercase tracking-[0.16em] whitespace-nowrap">
+                  <span className="text-secondary-text text-xs sm:text-sm font-semibold uppercase tracking-[0.12em] sm:tracking-[0.16em]">
                     {badge.label}
                   </span>
                 </div>

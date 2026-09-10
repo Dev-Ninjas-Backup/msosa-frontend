@@ -151,8 +151,8 @@ export default function ForgotPasswordPage() {
     <div className="min-h-screen w-full flex flex-col gap-10 items-center justify-center bg-white! dark:bg-slate-950 p-4 select-none relative">
       {/* Top Navigation Controls */}
       <div className="absolute top-3 left-0 right-0 w-full">
-        <div className="max-w-[1400px] mx-auto px-6 flex items-center justify-between">
-          <div onClick={() => navigate("/")} className="cursor-pointer w-52 transition-transform hover:scale-105 active:scale-95">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 flex items-center justify-between">
+          <div onClick={() => navigate("/")} className="cursor-pointer w-36 sm:w-52 transition-transform hover:scale-105 active:scale-95">
             <Logo />
           </div>
           <ThemeToggle />
@@ -160,7 +160,7 @@ export default function ForgotPasswordPage() {
       </div>
 
       {/* Unified Card Wrapper */}
-      <div className="w-full max-w-[420px] bg-white dark:bg-slate-900 rounded-xl p-8 shadow-[0_4px_10px_rgba(0,0,0,0.08)] border border-slate-200/50 dark:border-slate-800/50 flex flex-col items-center gap-8">
+      <div className="w-full max-w-[420px] mt-14 sm:mt-0 bg-white dark:bg-slate-900 rounded-xl p-5 sm:p-8 shadow-[0_4px_10px_rgba(0,0,0,0.08)] border border-slate-200/50 dark:border-slate-800/50 flex flex-col items-center gap-6 sm:gap-8">
         {/* Step Indicators */}
         <StepIndicators step={step} />
 
@@ -225,7 +225,7 @@ export default function ForgotPasswordPage() {
                       maxLength={1}
                       onChange={(e) => handleOtpChange(idx, e.target.value)}
                       onKeyDown={(e) => handleOtpKeyDown(idx, e)}
-                      className="w-[56px] h-[56px] rounded-xl text-center text-2xl font-bold text-primary-text border border-transparent focus:border-brand-blue bg-slate-100! dark:bg-slate-800! focus:bg-slate-100! dark:focus:bg-slate-800! outline-none transition-all cursor-pointer"
+                      className="w-10 h-10 sm:w-[56px] sm:h-[56px] rounded-lg sm:rounded-xl text-center text-lg sm:text-2xl font-bold text-primary-text border border-transparent focus:border-brand-blue bg-slate-100! dark:bg-slate-800! focus:bg-slate-100! dark:focus:bg-slate-800! outline-none transition-all cursor-pointer shrink"
                     />
                   ))}
                 </div>

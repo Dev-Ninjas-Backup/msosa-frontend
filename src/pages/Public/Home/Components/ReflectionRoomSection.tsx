@@ -104,35 +104,28 @@ const solutions: SolutionItem[] = [
 const ReflectionRoomSection = () => {
   return (
     <section className="w-full text-primary-text py-16 lg:py-24 select-none">
-      {/* 1. Header Banner with Golden Light Beam & Star Accents (Image 12 on border) */}
-      <div className="relative w-full flex items-center justify-center mb-12 sm:mb-16">
-        {/* Full-width continuous horizontal gold beam line */}
-        {/* Left glowing border segment & flare */}
-        <div className="flex-1 relative flex items-center justify-end h-14 overflow-visible">
-          {/* Left star flare: oriented towards text, perfectly centered on the line */}
+      {/* 1. Header Banner with Golden Light Beam & Star Accents */}
+      <div className="relative w-full flex items-center justify-center mb-10 sm:mb-16 gap-1 sm:gap-0">
+        <div className="hidden sm:flex flex-1 relative items-center justify-end h-14 overflow-visible min-w-0">
           <img
             src={starFlareImg}
             alt=""
-            className="absolute right-0 object-contain pointer-events-none select-none z-10"
+            className="absolute right-0 max-w-full object-contain pointer-events-none select-none z-10"
           />
         </div>
 
-        {/* Center Header Text */}
-        <div className="relative px-4 sm:px-6 py-2 bg-primary-bg z-20 shrink-0">
-          <h2 className="text-xs sm:text-sm md:text-base lg:text-xl font-medium leading-5
-tracking-[5.60px] text-secondary-brand uppercase text-center font-['Inter'] whitespace-nowrap">
+        <div className="relative px-2 sm:px-4 md:px-6 py-2 bg-primary-bg z-20 shrink min-w-0 max-w-full">
+          <h2 className="text-[10px] sm:text-sm md:text-base lg:text-xl font-medium leading-snug sm:leading-5 tracking-[0.12em] sm:tracking-[0.25em] md:tracking-[5.60px] text-secondary-brand uppercase text-center font-['Inter'] break-words sm:whitespace-nowrap">
             FEATURING THE UNIVERSAL FAR REFLECTION ROOM
-            <sup className="text-[10px] ml-1 tracking-normal font-normal">TM</sup>
+            <sup className="text-[8px] sm:text-[10px] ml-1 tracking-normal font-normal">TM</sup>
           </h2>
         </div>
 
-        {/* Right glowing border segment & flare */}
-        <div className="flex-1 relative flex items-center justify-start h-14 overflow-visible">
-          {/* Right star flare: flipped horizontally so larger burst faces inward, perfectly centered on line */}
+        <div className="hidden sm:flex flex-1 relative items-center justify-start h-14 overflow-visible min-w-0">
           <img
             src={starFlareImg}
             alt=""
-            className=" object-contain -scale-x-100 pointer-events-none select-none z-10"
+            className="max-w-full object-contain -scale-x-100 pointer-events-none select-none z-10"
           />
         </div>
       </div>

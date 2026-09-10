@@ -38,8 +38,8 @@ export default function RegisterPage() {
     <div className="min-h-screen w-full flex flex-col gap-10 items-center justify-center bg-white dark:bg-slate-950 p-4 select-none relative">
       {/* Top Navigation Controls */}
       <div className="absolute top-3 left-0 right-0 w-full">
-        <div className="max-w-[1400px] mx-auto px-6 flex items-center justify-between">
-          <div onClick={() => navigate("/")} className="cursor-pointer w-52 transition-transform hover:scale-105 active:scale-95">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 flex items-center justify-between">
+          <div onClick={() => navigate("/")} className="cursor-pointer w-36 sm:w-52 transition-transform hover:scale-105 active:scale-95">
             <Logo />
           </div>
           <ThemeToggle />
@@ -47,7 +47,7 @@ export default function RegisterPage() {
       </div>
 
       {/* Title Centered Above the Card */}
-      <h1 className="text-3xl font-medium text-[#2b353d] dark:text-slate-100 tracking-wide text-center w-full">
+      <h1 className="text-2xl sm:text-3xl font-medium text-[#2b353d] dark:text-slate-100 tracking-wide text-center w-full mt-14 sm:mt-0">
         Register
       </h1>
 
@@ -56,7 +56,7 @@ export default function RegisterPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-[488px] bg-[#f6f9ff] dark:bg-slate-900 rounded-xl p-8 shadow-[0_4px_10px_rgba(0,0,0,0.08)] border border-slate-100/50 dark:border-slate-800/50 flex flex-col gap-3"
+        className="w-full max-w-[488px] bg-[#f6f9ff] dark:bg-slate-900 rounded-xl p-5 sm:p-8 shadow-[0_4px_10px_rgba(0,0,0,0.08)] border border-slate-100/50 dark:border-slate-800/50 flex flex-col gap-3"
       >
         <form onSubmit={handleRegisterSubmit} className="flex flex-col gap-3">
           {/* Full Name */}

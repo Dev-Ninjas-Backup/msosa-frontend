@@ -74,7 +74,7 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
           onMenuClick={() => setIsMobileOpen(true)}
         />
 
-        <main className="flex-1 px-6 py-6">
+        <main className="flex-1 px-4 sm:px-6 py-4 sm:py-6">
           {/* Breadcrumbs (Optional) */}
           <div className="mb-4">
             <Breadcrumbs config={config} />
