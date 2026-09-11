@@ -29,7 +29,7 @@ const Navbar: React.FC = () => {
   const closeMobileMenu = () => setIsMenuOpen(false);
 
   const navLinkClass =
-    "text-sm font-medium tracking-wider text-primary-text hover:text-primary-brand transition-colors whitespace-nowrap";
+    "text-xs 2xl:text-sm font-medium tracking-wider text-primary-text hover:text-primary-brand transition-colors whitespace-nowrap";
 
   return (
     <header className="sticky top-0 z-40 bg-transparent text-primary-text border-none">
@@ -46,7 +46,7 @@ const Navbar: React.FC = () => {
               className="size-10 sm:size-12 lg:size-15 object-contain transition-transform duration-300 group-hover:scale-105 shrink-0"
             />
             <span className="leading-none flex flex-col justify-center min-w-0">
-              <span className="block text-lg sm:text-xl lg:text-2xl font-bold tracking-[0.1em] text-gradient truncate">
+              <span className="block text-lg sm:text-xl xl:text-2xl font-bold tracking-[0.1em] text-gradient truncate">
                 FAR SYSTEMS
                 <sup className="ml-0.5 text-[10px] tracking-normal text-primary-brand">
                   TM
@@ -60,7 +60,7 @@ const Navbar: React.FC = () => {
 
           {/* Desktop nav — xl+ only (laptop uses hamburger to avoid overflow) */}
           <nav
-            className="absolute left-[48%] top-1/2 -translate-x-1/2 -translate-y-1/2 hidden xl:flex items-center gap-5"
+            className="absolute left-[45%] 2xl:left-[48%] top-1/2 -translate-x-1/2 -translate-y-1/2 hidden xl:flex items-center gap-5"
             aria-label="Main navigation"
           >
             <div className="relative" ref={solutionsRef}>

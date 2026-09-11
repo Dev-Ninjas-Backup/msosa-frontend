@@ -26,16 +26,16 @@ export const MicrophoneAcousticVisualizer: React.FC<MicrophoneAcousticVisualizer
   });
 
   return (
-    <div className="relative flex items-center justify-center w-full max-w-[min(100%,580px)] aspect-square select-none pointer-events-none overflow-visible">
+    <div className="relative flex items-center justify-center w-full max-w-[min(100%,420px)] md:max-w-[min(100%,460px)] lg:max-w-[min(100%,380px)] xl:max-w-[min(100%,540px)] 2xl:max-w-[min(100%,580px)] aspect-square select-none pointer-events-none overflow-visible">
       {/* Ambient glow */}
-      <div className="absolute inset-0 bg-radial from-[#FFAA00]/10 via-[#FF7700]/5 to-transparent blur-3xl pointer-events-none transform-gpu scale-150 sm:scale-180" />
+      <div className="absolute inset-0 bg-radial from-[#FFAA00]/10 via-[#FF7700]/5 to-transparent blur-3xl pointer-events-none transform-gpu scale-130 sm:scale-140 md:scale-150 lg:scale-140 xl:scale-170 2xl:scale-180" />
 
-      {/* Concentric ripples — sized relative to container */}
+      {/* Concentric ripples */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         {[0, 1, 2, 3].map((index) => (
           <div
             key={`wave-circle-${index}`}
-            className="wave-ripple-circle absolute rounded-full pointer-events-none w-[120%] h-[120%] sm:w-[130%] sm:h-[130%] max-w-[680px] max-h-[680px]"
+            className="wave-ripple-circle absolute rounded-full pointer-events-none w-[110%] h-[110%] sm:w-[115%] sm:h-[115%] md:w-[120%] md:h-[120%] lg:w-[125%] lg:h-[125%] xl:w-[180%] xl:h-[180%] max-w-[600px] max-h-[600px]"
             style={{
               animationDelay: `-${index * 2.25}s`,
               animationDuration: "9s",
@@ -45,25 +45,26 @@ export const MicrophoneAcousticVisualizer: React.FC<MicrophoneAcousticVisualizer
       </div>
 
       {/* Sound-wave bars */}
-      <div className="absolute inset-x-0 sm:-inset-x-8 lg:-inset-x-12 xl:-inset-x-18 top-1/2 -translate-y-1/2 flex items-center justify-between pointer-events-none z-10 px-1">
+      <div className="absolute inset-x-0 sm:-inset-x-5 md:-inset-x-7 lg:-inset-x-6 xl:-inset-x-12 2xl:-inset-x-16 top-1/2 -translate-y-1/2 flex items-center justify-between pointer-events-none z-10 px-1">
         {barConfigs.map((bar, i) => {
           const isMiddleHidden = i > totalBars * 0.42 && i < totalBars * 0.58;
-          const baseHeight = 26 + bar.heightFactor * 215;
+          // Slightly shorter bars at lg (1024) because column is narrower
+          const baseHeight = 20 + bar.heightFactor * 175;
 
           return (
             <span
               key={`wave-bar-${i}`}
               className="inline-block pointer-events-none transform-gpu will-change-transform"
               style={{
-                width: "clamp(1.5px, 0.45vw, 3.5px)",
-                height: `clamp(${baseHeight * 0.35}px, ${baseHeight * 0.12}vw, ${baseHeight}px)`,
-                margin: "0 clamp(0.5px, 0.15vw, 2px)",
+                width: "clamp(1.3px, 0.4vw, 3px)",
+                height: `clamp(${baseHeight * 0.3}px, ${baseHeight * 0.1}vw, ${baseHeight}px)`,
+                margin: "0 clamp(0.35px, 0.12vw, 1.6px)",
                 opacity: isMiddleHidden ? 0.35 : 1,
                 clipPath: "polygon(50% 0%, 100% 10%, 100% 90%, 50% 100%, 0% 90%, 0% 10%)",
                 background:
                   "linear-gradient(180deg, rgba(255, 140, 0, 0.25) 0%, rgba(255, 185, 30, 0.9) 15%, rgba(255, 235, 110, 1) 35%, #FFFFFF 50%, rgba(255, 235, 110, 1) 65%, rgba(255, 185, 30, 0.9) 85%, rgba(255, 140, 0, 0.25) 100%)",
                 boxShadow:
-                  "0 0 12px rgba(255, 255, 255, 0.95), 0 0 24px rgba(255, 210, 60, 0.95), 0 0 38px rgba(255, 140, 10, 0.75)",
+                  "0 0 9px rgba(255, 255, 255, 0.9), 0 0 18px rgba(255, 210, 60, 0.85), 0 0 28px rgba(255, 140, 10, 0.65)",
                 animation: `soundWaveBar ${bar.duration}s ease-in-out infinite alternate`,
                 animationDelay: `${bar.delay}s`,
                 transformOrigin: "center center",
@@ -74,13 +75,13 @@ export const MicrophoneAcousticVisualizer: React.FC<MicrophoneAcousticVisualizer
       </div>
 
       {/* Microphone */}
-      <div className="relative z-20 flex items-center justify-center pointer-events-none w-[70%] sm:w-[80%] lg:w-full">
-        <div className="absolute top-[22%] w-32 h-32 sm:w-44 sm:h-44 lg:w-56 lg:h-56 rounded-full bg-radial from-[#FFE680]/50 via-[#FFAA00]/40 to-transparent blur-2xl pointer-events-none transform-gpu" />
+      <div className="relative z-20 flex items-center justify-center pointer-events-none w-[72%] sm:w-[78%] md:w-[80%] lg:w-[90%] xl:w-full">
+        <div className="absolute top-[22%] w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 lg:w-36 lg:h-36 xl:w-48 xl:h-48 2xl:w-56 2xl:h-56 rounded-full bg-radial from-[#FFE680]/50 via-[#FFAA00]/40 to-transparent blur-2xl pointer-events-none transform-gpu" />
 
         <img
           src={micSrc}
           alt={altText}
-          className="w-full h-auto max-h-[280px] sm:max-h-[380px] lg:max-h-[480px] xl:max-h-[520px] object-contain relative z-20 transform-gpu"
+          className="w-full h-auto max-h-[220px] sm:max-h-[280px] md:max-h-[320px] lg:max-h-[340px] xl:max-h-[400px] 2xl:max-h-[520px] object-contain relative z-20 transform-gpu"
         />
       </div>
 
