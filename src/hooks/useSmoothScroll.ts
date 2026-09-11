@@ -1,37 +1,15 @@
-import { RefObject, useEffect } from "react";
+import { useEffect } from "react";
 import Lenis from "lenis";
 
 /**
- * Smooth scrolling via Lenis.
- * - No arg → window / document scroll (public pages)
- * - RefObject → nested overflow container (dashboard shells)
- *
- * Always pass the RefObject itself — never `.current` at call time
- * (that is null on first render / hard reload and breaks wheel scroll).
+ * Smooth scrolling via Lenis — landing / public pages only.
+ * Do not use on dashboard or consumer shells (breaks nested/modal scroll).
  */
-export const useSmoothScroll = (
-  targetRef?: RefObject<HTMLElement | null>
-) => {
+export const useSmoothScroll = () => {
   useEffect(() => {
-    const targetElement = targetRef?.current ?? null;
-
-    // Nested shell: wrapper scrolls; content must be a single child that
-    // wraps the full page height (header + main + footer).
-    const contentElement = targetElement
-      ? ((targetElement.firstElementChild as HTMLElement | null) ??
-        targetElement)
-      : document.documentElement;
-
     const lenis = new Lenis({
-      ...(targetElement
-        ? {
-            wrapper: targetElement,
-            content: contentElement,
-          }
-        : {
-            wrapper: window,
-            content: document.documentElement,
-          }),
+      wrapper: window,
+      content: document.documentElement,
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: "vertical",
@@ -53,7 +31,7 @@ export const useSmoothScroll = (
       cancelAnimationFrame(rafId);
       lenis.destroy();
     };
-  }, [targetRef]);
+  }, []);
 };
 
 export default useSmoothScroll;

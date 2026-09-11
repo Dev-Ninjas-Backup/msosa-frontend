@@ -1,10 +1,9 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import Breadcrumbs from "./Breadcrumbs";
 import { menuGenerator } from "@/utils/Generator/MenuGenerator";
-import useSmoothScroll from "@/hooks/useSmoothScroll";
 
 const routeDescriptions: Record<string, string> = {
   "Overview": "Welcome back to your reseller dashboard.",
@@ -43,9 +42,6 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
     return null;
   };
 
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-  useSmoothScroll(scrollContainerRef);
-
   const activeItem = findActiveItem(menu);
   const title = activeItem ? activeItem.label : "Overview";
   const description = activeItem && routeDescriptions[activeItem.label]
@@ -66,25 +62,19 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
       )}
 
       {/* 2. Main Content Area */}
-      <div
-        ref={scrollContainerRef}
-        className="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto overscroll-contain"
-      >
-        {/* Single content child required by Lenis nested wrapper */}
-        <div className="flex min-h-full flex-col">
-          <Header
-            title={title}
-            description={description}
-            onMenuClick={() => setIsMobileOpen(true)}
-          />
+      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto overscroll-contain">
+        <Header
+          title={title}
+          description={description}
+          onMenuClick={() => setIsMobileOpen(true)}
+        />
 
-          <main className="flex-1 px-4 sm:px-6 py-4 sm:py-6">
-            <div className="mb-4">
-              <Breadcrumbs config={config} />
-            </div>
-            <Outlet />
-          </main>
-        </div>
+        <main className="flex-1 px-4 sm:px-6 py-4 sm:py-6">
+          <div className="mb-4">
+            <Breadcrumbs config={config} />
+          </div>
+          <Outlet />
+        </main>
       </div>
     </div>
   );

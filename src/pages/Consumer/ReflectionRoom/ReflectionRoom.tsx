@@ -4,7 +4,6 @@ import {
   ChevronRight,
   Clock3,
   Globe,
-  Keyboard,
   List,
   Lock,
   Mic,
@@ -18,10 +17,10 @@ import {
   Square,
 } from "lucide-react";
 import logo from "@/assets/logo.png";
-import { Textarea } from "@/ui/Textarea";
 import { cn } from "@/lib/utils";
 import SettingsPanel from "./SettingsPanel";
 import VibePanel from "./VibePanel";
+import TypeEditor from "./TypeEditor";
 import {
   copy,
   DEFAULT_SETTINGS,
@@ -294,14 +293,27 @@ const ReflectionRoom = () => {
           </div>
 
           {/* Center */}
-          <div className="flex flex-col items-center justify-center text-center px-2 py-4 lg:py-0">
-            <p className="text-sm sm:text-base text-white/80">{t.welcome}</p>
-            <h2 className="mt-2 font-playfair text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-white max-w-xl leading-tight">
-              {settings.mainText || t.prompt}
-            </h2>
-            <p className="mt-3 text-sm text-white/55 max-w-md">
-              {settings.subText}
-            </p>
+          <div className="flex flex-col items-center justify-center text-center px-2 py-4 lg:py-0 min-w-0">
+            {inputMode === "type" ? (
+              <>
+                <h2 className="font-playfair text-2xl sm:text-3xl lg:text-4xl text-white max-w-xl leading-tight">
+                  {t.welcome}
+                </h2>
+                <p className="mt-2 text-sm sm:text-base text-white/65 max-w-md">
+                  {t.prompt}
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="text-sm sm:text-base text-white/80">{t.welcome}</p>
+                <h2 className="mt-2 font-playfair text-2xl sm:text-3xl lg:text-4xl text-white max-w-xl leading-tight">
+                  {settings.mainText || t.prompt}
+                </h2>
+                <p className="mt-3 text-sm text-white/55 max-w-md">
+                  {settings.subText}
+                </p>
+              </>
+            )}
 
             {inputMode === "voice" ? (
               <div className="mt-8 sm:mt-10 w-full">
@@ -348,40 +360,48 @@ const ReflectionRoom = () => {
                       ? t.answer
                       : settings.instructionText}
                 </p>
+
+                <div className="mt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setInputMode("type")}
+                    className="inline-flex items-center gap-2 h-10 px-4 rounded-full border border-white/20 bg-black/40 text-sm text-white hover:bg-black/55 cursor-pointer"
+                  >
+                    {t.type}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={submitReflection}
+                    disabled={phase === "idle" && !notes.trim()}
+                    className="inline-flex items-center gap-2 h-10 px-5 rounded-full text-sm font-semibold text-black border-0 cursor-pointer disabled:opacity-40"
+                    style={{ backgroundColor: primary }}
+                  >
+                    {t.submit}
+                  </button>
+                </div>
               </div>
             ) : (
-              <div className="mt-8 w-full max-w-xl text-left">
-                <Textarea
+              <div className="mt-6 sm:mt-8 w-full px-0 sm:px-2">
+                <TypeEditor
                   value={notes}
-                  onChange={(e) => setNotes(e.target.value)}
+                  onChange={setNotes}
+                  primaryColor={primary}
+                  onSwitchToVoice={() => setInputMode("voice")}
                   placeholder={t.placeholder}
-                  className="min-h-[140px] bg-black/50 border-white/15 text-white placeholder:text-white/40"
-                  autoFocus
                 />
+                <div className="mt-4 flex justify-center">
+                  <button
+                    type="button"
+                    onClick={submitReflection}
+                    disabled={!notes.trim()}
+                    className="inline-flex items-center gap-2 h-10 px-5 rounded-full text-sm font-semibold text-black border-0 cursor-pointer disabled:opacity-40"
+                    style={{ backgroundColor: primary }}
+                  >
+                    {t.submit}
+                  </button>
+                </div>
               </div>
             )}
-
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-              <button
-                type="button"
-                onClick={() =>
-                  setInputMode((m) => (m === "voice" ? "type" : "voice"))
-                }
-                className="inline-flex items-center gap-2 h-10 px-4 rounded-full border border-white/20 bg-black/40 text-sm text-white hover:bg-black/55 cursor-pointer"
-              >
-                <Keyboard className="size-4" />
-                {t.type}
-              </button>
-              <button
-                type="button"
-                onClick={submitReflection}
-                disabled={phase === "idle" && !notes.trim()}
-                className="inline-flex items-center gap-2 h-10 px-5 rounded-full text-sm font-semibold text-black border-0 cursor-pointer disabled:opacity-40"
-                style={{ backgroundColor: primary }}
-              >
-                {t.submit}
-              </button>
-            </div>
 
             {/* Mobile language / vibe */}
             <div className="lg:hidden mt-6 flex flex-wrap justify-center gap-2 w-full">
@@ -523,7 +543,6 @@ const ReflectionRoom = () => {
 
       <SettingsPanel
         open={settingsOpen}
-        settings={settings}
         draft={draft}
         onDraftChange={setDraft}
         onClose={() => setSettingsOpen(false)}

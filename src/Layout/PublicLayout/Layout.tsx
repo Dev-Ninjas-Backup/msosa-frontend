@@ -4,7 +4,7 @@ import Footer from "./Footer";
 import useSmoothScroll from "@/hooks/useSmoothScroll";
 
 const Layout: React.FC = () => {
-  // Initialize buttery-smooth scrolling for the entire public site
+  // Landing / public pages only
   useSmoothScroll();
 
   return (

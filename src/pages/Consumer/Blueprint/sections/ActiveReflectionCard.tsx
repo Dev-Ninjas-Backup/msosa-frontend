@@ -23,6 +23,14 @@ const ActiveReflectionCard = ({
   return (
     <Card className="p-4 sm:p-5 flex flex-col">
 
+      {/* Cover */}
+      <div className="w-full h-28 rounded-xl bg-black/40 border border-white/10 flex items-center justify-center mb-4">
+        <div className="flex flex-col items-center gap-1.5 text-white/50">
+          <ImageIcon className="size-6 opacity-60" />
+          <span className="text-xs">Cover Image</span>
+        </div>
+      </div>
+
       <div className="flex items-start justify-between gap-2 mb-2">
         <div className="flex items-center gap-2">
           <FileText className="size-4 text-[#FBBF24] shrink-0" />

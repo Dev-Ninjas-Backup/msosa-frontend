@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import { X, Upload, Info } from "lucide-react";
 import Input from "@/ui/Input";
 import { Label } from "@/ui/Label";
@@ -10,7 +11,6 @@ import { cn } from "@/lib/utils";
 
 type SettingsPanelProps = {
   open: boolean;
-  settings: RoomSettings;
   draft: RoomSettings;
   onDraftChange: (next: RoomSettings) => void;
   onClose: () => void;
@@ -26,32 +26,41 @@ const ColorRow = ({
   label: string;
   value: string;
   onChange: (v: string) => void;
-}) => (
-  <label className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2.5 cursor-pointer">
-    <div className="flex items-center gap-3 min-w-0">
-      <span
-        className="size-8 rounded-lg border border-white/15 shrink-0"
-        style={{ backgroundColor: value }}
-      />
-      <span className="text-sm text-primary-text">{label}</span>
-    </div>
-    <div className="flex items-center gap-2 shrink-0">
-      <span className="text-xs text-secondary-text font-mono uppercase">
+}) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  return (
+    <button
+      type="button"
+      onClick={() => inputRef.current?.click()}
+      className="flex w-full items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2.5 cursor-pointer text-left relative overflow-hidden"
+    >
+      <div className="flex items-center gap-3 min-w-0">
+        <span
+          className="size-8 rounded-lg border border-white/15 shrink-0"
+          style={{ backgroundColor: value }}
+        />
+        <span className="text-sm text-primary-text truncate">{label}</span>
+      </div>
+      <span className="text-xs text-secondary-text font-mono uppercase shrink-0">
         {value}
       </span>
+      {/* Visually hidden native picker — clipped inside row so it never overflows modal */}
       <input
+        ref={inputRef}
         type="color"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="size-8 cursor-pointer rounded border-0 bg-transparent p-0"
+        className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+        tabIndex={-1}
+        aria-label={label}
       />
-    </div>
-  </label>
-);
+    </button>
+  );
+};
 
 const SettingsPanel = ({
   open,
-  settings,
   draft,
   onDraftChange,
   onClose,
@@ -64,16 +73,23 @@ const SettingsPanel = ({
     onDraftChange({ ...draft, [key]: value });
 
   return (
-    <>
+    <div className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-6">
       <button
         type="button"
         aria-label="Close settings backdrop"
-        className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm border-0 cursor-pointer"
+        className="absolute inset-0 bg-black/70 backdrop-blur-sm border-0 cursor-pointer"
         onClick={onClose}
       />
-      <aside className="fixed right-0 top-0 z-[70] h-full w-full max-w-[min(100%,420px)] sm:max-w-[480px] overflow-y-auto border-l border-white/10 bg-[#0a0a0a] shadow-2xl">
-        <div className="sticky top-0 z-10 flex items-center justify-between gap-3 border-b border-white/10 bg-[#0a0a0a]/95 px-5 py-4 backdrop-blur">
+
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="rr-settings-title"
+        className="relative z-[1] w-full max-w-[520px] max-h-[min(92vh,900px)] overflow-hidden rounded-2xl border border-white/10 bg-[#0c0c0c] shadow-2xl flex flex-col"
+      >
+        <div className="flex items-center justify-between gap-3 border-b border-white/10 px-5 py-4 shrink-0">
           <h2
+            id="rr-settings-title"
             className="text-sm font-bold tracking-[0.18em] uppercase"
             style={{ color: draft.primaryColor }}
           >
@@ -82,13 +98,16 @@ const SettingsPanel = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg text-secondary-text hover:text-primary-text border-0 bg-transparent cursor-pointer"
+            className="flex size-8 items-center justify-center rounded-full border border-white/15 text-secondary-text hover:text-primary-text bg-transparent cursor-pointer"
           >
-            <X className="size-5" />
+            <X className="size-4" />
           </button>
         </div>
 
-        <div className="px-5 py-5 space-y-7">
+        <div
+          className="overflow-y-auto overscroll-contain px-5 py-5 space-y-6 flex-1 min-h-0"
+          data-lenis-prevent
+        >
           <div>
             <h3 className="text-base font-medium text-primary-text">
               Reflection Room™ Branding
@@ -99,7 +118,6 @@ const SettingsPanel = ({
             </p>
           </div>
 
-          {/* Wallpaper */}
           <section className="space-y-3">
             <div className="flex items-center justify-between gap-2">
               <p className="text-[11px] font-semibold tracking-[0.14em] text-secondary-text uppercase">
@@ -123,9 +141,9 @@ const SettingsPanel = ({
                   type="button"
                   onClick={() => set("wallpaper", preset.url)}
                   className={cn(
-                    "relative overflow-hidden rounded-lg border h-16 cursor-pointer p-0",
+                    "relative overflow-hidden rounded-lg border h-14 cursor-pointer p-0",
                     draft.wallpaper === preset.url
-                      ? "border-[#FBB124] ring-1 ring-[#FBB124]/40"
+                      ? "border-[#FBBF24] ring-1 ring-[#FBBF24]/40"
                       : "border-white/10 hover:border-white/25"
                   )}
                   title={preset.label}
@@ -148,14 +166,12 @@ const SettingsPanel = ({
                 onChange={(e) => {
                   const file = e.target.files?.[0];
                   if (!file) return;
-                  const url = URL.createObjectURL(file);
-                  set("wallpaper", url);
+                  set("wallpaper", URL.createObjectURL(file));
                 }}
               />
             </label>
           </section>
 
-          {/* Branding copy */}
           <section className="space-y-3">
             <p className="text-[11px] font-semibold tracking-[0.14em] text-secondary-text uppercase">
               Reflection Branding
@@ -186,39 +202,26 @@ const SettingsPanel = ({
             <p className="text-[11px] font-semibold tracking-[0.14em] text-secondary-text uppercase">
               Content Configuration
             </p>
-            <div className="space-y-1.5">
-              <Label className="text-[11px] uppercase tracking-wider text-secondary-text">
-                Main Text
-              </Label>
-              <Input
-                variant="soft"
-                value={draft.mainText}
-                onChange={(e) => set("mainText", e.target.value)}
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label className="text-[11px] uppercase tracking-wider text-secondary-text">
-                Sub Text
-              </Label>
-              <Input
-                variant="soft"
-                value={draft.subText}
-                onChange={(e) => set("subText", e.target.value)}
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label className="text-[11px] uppercase tracking-wider text-secondary-text">
-                Instruction Text
-              </Label>
-              <Input
-                variant="soft"
-                value={draft.instructionText}
-                onChange={(e) => set("instructionText", e.target.value)}
-              />
-            </div>
+            {(
+              [
+                ["mainText", "Main Text"],
+                ["subText", "Sub Text"],
+                ["instructionText", "Instruction Text"],
+              ] as const
+            ).map(([key, label]) => (
+              <div key={key} className="space-y-1.5">
+                <Label className="text-[11px] uppercase tracking-wider text-secondary-text">
+                  {label}
+                </Label>
+                <Input
+                  variant="soft"
+                  value={draft[key]}
+                  onChange={(e) => set(key, e.target.value)}
+                />
+              </div>
+            ))}
           </section>
 
-          {/* Colors */}
           <section className="space-y-3">
             <p className="text-[11px] font-semibold tracking-[0.14em] text-secondary-text uppercase">
               Theme Colors
@@ -240,7 +243,6 @@ const SettingsPanel = ({
             />
           </section>
 
-          {/* Overlay */}
           <section className="space-y-4">
             <p className="text-[11px] font-semibold tracking-[0.14em] text-secondary-text uppercase">
               Overlay & Readability
@@ -258,7 +260,7 @@ const SettingsPanel = ({
                 max={100}
                 value={draft.brightness}
                 onChange={(e) => set("brightness", Number(e.target.value))}
-                className="w-full accent-[#FBB124]"
+                className="w-full accent-[#FBBF24]"
               />
             </div>
             <div>
@@ -272,7 +274,7 @@ const SettingsPanel = ({
                 max={40}
                 value={draft.blur}
                 onChange={(e) => set("blur", Number(e.target.value))}
-                className="w-full accent-[#FBB124]"
+                className="w-full accent-[#FBBF24]"
               />
             </div>
             <div className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-3">
@@ -288,8 +290,8 @@ const SettingsPanel = ({
                 aria-checked={draft.darkMode}
                 onClick={() => set("darkMode", !draft.darkMode)}
                 className={cn(
-                  "relative h-7 w-12 rounded-full transition-colors border-0 cursor-pointer",
-                  draft.darkMode ? "bg-[#FBB124]" : "bg-white/20"
+                  "relative h-7 w-12 rounded-full transition-colors border-0 cursor-pointer shrink-0",
+                  draft.darkMode ? "bg-[#FBBF24]" : "bg-white/20"
                 )}
               >
                 <span
@@ -302,7 +304,6 @@ const SettingsPanel = ({
             </div>
           </section>
 
-          {/* Live preview */}
           <section className="space-y-3">
             <div className="flex items-center gap-2">
               <p className="text-[11px] font-semibold tracking-[0.14em] text-secondary-text uppercase">
@@ -312,7 +313,7 @@ const SettingsPanel = ({
                 REAL-TIME
               </span>
             </div>
-            <div className="relative overflow-hidden rounded-xl border border-white/10 h-40">
+            <div className="relative overflow-hidden rounded-xl border border-white/10 h-36">
               <img
                 src={draft.wallpaper}
                 alt=""
@@ -327,7 +328,10 @@ const SettingsPanel = ({
                 <p className="mt-1 text-sm text-white font-medium">
                   {draft.mainText}
                 </p>
-                <p className="mt-2 text-[10px]" style={{ color: draft.primaryColor }}>
+                <p
+                  className="mt-2 text-[10px]"
+                  style={{ color: draft.primaryColor }}
+                >
                   {draft.instructionText}
                 </p>
               </div>
@@ -341,8 +345,10 @@ const SettingsPanel = ({
               layout, controls, workflow, and functionality remain unchanged.
             </p>
           </div>
+        </div>
 
-          <div className="flex gap-2 pb-4">
+        <div className="shrink-0 border-t border-white/10 px-5 py-4 space-y-2 bg-[#0c0c0c]">
+          <div className="flex gap-2">
             <button
               type="button"
               onClick={onSave}
@@ -359,20 +365,16 @@ const SettingsPanel = ({
               Preview
             </button>
           </div>
-
           <button
             type="button"
             onClick={() => onDraftChange({ ...DEFAULT_SETTINGS })}
-            className="w-full text-center text-xs text-secondary-text hover:text-primary-text border-0 bg-transparent cursor-pointer pb-6"
+            className="w-full text-center text-xs text-secondary-text hover:text-primary-text border-0 bg-transparent cursor-pointer py-1"
           >
             Reset to defaults
           </button>
-
-          {/* keep unused warning quiet */}
-          <span className="sr-only">{settings.productTitle}</span>
         </div>
-      </aside>
-    </>
+      </div>
+    </div>
   );
 };
 

@@ -1,9 +1,8 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import ConsumerSidebar from "./ConsumerSidebar";
 import ConsumerHeader from "./ConsumerHeader";
 import { menuGenerator } from "@/utils/Generator/MenuGenerator";
-import useSmoothScroll from "@/hooks/useSmoothScroll";
 
 const pageMeta: Record<string, { title: string; description: string }> = {
   Dashboard: {
@@ -38,6 +37,10 @@ const pageMeta: Record<string, { title: string; description: string }> = {
     title: "Profile",
     description: "Manage your personal details and preferences.",
   },
+  Notifications: {
+    title: "Notifications",
+    description: "Stay on top of reflections, reports, and system updates.",
+  },
 };
 
 type ConsumerLayoutProps = {
@@ -48,8 +51,6 @@ const ConsumerLayout = ({ config }: ConsumerLayoutProps) => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const location = useLocation();
   const menu = menuGenerator(config);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-  useSmoothScroll(scrollContainerRef);
 
   const findActiveItem = (items: any[]): any => {
     for (const item of items) {
@@ -81,6 +82,7 @@ const ConsumerLayout = ({ config }: ConsumerLayoutProps) => {
     location.pathname.includes("/checkout") && !isCheckoutSuccess;
   const isReportDetail = /\/report\/[^/]+$/.test(location.pathname);
   const isProfile = location.pathname.includes("/profile");
+  const isNotifications = location.pathname.includes("/notifications");
   const headerMeta = isCheckoutSuccess
     ? pageMeta["Checkout Success"]
     : isCheckout
@@ -92,7 +94,9 @@ const ConsumerLayout = ({ config }: ConsumerLayoutProps) => {
           }
         : isProfile
           ? pageMeta.Profile
-          : meta;
+          : isNotifications
+            ? pageMeta.Notifications
+            : meta;
 
   const isReflectionRoom = location.pathname.includes("/reflection-room");
 
@@ -121,29 +125,23 @@ const ConsumerLayout = ({ config }: ConsumerLayoutProps) => {
         />
       )}
 
-      <div
-        ref={scrollContainerRef}
-        className="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto overscroll-contain"
-      >
-        {/* Single content child required by Lenis nested wrapper */}
-        <div className="flex min-h-full flex-col">
-          <ConsumerHeader
-            title={headerMeta.title}
-            description={headerMeta.description}
-            onMenuClick={() => setIsMobileOpen(true)}
-          />
+      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto overscroll-contain">
+        <ConsumerHeader
+          title={headerMeta.title}
+          description={headerMeta.description}
+          onMenuClick={() => setIsMobileOpen(true)}
+        />
 
-          <main className="flex-1 px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
-            <Outlet />
-          </main>
+        <main className="flex-1 px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
+          <Outlet />
+        </main>
 
-          <footer className="px-4 sm:px-6 lg:px-8 py-4 border-t border-white/5">
-            <p className="text-[11px] sm:text-xs text-muted-blue text-center sm:text-left">
-              FAR Systems™ uses enterprise-grade encryption. Your personal
-              reflection data is private and secure.
-            </p>
-          </footer>
-        </div>
+        <footer className="px-4 sm:px-6 lg:px-8 py-4 border-t border-white/5">
+          <p className="text-[11px] sm:text-xs text-muted-blue text-center sm:text-left">
+            FAR Systems™ uses enterprise-grade encryption. Your personal
+            reflection data is private and secure.
+          </p>
+        </footer>
       </div>
     </div>
   );

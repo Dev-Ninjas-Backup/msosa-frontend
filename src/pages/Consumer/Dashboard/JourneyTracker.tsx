@@ -113,8 +113,8 @@ const JourneyTracker = () => {
 
             {/* Steps */}
             <div className="relative">
-              <div className="hidden md:block absolute top-4 left-[8%] right-[8%] h-[2px] bg-white/10" />
-              <div className="hidden md:block absolute top-4 left-[8%] w-[42%] h-[2px] bg-[#10B7BA]" />
+              <div className="hidden md:block absolute top-4 left-[8%] right-[8%] h-[1px] bg-white/10" />
+              <div className="hidden md:block absolute top-4 left-[8%] w-[42%] h-[1px] bg-[#10B7BA]" />
 
               <div className="grid grid-cols-3 md:grid-cols-6 gap-4 md:gap-2">
                 {JOURNEY.map((step, i) => (

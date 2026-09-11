@@ -45,7 +45,7 @@ const ConsumerHeader = ({
 
           {/* Notification Bell */}
           <Link
-            to="/consumer/profile"
+            to="/consumer/notifications"
             className="relative flex size-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-secondary-text hover:text-primary-brand hover:border-primary-brand/40 transition-colors"
             aria-label="Notifications"
           >

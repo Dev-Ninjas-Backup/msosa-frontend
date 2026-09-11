@@ -48,6 +48,10 @@ const Profile = Loadable(
   lazy(() => import("@/pages/Consumer/Profile/Profile")),
   AdminSkeleton
 );
+const Notifications = Loadable(
+  lazy(() => import("@/pages/Consumer/Notifications/Notifications")),
+  AdminSkeleton
+);
 
 const ConsumerShell = () => <ConsumerLayout config={consumerRoutes} />;
 
@@ -109,6 +113,10 @@ export const consumerRoutes = [
       {
         path: "profile",
         element: <Profile />,
+      },
+      {
+        path: "notifications",
+        element: <Notifications />,
       },
     ],
   },
