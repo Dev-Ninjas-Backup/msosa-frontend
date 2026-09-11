@@ -43,10 +43,10 @@ const Navbar: React.FC = () => {
             <img
               src={logo}
               alt="FAR SYSTEMS Logo"
-              className="size-10 sm:size-12 lg:size-15 object-contain transition-transform duration-300 group-hover:scale-105 shrink-0"
+              className="size-10 sm:size-12 2xl:size-15 object-contain transition-transform duration-300 group-hover:scale-105 shrink-0"
             />
             <span className="leading-none flex flex-col justify-center min-w-0">
-              <span className="block text-lg sm:text-xl xl:text-2xl font-bold tracking-[0.1em] text-gradient truncate">
+              <span className="block text-lg sm:text-lg 2xl:text-2xl font-bold tracking-[0.1em] text-gradient truncate">
                 FAR SYSTEMS
                 <sup className="ml-0.5 text-[10px] tracking-normal text-primary-brand">
                   TM

@@ -83,7 +83,7 @@ const Banner = () => {
         </div>
 
         {/* Right Column - Logo + Features */}
-        <div className="lg:col-span-5 ml-22 2xl:ml-0  2xl:col-span-4 flex flex-col justify-between self-stretch py-2 lg:py-3 xl:py-4 2xl:py-4 gap-6 md:gap-8 lg:gap-10 xl:gap-12 2xl:gap-14 order-3">
+        <div className="lg:col-span-5 xl:ml-22 2xl:ml-0  2xl:col-span-4 flex flex-col justify-between self-stretch py-2 lg:py-3 xl:py-4 2xl:py-4 gap-6 md:gap-8 lg:gap-10 xl:gap-12 2xl:gap-14 order-3">
           <div className="flex flex-col gap-3 sm:gap-4 md:gap-5 lg:gap-5 xl:gap-6 2xl:gap-6 select-none items-center lg:items-start text-center lg:text-left">
             <div className="w-full max-w-[180px] sm:max-w-[210px] md:max-w-[230px] lg:max-w-[260px] xl:max-w-[280px] 2xl:max-w-[300px] select-none">
               <img
