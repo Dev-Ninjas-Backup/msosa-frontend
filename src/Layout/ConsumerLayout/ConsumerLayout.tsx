@@ -52,6 +52,8 @@ const ConsumerLayout = ({ config }: ConsumerLayoutProps) => {
   const location = useLocation();
   const menu = menuGenerator(config);
 
+  const isContinuum = location.pathname.includes("/continuum");
+
   const findActiveItem = (items: any[]): any => {
     for (const item of items) {
       if (item.path === location.pathname) return item;
@@ -132,7 +134,7 @@ const ConsumerLayout = ({ config }: ConsumerLayoutProps) => {
           onMenuClick={() => setIsMobileOpen(true)}
         />
 
-        <main className="flex-1 px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
+        <main className={`flex-1 ${isContinuum ? "" : "px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8"}`}>
           <Outlet />
         </main>
 

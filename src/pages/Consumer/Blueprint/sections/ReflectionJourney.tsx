@@ -1,5 +1,5 @@
 // src/components/consumer/marketplace/ReflectionJourney.tsx
-import { ShoppingCart, Mic, Sparkles, FileText, Infinity } from "lucide-react";
+import { ShoppingCart, Mic, Sparkles, FileText, Infinity, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const STEPS = [
@@ -16,7 +16,7 @@ const STEPS = [
     active: false,
   },
   {
-    icon: Sparkles,
+    icon: User ,
     label: "Illumination Bridge™",
     sub: "HUMAN & AI\nTRANSFORMATION STAGE",
     active: false,

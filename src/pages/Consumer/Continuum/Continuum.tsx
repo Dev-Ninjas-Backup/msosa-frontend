@@ -1,242 +1,123 @@
 import { Link } from "react-router-dom";
-import { Filter, Search, Trophy } from "lucide-react";
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { FileText, Play, Users } from "lucide-react";
 import AnimatedContainer from "@/common/AnimatedContainer";
-import Input from "@/ui/Input";
-import Card from "@/pages/Consumer/Dashboard/Card";
 import { cn } from "@/lib/utils";
-
-const CHART = [
-  { label: "Jan", value: 42 },
-  { label: "Feb", value: 48 },
-  { label: "Mar", value: 55 },
-  { label: "Apr", value: 52 },
-  { label: "May", value: 61 },
-  { label: "Jun", value: 68 },
-  { label: "Jul", value: 72 },
-  { label: "Aug", value: 78 },
-  { label: "Sep", value: 81 },
-  { label: "Oct", value: 87 },
-];
-
-const TIMELINE = [
-  {
-    name: "Professional Evolution Report",
-    series: "Relationship Blueprint™",
-    date: "Mar 15, 2026",
-    status: "DELIVERED",
-    delta: "+4.2%",
-  },
-  {
-    name: "Core Dynamics Mapping",
-    series: "Clarity Series",
-    date: "Feb 28, 2026",
-    status: "ARCHIVED",
-    delta: "+2.8%",
-  },
-] as const;
-
-const ghostBtn =
-  "h-9 px-4 rounded-lg border border-white/15 bg-white/5 hover:bg-white/10 text-primary-text text-xs font-medium transition-colors cursor-pointer";
-const goldBtn =
-  "h-9 px-4 rounded-lg bg-[#F5C542] hover:bg-[#e8b93a] text-black text-xs font-semibold transition-colors cursor-pointer border-0";
 
 const Continuum = () => {
   return (
-    <div className="space-y-5 sm:space-y-6 pb-6">
-      <AnimatedContainer delay={0.05}>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          {[
-            { label: "Blueprints Completed", value: "12" },
-            { label: "Reports Delivered", value: "8" },
-            { label: "Alignment Score", value: "87%" },
-            { label: "Growth Stage", value: "Expanding" },
-          ].map((stat) => (
-            <Card key={stat.label} className="p-4">
-              <p className="text-xs text-secondary-text">{stat.label}</p>
-              <p className="mt-2 font-playfair text-2xl text-primary-text">
-                {stat.value}
-              </p>
-            </Card>
-          ))}
-        </div>
-      </AnimatedContainer>
+    <div className="relative min-h-[calc(100vh-8rem)] w-full overflow-hidden rounded-xl">
+      {/* Background Image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center "
+        style={{
+          backgroundImage: `url('../../../../public/bg/sunset.jpg')`,
+        }}
+      />
+      {/* Dark overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/75" />
 
-      <AnimatedContainer delay={0.1}>
-        <Card className="p-4 sm:p-5 lg:p-6">
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-4">
-            <div>
-              <h2 className="font-playfair text-xl sm:text-2xl text-primary-text">
-                FRC™ Continuum Growth
-              </h2>
-              <p className="mt-1 text-sm text-secondary-text">
-                Longitudinal alignment across your reflection journey
-              </p>
-            </div>
-            <p className="font-playfair text-3xl text-[#F5C542]">87%</p>
-          </div>
-          <div className="h-[220px] sm:h-[280px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart
-                data={CHART}
-                margin={{ top: 8, right: 8, left: -16, bottom: 0 }}
-              >
-                <defs>
-                  <linearGradient id="continuumGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#F5C542" stopOpacity={0.35} />
-                    <stop offset="95%" stopColor="#F5C542" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid
-                  strokeDasharray="3 3"
-                  stroke="rgba(255,255,255,0.06)"
-                  vertical={false}
-                />
-                <XAxis
-                  dataKey="label"
-                  tickLine={false}
-                  axisLine={false}
-                  tick={{ fill: "#9CA3AF", fontSize: 11 }}
-                />
-                <YAxis
-                  tickLine={false}
-                  axisLine={false}
-                  tick={{ fill: "#9CA3AF", fontSize: 11 }}
-                  domain={[0, 100]}
-                />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "#0d1117",
-                    border: "1px solid rgba(255,255,255,0.08)",
-                    borderRadius: 12,
-                    color: "#fff",
-                  }}
-                  formatter={(v) => [`${v}%`, "Alignment"]}
-                />
-                <Area
-                  type="monotone"
-                  dataKey="value"
-                  stroke="#F5C542"
-                  strokeWidth={2.5}
-                  fill="url(#continuumGrad)"
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="mt-4 flex flex-wrap gap-3">
-            <button type="button" className={ghostBtn}>
-              Analyze Remediation →
-            </button>
-            <button type="button" className={goldBtn}>
-              Optimize Balance →
-            </button>
-          </div>
-        </Card>
-      </AnimatedContainer>
+      {/* Soft gold window frame glow */}
+      <div className="pointer-events-none absolute rounded-3xl border border-amber-400/15 shadow-[0_0_80px_rgba(251,191,36,0.08)]" />
 
-      <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_300px] 2xl:grid-cols-[minmax(0,1fr)_320px] gap-5 lg:gap-6">
-        <AnimatedContainer delay={0.14}>
-          <Card className="p-4 sm:p-5 lg:p-6">
-            <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-5">
-              <h2 className="font-playfair text-xl text-primary-text flex-1">
-                Reflection Journey Timeline
-              </h2>
-              <div className="flex gap-2 w-full sm:w-auto">
-                <div className="flex-1 sm:w-48">
-                  <Input
-                    variant="search"
-                    placeholder="Search timeline..."
-                    leftIcon={<Search className="size-4 text-secondary-text" />}
-                  />
-                </div>
-                <button type="button" className={ghostBtn}>
-                  <span className="inline-flex items-center gap-1.5">
-                    <Filter className="size-3.5" />
-                    Filter
-                  </span>
-                </button>
+      {/* Main Content */}
+      <div className="relative z-10 flex min-h-[calc(100vh-8rem)] flex-col items-center justify-center px-4 py-10 text-center sm:px-6">
+        <AnimatedContainer delay={0.05}>
+          {/* Welcome */}
+          <h1 className="font-playfair text-3xl font-medium tracking-tight text-white drop-shadow-lg sm:text-4xl md:text-5xl">
+            Welcome back, Michel.
+          </h1>
+          <p className="mt-3 text-base text-white/80 sm:text-lg md:text-xl">
+            What brings you back here?
+          </p>
+          <div className="mx-auto mt-4 h-0.5 w-14 rounded-full bg-gradient-to-r from-transparent via-amber-400 to-transparent" />
+        </AnimatedContainer>
+
+        {/* Previous Blueprint Card */}
+        <AnimatedContainer delay={0.12} className="mt-8 w-full max-w-md sm:mt-10">
+          <div className="rounded-2xl border border-white/15 bg-black/55 p-5 backdrop-blur-xl shadow-2xl">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/50">
+              Previous Blueprint
+            </p>
+
+            <div className="mt-4 flex items-center gap-4">
+              <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-amber-400/15 text-amber-300">
+                <Users className="size-5" />
               </div>
-            </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[560px] text-left text-sm">
-                <thead>
-                  <tr className="border-b border-white/[0.08] text-xs uppercase text-secondary-text">
-                    <th className="py-3 pr-3 font-medium">Blueprint Name</th>
-                    <th className="py-3 pr-3 font-medium">Date Range</th>
-                    <th className="py-3 pr-3 font-medium">Status</th>
-                    <th className="py-3 font-medium">Delta</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {TIMELINE.map((row) => (
-                    <tr
-                      key={row.name}
-                      className="border-b border-white/[0.05] last:border-0"
-                    >
-                      <td className="py-4 pr-3">
-                        <p className="text-primary-text font-medium">{row.name}</p>
-                        <p className="text-xs text-secondary-text">{row.series}</p>
-                      </td>
-                      <td className="py-4 pr-3 text-secondary-text">{row.date}</td>
-                      <td className="py-4 pr-3">
-                        <span
-                          className={cn(
-                            "text-xs font-semibold",
-                            row.status === "DELIVERED"
-                              ? "text-emerald-400"
-                              : "text-secondary-text"
-                          )}
-                        >
-                          {row.status}
-                        </span>
-                      </td>
-                      <td className="py-4 text-[#F5C542] font-medium">{row.delta}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+              <div className="min-w-0 flex-1 text-left">
+                <p className="truncate font-medium text-white">
+                  Relationship Blueprint<sup className="text-[9px]">™</sup>
+                </p>
+                <p className="text-xs text-white/55">Completed Mar 15, 2026</p>
+              </div>
 
-            <div className="mt-5 flex justify-center">
-              <button type="button" className={ghostBtn}>
-                LOAD FULL JOURNEY
-              </button>
+              <Link
+                to="/consumer/reports"
+                className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-white/20 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/80 transition hover:bg-white/10"
+              >
+                <FileText className="size-3.5" />
+                View Report
+              </Link>
             </div>
-          </Card>
+          </div>
         </AnimatedContainer>
 
-        <AnimatedContainer delay={0.16} direction="left">
-          <Card className="p-4 sm:p-5">
-            <h3 className="font-playfair text-lg text-primary-text mb-3 flex items-center gap-2">
-              <Trophy className="size-4 text-[#F5C542]" />
-              Milestones
-            </h3>
-            <ul className="space-y-3 text-sm">
-              <li className="flex justify-between gap-2">
-                <span className="text-secondary-text">1 Year Active</span>
-                <span className="text-emerald-400">Reached</span>
-              </li>
-              <li className="flex justify-between gap-2">
-                <span className="text-secondary-text">Next badge</span>
-                <span className="text-secondary-text">2 reports away</span>
-              </li>
-            </ul>
-            <Link to="/consumer/blueprint" className="mt-4 block">
-              <button type="button" className={`${ghostBtn} w-full`}>
-                Explore Blueprint
-              </button>
-            </Link>
-          </Card>
+        {/* Primary CTA */}
+        <AnimatedContainer delay={0.18} className="mt-8 sm:mt-10">
+          <Link to="/consumer/reflection-room">
+            <button
+              type="button"
+              className={cn(
+                "group relative inline-flex items-center gap-3 rounded-full",
+                "bg-gradient-to-r from-black/90 via-black/90 to-black backdrop-blur-sm px-7 py-3.5 sm:px-8 sm:py-4",
+                "px-7 py-3.5 sm:px-8 sm:py-4",
+                "text-sm font-bold uppercase tracking-wide text-black sm:text-base",
+                "shadow-[0_0_40px_rgba(251,191,36,0.45)]",
+                "transition hover:scale-[1.03] hover:shadow-[0_0_55px_rgba(251,191,36,0.6)]",
+                "border-2 border-amber-400/70 cursor-pointer"
+              )}
+            >
+              <span className="flex size-8 items-center justify-center rounded-full bg-black/15">
+                <Play className="size-12 fill-amber-400" />
+              </span>
+              <span className="flex flex-col items-start leading-none text-amber-400">
+                <span>Continue My Reflection</span>
+                <span className="mt-1 text-[11px] text-white text-center justify-center pl-4 font-medium tracking-normal opacity-80">
+                  35:00 Conversation Session
+                </span>
+              </span>
+            </button>
+          </Link>
         </AnimatedContainer>
+
+        {/* Decorative lower area (bonsai + fire bowls) */}
+        <div className="pointer-events-none absolute bottom-16 left-1/2 flex -translate-x-1/2 items-end gap-14 opacity-80 sm:gap-20">
+          {/* Left fire */}
+          <div className="relative">
+            <div className="h-3 w-9 rounded-full bg-gradient-to-t from-orange-600 to-amber-400 opacity-80 blur-[1px]" />
+            <div className="absolute -top-5 left-1/2 h-7 w-3.5 -translate-x-1/2 rounded-full bg-gradient-to-t from-orange-500 to-yellow-300 opacity-70 blur-sm" />
+          </div>
+
+          {/* Center platform */}
+          <div className="relative flex flex-col items-center">
+            <div className="mb-1.5 h-14 w-24 rounded-full bg-gradient-to-b from-emerald-800/50 to-emerald-950/70 shadow-inner" />
+            <div className="h-1.5 w-32 rounded-full bg-stone-700/70" />
+            <div className="h-1 w-40 rounded-full bg-stone-800/80" />
+          </div>
+
+          {/* Right fire */}
+          <div className="relative">
+            <div className="h-3 w-9 rounded-full bg-gradient-to-t from-orange-600 to-amber-400 opacity-80 blur-[1px]" />
+            <div className="absolute -top-5 left-1/2 h-7 w-3.5 -translate-x-1/2 rounded-full bg-gradient-to-t from-orange-500 to-yellow-300 opacity-70 blur-sm" />
+          </div>
+        </div>
+
+        {/* Bottom tagline */}
+        <div className="absolute bottom-5 left-0 right-0 z-20">
+          <p className="text-[12px] font-medium uppercase tracking-[0.28em] text-white/65 sm:text-[14px]">
+            Your Insights Create a Brighter Tomorrow
+          </p>
+        </div>
       </div>
     </div>
   );
