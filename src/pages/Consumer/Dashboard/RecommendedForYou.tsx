@@ -2,7 +2,7 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, Info } from "lucide-react";
 import AnimatedContainer from "@/common/AnimatedContainer";
-import Card from "./Card";
+import Card from "@/ui/Card";
 
 const RecommendedForYou = () => {
   return (
@@ -22,11 +22,11 @@ const RecommendedForYou = () => {
           </p>
         </div>
 
-        <div className="rounded-xl border border-[#10B7BA]/20 bg-[#10B7BA]/5 p-3.5 mb-3">
+        <div className="rounded-xl border-2 border-[#FBBF241A] bg-[#FBBF240D] p-3.5 mb-3">
           <p className="text-sm text-primary-text leading-relaxed">
             &ldquo;Based on your recent reflections on leadership stressors, we
             suggest exploring the{" "}
-            <span className="text-[#10B7BA]">
+            <span className="text-[#FBBF24]">
               Executive Function & Clarity Reflection™
             </span>{" "}
             next.&rdquo;
@@ -35,7 +35,7 @@ const RecommendedForYou = () => {
 
         <Link
           to="/consumer/blueprint"
-          className="inline-flex items-center gap-1.5 text-sm text-[#10B7BA] hover:opacity-80 transition-opacity"
+          className="inline-flex items-center gap-1.5 text-sm text-[#FBBF24] hover:opacity-80 transition-opacity"
         >
           Explore suggestion
           <ArrowRight className="size-3.5" />

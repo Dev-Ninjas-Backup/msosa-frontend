@@ -1,7 +1,7 @@
 // src/components/consumer/dashboard/RecentActivity.tsx
 import { Info } from "lucide-react";
 import AnimatedContainer from "@/common/AnimatedContainer";
-import Card from "./Card";
+import Card from "@/ui/Card";
 import { cn } from "@/lib/utils";
 
 const ACTIVITIES = [
@@ -35,7 +35,7 @@ const RecentActivity = () => {
           </div>
           <button
             type="button"
-            className="text-[11px] text-secondary-text hover:text-primary-text transition-colors border-0 bg-transparent cursor-pointer"
+            className="text-[12px] text-[#FBBF24] font-bold transition-colors border-0 bg-transparent cursor-pointer"
           >
             CLEAR ALL
           </button>
@@ -46,8 +46,8 @@ const RecentActivity = () => {
             <li key={item.text} className="flex gap-3">
               <span
                 className={cn(
-                  "mt-1.5 size-1.5 rounded-full shrink-0",
-                  item.active ? "bg-[#10B7BA]" : "bg-white/20"
+                  "mt-1.5 size-2 rounded-full shrink-0",
+                  item.active ? "bg-[#FBBF24]" : "bg-white/20"
                 )}
               />
               <div>

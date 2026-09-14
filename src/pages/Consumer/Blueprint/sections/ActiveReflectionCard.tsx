@@ -21,7 +21,7 @@ const ActiveReflectionCard = ({
   remaining,
 }: ActiveReflectionCardProps) => {
   return (
-    <Card className="p-4 sm:p-5 flex flex-col">
+    <Card className="p-4 sm:p-5 flex flex-col " borderColor="#FFFFFF1A" >
 
       {/* Cover */}
       <div className="w-full h-28 rounded-xl bg-black/40 border border-white/10 flex items-center justify-center mb-4">

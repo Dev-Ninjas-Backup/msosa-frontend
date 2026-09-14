@@ -2,7 +2,8 @@
 import { useState, useRef, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import AnimatedContainer from "@/common/AnimatedContainer";
-import Card from "./Card";
+import Card from "@/ui/Card";
+
 import { cn } from "@/lib/utils";
 
 const JOURNEY = [
@@ -63,7 +64,7 @@ const JourneyTracker = () => {
 
   return (
     <AnimatedContainer delay={0.05}>
-      <Card className="p-5 sm:p-6 lg:p-7">
+      <Card className="p-5 sm:p-6 lg:p-7 bg-[#0d1117] border border-white/10">
         <div className="flex flex-col lg:flex-row lg:items-start gap-6">
           {/* Left: Title + Steps */}
           <div className="flex-1 min-w-0">

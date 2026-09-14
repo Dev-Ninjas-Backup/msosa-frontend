@@ -10,7 +10,7 @@ import {
   Target,
 } from "lucide-react";
 import AnimatedContainer from "@/common/AnimatedContainer";
-import Card from "@/pages/Consumer/Dashboard/Card";
+import Card from "@/ui/Card";
 import { cn } from "@/lib/utils";
 
 const ReportDetail = () => {

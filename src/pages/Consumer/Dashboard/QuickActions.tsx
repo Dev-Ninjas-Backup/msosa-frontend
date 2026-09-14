@@ -2,7 +2,8 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, FileText, Info, Plus } from "lucide-react";
 import AnimatedContainer from "@/common/AnimatedContainer";
-import Card from "./Card";
+import Card from "@/ui/Card";
+
 
 const QuickActions = () => {
   return (

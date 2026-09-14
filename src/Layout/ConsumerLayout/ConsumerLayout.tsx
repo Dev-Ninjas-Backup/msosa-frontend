@@ -122,7 +122,7 @@ const ConsumerLayout = ({ config }: ConsumerLayoutProps) => {
         <button
           type="button"
           aria-label="Close menu"
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden border-0 cursor-pointer"
+          className="fixed inset-0 bg-[#1A1A1A] backdrop-blur-sm z-40 lg:hidden border-0 cursor-pointer"
           onClick={() => setIsMobileOpen(false)}
         />
       )}

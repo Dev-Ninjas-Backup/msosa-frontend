@@ -45,10 +45,7 @@ const Banner = () => {
 
           <div className="flex flex-col gap-2.5 sm:gap-4 md:gap-5 lg:gap-5 2xl:gap-6">
             <p className="text-secondary-text text-base sm:text-lg md:text-[17px] lg:text-lg xl:text-xl 2xl:text-xl leading-relaxed">
-              Speak naturally. See clearly.
-            </p>
-            <p className="text-secondary-text text-base sm:text-lg md:text-[17px] lg:text-lg xl:text-xl 2xl:text-xl leading-relaxed">
-              Move forward with confidence and purpose.
+              Speak naturally. See clearly. Move forward with confidence and purpose.
             </p>
           </div>
 

@@ -21,7 +21,7 @@ const MarketplaceCard = ({
   price,
 }: MarketplaceCardProps) => {
   return (
-    <Card className="overflow-hidden flex flex-col">
+    <Card className="overflow-hidden flex flex-col" >
       {/* Image */}
       <div className="relative h-40 w-full overflow-hidden">
         <img
