@@ -11,6 +11,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import AnimatedContainer from "@/common/AnimatedContainer";
+import { useMemberPortal } from "@/pages/shared/member/MemberPortalContext";
 
 const INCLUDED = [
   {
@@ -42,6 +43,7 @@ const INCLUDED = [
 
 const Checkout = () => {
   const navigate = useNavigate();
+  const { path } = useMemberPortal();
   const [fullName, setFullName] = useState("Encounters Corp");
   const [email, setEmail] = useState("admin@organization.com");
   const [cardNumber, setCardNumber] = useState("1234 1234 1234 1234");
@@ -52,7 +54,7 @@ const Checkout = () => {
   const handlePayment = (e: React.FormEvent) => {
     e.preventDefault();
     // For now → go directly to success
-    navigate("/consumer/checkout/success");
+    navigate(path("checkout/success"));
   };
 
   return (
@@ -265,7 +267,7 @@ const Checkout = () => {
 
               <button
                 type="button"
-                onClick={() => navigate("/consumer/customer-products")}
+                onClick={() => navigate(path("customer-products"))}
                 className="w-full text-center text-sm text-secondary-text hover:text-primary-text transition-colors border-0 bg-transparent cursor-pointer py-1"
               >
                 Cancel Purchase

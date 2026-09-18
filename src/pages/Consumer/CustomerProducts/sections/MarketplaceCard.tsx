@@ -2,6 +2,7 @@
 import { Info, Mic } from "lucide-react";
 import Card from "@/ui/Card";
 import { Link } from "react-router-dom";
+import { useMemberPortal } from "@/pages/shared/member/MemberPortalContext";
 
 type MarketplaceCardProps = {
   image: string;
@@ -20,6 +21,8 @@ const MarketplaceCard = ({
   description,
   price,
 }: MarketplaceCardProps) => {
+  const { path } = useMemberPortal();
+
   return (
     <Card className="overflow-hidden flex flex-col" >
       {/* Image */}
@@ -66,7 +69,7 @@ const MarketplaceCard = ({
             </button>
 
             {/* Purchase → Checkout */}
-            <Link to="/consumer/checkout">
+            <Link to={path("checkout")}>
               <button
                 type="button"
                 className="h-9 px-4 rounded-lg bg-[#FBBF24] hover:bg-[#e5a820] text-black text-xs font-semibold transition-colors cursor-pointer border-0"

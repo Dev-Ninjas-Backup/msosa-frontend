@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { FileText, Play } from "lucide-react";
 import AnimatedContainer from "@/common/AnimatedContainer";
 import { cn } from "@/lib/utils";
+import { useMemberPortal } from "@/pages/shared/member/MemberPortalContext";
 
 const BLUEPRINTS = [
   {
@@ -33,6 +34,7 @@ const BLUEPRINTS = [
 
 const Continuum = () => {
   const [selected, setSelected] = useState("1");
+  const { path } = useMemberPortal();
 
   return (
     <div className="relative flex min-h-[calc(100vh-12rem)] w-full items-center justify-center overflow-hidden rounded-xl bg-black">
@@ -115,7 +117,7 @@ const Continuum = () => {
                       </span>
 
                       <Link
-                        to="/consumer/report"
+                        to={path("report")}
                         onClick={(e) => e.stopPropagation()}
                         className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/80 transition hover:bg-white/10"
                       >
@@ -132,7 +134,7 @@ const Continuum = () => {
 
         {/* Primary CTA - tighter spacing */}
         <AnimatedContainer delay={0.14} className="mt-6">
-          <Link to="/consumer/reflection-room">
+          <Link to={path("reflection-room")}>
             <button
               type="button"
               className={cn(

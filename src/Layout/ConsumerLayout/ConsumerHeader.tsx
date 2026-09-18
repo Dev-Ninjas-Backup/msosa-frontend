@@ -1,6 +1,7 @@
 import { Bell, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ConsumerMenuButton } from "./ConsumerSidebar";
+import { useMemberPortal } from "@/pages/shared/member/MemberPortalContext";
 
 type ConsumerHeaderProps = {
   title: string;
@@ -13,10 +14,11 @@ const ConsumerHeader = ({
   description,
   onMenuClick,
 }: ConsumerHeaderProps) => {
+  const { path } = useMemberPortal();
+
   return (
     <header className="sticky top-0 z-30 bg-primary-bg/90 backdrop-blur-md border-b border-white/5">
       <div className="flex items-center justify-between gap-4 px-4 sm:px-6 lg:px-8 py-4 sm:py-5">
-        {/* Left: Menu + Title */}
         <div className="flex items-start gap-2 sm:gap-3 min-w-0 flex-1">
           <ConsumerMenuButton onClick={onMenuClick} />
           <div className="min-w-0 pt-0.5 sm:pt-0">
@@ -31,9 +33,7 @@ const ConsumerHeader = ({
           </div>
         </div>
 
-        {/* Right: Search + Notification */}
         <div className="flex items-center gap-3 shrink-0">
-          {/* Search Bar */}
           <div className="relative hidden sm:block">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-secondary-text pointer-events-none" />
             <input
@@ -43,9 +43,8 @@ const ConsumerHeader = ({
             />
           </div>
 
-          {/* Notification Bell */}
           <Link
-            to="/consumer/notifications"
+            to={path("notifications")}
             className="relative flex size-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-secondary-text hover:text-primary-brand hover:border-primary-brand/40 transition-colors"
             aria-label="Notifications"
           >

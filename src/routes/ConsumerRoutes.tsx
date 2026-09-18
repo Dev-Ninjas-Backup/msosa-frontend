@@ -11,6 +11,7 @@ import {
 import Loadable from "@/utils/Loadable";
 import { AdminSkeleton } from "@/common/Skeleton/Admin/AdminSkeleton";
 import ConsumerLayout from "@/Layout/ConsumerLayout/ConsumerLayout";
+import { MemberPortalProvider } from "@/pages/shared/member/MemberPortalContext";
 
 const Dashboard = Loadable(
   lazy(() => import("@/pages/Consumer/Dashboard/Dashboard")),
@@ -53,7 +54,11 @@ const Notifications = Loadable(
   AdminSkeleton
 );
 
-const ConsumerShell = () => <ConsumerLayout config={consumerRoutes} />;
+const ConsumerShell = () => (
+  <MemberPortalProvider role="consumer">
+    <ConsumerLayout config={consumerRoutes} />
+  </MemberPortalProvider>
+);
 
 export const consumerRoutes = [
   {

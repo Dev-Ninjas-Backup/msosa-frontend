@@ -3,6 +3,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import ConsumerSidebar from "./ConsumerSidebar";
 import ConsumerHeader from "./ConsumerHeader";
 import { menuGenerator } from "@/utils/Generator/MenuGenerator";
+import { useMemberPortal } from "@/pages/shared/member/MemberPortalContext";
 
 const pageMeta: Record<string, { title: string; description: string }> = {
   Dashboard: {
@@ -35,6 +36,10 @@ const pageMeta: Record<string, { title: string; description: string }> = {
     title: "Reports",
     description: "Your delivered narratives and reflection analyses.",
   },
+  Report: {
+    title: "Reports",
+    description: "Your delivered narratives and reflection analyses.",
+  },
   Continuum: {
     title: "FRC™ Continuum",
     description: "Longitudinal data from your reflection journey.",
@@ -56,6 +61,7 @@ type ConsumerLayoutProps = {
 const ConsumerLayout = ({ config }: ConsumerLayoutProps) => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const location = useLocation();
+  const { basePath } = useMemberPortal();
   const menu = menuGenerator(config);
 
   const isContinuum = location.pathname.includes("/continuum");
@@ -71,7 +77,7 @@ const ConsumerLayout = ({ config }: ConsumerLayoutProps) => {
     for (const item of items) {
       if (
         item.path &&
-        item.path !== "/consumer" &&
+        item.path !== basePath &&
         location.pathname.startsWith(item.path)
       ) {
         return item;
@@ -82,8 +88,7 @@ const ConsumerLayout = ({ config }: ConsumerLayoutProps) => {
 
   const activeItem = findActiveItem(menu);
   const meta =
-    (activeItem && pageMeta[activeItem.label]) ||
-    pageMeta.Dashboard;
+    (activeItem && pageMeta[activeItem.label]) || pageMeta.Dashboard;
 
   const isCheckoutSuccess = location.pathname.includes("/checkout/success");
   const isCheckout =
@@ -140,7 +145,9 @@ const ConsumerLayout = ({ config }: ConsumerLayoutProps) => {
           onMenuClick={() => setIsMobileOpen(true)}
         />
 
-        <main className={`flex-1 ${isContinuum ? "" : "px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8"}`}>
+        <main
+          className={`flex-1 ${isContinuum ? "" : "px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8"}`}
+        >
           <Outlet />
         </main>
 

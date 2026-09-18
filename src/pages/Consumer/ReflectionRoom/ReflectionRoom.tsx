@@ -27,9 +27,11 @@ import {
   ROOM_BG,
   SessionPhase,
 } from "./types";
+import { useMemberPortal } from "@/pages/shared/member/MemberPortalContext";
 
 const ReflectionRoom = () => {
   const navigate = useNavigate();
+  const { path } = useMemberPortal();
   const [language, setLanguage] = useState<Language>("en");
   const [langOpen, setLangOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -89,7 +91,7 @@ const ReflectionRoom = () => {
         ? "Reflection submitted — continuing journey"
         : "Reflexión enviada"
     );
-    window.setTimeout(() => navigate("/consumer/dashboard"), 1200);
+    window.setTimeout(() => navigate(path("dashboard")), 1200);
   };
 
   const canSubmit =
@@ -107,7 +109,7 @@ const ReflectionRoom = () => {
       <div className="relative z-10 flex h-full flex-col">
         {/* Header */}
         <header className="flex items-center justify-between gap-3 px-4 sm:px-8 lg:px-12 pt-5 sm:pt-7 pb-2">
-          <Link to="/consumer/dashboard" className="flex items-center gap-2.5 shrink-0">
+          <Link to={path("dashboard")} className="flex items-center gap-2.5 shrink-0">
             <img src={logo} alt="FAR Systems" className="size-9 sm:size-10 object-contain" />
             <span
               className="hidden sm:inline text-sm font-semibold tracking-[0.18em] uppercase"
@@ -187,21 +189,21 @@ const ReflectionRoom = () => {
                   />
                   <div className="absolute right-0 mt-2 z-30 min-w-[180px] overflow-hidden rounded-xl border border-white/15 bg-black/85 backdrop-blur-xl shadow-xl">
                     <Link
-                      to="/consumer/dashboard"
+                      to={path("dashboard")}
                       className="block px-4 py-2.5 text-sm text-white/80 hover:bg-white/5 hover:text-white"
                       onClick={() => setMenuOpen(false)}
                     >
                       Dashboard
                     </Link>
                     <Link
-                      to="/consumer/customer-products"
+                      to={path("customer-products")}
                       className="block px-4 py-2.5 text-sm text-white/80 hover:bg-white/5 hover:text-white"
                       onClick={() => setMenuOpen(false)}
                     >
                       Products
                     </Link>
                     <Link
-                      to="/consumer/profile"
+                      to={path("profile")}
                       className="block px-4 py-2.5 text-sm text-white/80 hover:bg-white/5 hover:text-white"
                       onClick={() => setMenuOpen(false)}
                     >
@@ -360,7 +362,7 @@ const ReflectionRoom = () => {
                   showToast(
                     language === "en" ? "Progress saved" : "Progreso guardado"
                   );
-                  navigate("/consumer/dashboard");
+                  navigate(path("dashboard"));
                 }}
                 className="hidden sm:flex"
               />
@@ -374,7 +376,7 @@ const ReflectionRoom = () => {
                       ? "Session paused for later"
                       : "Sesión pausada"
                   );
-                  navigate("/consumer/dashboard");
+                  navigate(path("dashboard"));
                 }}
                 className="hidden md:flex"
               />

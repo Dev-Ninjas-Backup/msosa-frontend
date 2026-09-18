@@ -2,6 +2,7 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, FileText, ImageIcon } from "lucide-react";
 import Card from "@/ui/Card"; // or relative path
+import { useMemberPortal } from "@/pages/shared/member/MemberPortalContext";
 
 type ActiveReflectionCardProps = {
   title: string;
@@ -20,6 +21,8 @@ const ActiveReflectionCard = ({
   lastActivity,
   remaining,
 }: ActiveReflectionCardProps) => {
+  const { path } = useMemberPortal();
+
   return (
     <Card className="p-4 sm:p-5 flex flex-col " borderColor="#FFFFFF1A" >
 
@@ -72,7 +75,7 @@ const ActiveReflectionCard = ({
         EST. REMAINING: <span className="text-white">{remaining}</span>
       </p>
 
-      <Link to="/consumer/reflection-room" className="mt-auto">
+      <Link to={path("reflection-room")} className="mt-auto">
         <button
           type="button"
           className="w-full h-11 rounded-xl bg-[#FBBF24] hover:bg-[#e5a820] text-black text-sm font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer border-0"

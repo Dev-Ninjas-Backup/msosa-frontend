@@ -12,9 +12,11 @@ import {
 import AnimatedContainer from "@/common/AnimatedContainer";
 import Card from "@/ui/Card";
 import { cn } from "@/lib/utils";
+import { useMemberPortal } from "@/pages/shared/member/MemberPortalContext";
 
 const ReportDetail = () => {
   const { reportId } = useParams();
+  const { path } = useMemberPortal();
 
   return (
     <div className="space-y-5 sm:space-y-6 pb-8">
@@ -22,11 +24,11 @@ const ReportDetail = () => {
       <AnimatedContainer delay={0.02}>
         <div className="flex flex-col gap-3">
           <div className="flex flex-wrap items-center gap-1.5 text-xs text-secondary-text">
-            <Link to="/consumer/dashboard" className="hover:text-[#F5C542] transition-colors">
+            <Link to={path("dashboard")} className="hover:text-[#F5C542] transition-colors">
               HOME
             </Link>
             <span className="text-white/30">›</span>
-            <Link to="/consumer/report" className="hover:text-[#F5C542] transition-colors">
+            <Link to={path("report")} className="hover:text-[#F5C542] transition-colors">
               REPORTS
             </Link>
             <span className="text-white/30">›</span>
@@ -36,7 +38,7 @@ const ReportDetail = () => {
           </div>
 
           <Link
-            to="/consumer/report"
+            to={path("report")}
             className="inline-flex items-center gap-1.5 text-sm text-secondary-text hover:text-primary-text transition-colors w-fit"
           >
             <ArrowLeft className="size-3.5" />

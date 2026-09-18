@@ -23,6 +23,7 @@ import AnimatedContainer from "@/common/AnimatedContainer";
 import Input from "@/ui/Input";
 import Card from "@/ui/Card";
 import { cn } from "@/lib/utils";
+import { useMemberPortal } from "@/pages/shared/member/MemberPortalContext";
 
 type NotifTag =
   | "ACTION REQUIRED"
@@ -58,7 +59,7 @@ const INITIAL: NotificationItem[] = [
     unread: true,
     icon: "alert",
     actionLabel: "Take Action",
-    actionHref: "/consumer/reflection-room",
+    actionHref: "reflection-room",
     actionVariant: "primary",
   },
   {
@@ -71,7 +72,7 @@ const INITIAL: NotificationItem[] = [
     unread: true,
     icon: "report",
     actionLabel: "View Report",
-    actionHref: "/consumer/report",
+    actionHref: "report",
     actionVariant: "secondary",
   },
   {
@@ -164,6 +165,7 @@ const priorityDot = (p: Priority) =>
       : "bg-emerald-400";
 
 const Notifications = () => {
+  const { path } = useMemberPortal();
   const [items, setItems] = useState(INITIAL);
   const [query, setQuery] = useState("");
 
@@ -336,7 +338,7 @@ const Notifications = () => {
                       <div className="flex items-start gap-2 shrink-0">
                         {n.actionLabel && (
                           n.actionHref ? (
-                            <Link to={n.actionHref}>
+                            <Link to={path(n.actionHref)}>
                               <button
                                 type="button"
                                 className={cn(
@@ -423,7 +425,7 @@ const Notifications = () => {
                 </li>
                 <li>
                   <Link
-                    to="/consumer/profile"
+                    to={path("profile")}
                     className="w-full flex items-center justify-between gap-3 rounded-xl px-3 py-2.5 text-sm text-primary-text hover:bg-white/5"
                   >
                     <span className="inline-flex items-center gap-3">

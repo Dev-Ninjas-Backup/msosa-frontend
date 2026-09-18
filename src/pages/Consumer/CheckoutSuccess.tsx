@@ -2,6 +2,7 @@
 import { Link } from "react-router-dom";
 import { Check, Plus } from "lucide-react";
 import AnimatedContainer from "@/common/AnimatedContainer";
+import { useMemberPortal } from "@/pages/shared/member/MemberPortalContext";
 
 const PURCHASE_HISTORY = [
   {
@@ -11,7 +12,7 @@ const PURCHASE_HISTORY = [
     status: "IN PROGRESS (60%)",
     statusColor: "text-[#FBBF24]",
     primaryAction: "START REFLECTION",
-    primaryTo: "/consumer/reflection-room",
+    primaryTo: "reflection-room",
   },
   {
     title: "Relationship Reflection™",
@@ -20,9 +21,9 @@ const PURCHASE_HISTORY = [
     status: "COMPLETED",
     statusColor: "text-emerald-400",
     secondaryAction: "VIEW REPORT",
-    secondaryTo: "/consumer/report",
+    secondaryTo: "report",
     primaryAction: "CONTINUE REFLECTION",
-    primaryTo: "/consumer/reflection-room",
+    primaryTo: "reflection-room",
   },
 ];
 
@@ -48,6 +49,8 @@ const EXPLORE_NEXT = [
 ];
 
 const CheckoutSuccess = () => {
+  const { path } = useMemberPortal();
+
   return (
     <div className="space-y-10 sm:space-y-12 pb-10">
       {/* Breadcrumb */}
@@ -103,7 +106,7 @@ const CheckoutSuccess = () => {
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-3">
-              <Link to="/consumer/reflection-room">
+              <Link to={path("reflection-room")}>
                 <button
                   type="button"
                   className="h-11 px-6 rounded-xl bg-[#FBBF24] hover:bg-[#e5a820] text-black text-sm font-semibold transition-colors cursor-pointer border-0"
@@ -112,7 +115,7 @@ const CheckoutSuccess = () => {
                 </button>
               </Link>
 
-              <Link to="/consumer/dashboard">
+              <Link to={path("dashboard")}>
                 <button
                   type="button"
                   className="h-11 px-6 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 text-primary-text text-sm font-medium transition-colors cursor-pointer"
@@ -122,7 +125,7 @@ const CheckoutSuccess = () => {
               </Link>
 
               <Link
-                to="/consumer/customer-products"
+                to={path("customer-products")}
                 className="text-sm text-secondary-text hover:text-primary-text transition-colors"
               >
                 View All Reflections →
@@ -176,7 +179,7 @@ const CheckoutSuccess = () => {
                   </div>
 
                   {item.secondaryAction && (
-                    <Link to={item.secondaryTo || "#"}>
+                    <Link to={item.secondaryTo ? path(item.secondaryTo) : "#"}>
                       <button
                         type="button"
                         className="h-9 px-4 rounded-lg border border-white/15 bg-white/5 hover:bg-white/10 text-primary-text text-xs font-medium transition-colors cursor-pointer"
@@ -186,7 +189,7 @@ const CheckoutSuccess = () => {
                     </Link>
                   )}
 
-                  <Link to={item.primaryTo}>
+                  <Link to={path(item.primaryTo)}>
                     <button
                       type="button"
                       className="h-9 px-4 rounded-lg bg-[#FBBF24] hover:bg-[#e5a820] text-black text-xs font-semibold transition-colors cursor-pointer border-0 whitespace-nowrap"
@@ -234,7 +237,7 @@ const CheckoutSuccess = () => {
                   <span className="text-lg font-semibold text-primary-text">
                     {item.price}
                   </span>
-                  <Link to="/consumer/checkout">
+                  <Link to={path("checkout")}>
                     <button
                       type="button"
                       className="size-9 rounded-lg border border-white/15 bg-white/5 hover:bg-white/10 flex items-center justify-center text-secondary-text hover:text-primary-text transition-colors cursor-pointer"

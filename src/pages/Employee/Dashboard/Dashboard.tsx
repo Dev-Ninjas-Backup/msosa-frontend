@@ -1,7 +1,3 @@
-import WorkInProgress from "@/common/WorkInProgress";
+import MemberDashboard from "@/pages/shared/member/dashboard/MemberDashboard";
 
-const EmployeeDashboard = () => {
-  return <WorkInProgress title="Dashboard" subtitle="Employee workspace, guided reflections, and personal growth tools." />;
-};
-
-export default EmployeeDashboard;
+export default MemberDashboard;

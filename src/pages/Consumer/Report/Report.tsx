@@ -12,6 +12,7 @@ import AnimatedContainer from "@/common/AnimatedContainer";
 import Input from "@/ui/Input";
 import Card from "@/ui/Card";
 import { cn } from "@/lib/utils";
+import { useMemberPortal } from "@/pages/shared/member/MemberPortalContext";
 
 const STATS = [
   { label: "TOTAL REPORTS", value: "8" },
@@ -44,6 +45,8 @@ const ghostBtn =
   "h-9 px-4 rounded-lg border border-white/15 bg-white/5 hover:bg-white/10 text-primary-text text-xs font-medium transition-colors cursor-pointer";
 
 const Report = () => {
+  const { path } = useMemberPortal();
+
   return (
     <div className="space-y-5 sm:space-y-6 pb-6">
       {/* Page Title */}
@@ -152,7 +155,7 @@ const Report = () => {
                       </td>
                       <td className="py-4">
                         <div className="flex items-center justify-end gap-2">
-                          <Link to={`/consumer/report/${report.id}`}>
+                          <Link to={path(`report/${report.id}`)}>
                             <button
                               type="button"
                               aria-label="Open report"
@@ -259,7 +262,7 @@ const Report = () => {
               </p>
 
               <Link
-                to="/consumer/report/relationship-v2"
+                to={path("report/relationship-v2")}
                 className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold tracking-wide text-amber-300 hover:text-amber-200 transition-colors"
               >
                 GO TO SECTION →
