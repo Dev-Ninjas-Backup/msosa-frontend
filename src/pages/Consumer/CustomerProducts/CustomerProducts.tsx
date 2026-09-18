@@ -1,4 +1,4 @@
-// src/pages/consumer/ReflectionMarketplace.tsx
+// src/pages/consumer/CustomerProducts/CustomerProducts.tsx
 import ActiveReflectionCard from "./sections/ActiveReflectionCard";
 import MarketplaceCard from "./sections/MarketplaceCard";
 import ReflectionJourney from "./sections/ReflectionJourney";
@@ -74,7 +74,7 @@ const ALL_REFLECTIONS = [
   },
 ];
 
-const Blueprint = () => {
+const CustomerProducts = () => {
   return (
     <div className="space-y-10 sm:space-y-12 pb-10">
       {/* Page Header */}
@@ -92,7 +92,7 @@ const Blueprint = () => {
       <AnimatedContainer delay={0.1}>
         <div>
           <h2 className="font-playfair text-xl text-primary-text mb-4">
-            Active Reflection
+            Active Consumer Products
             <sup className="text-[#10B7BA] text-sm">™</sup>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -131,4 +131,4 @@ const Blueprint = () => {
   );
 };
 
-export default Blueprint;
+export default CustomerProducts;

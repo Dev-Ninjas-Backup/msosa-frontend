@@ -34,7 +34,7 @@ const RecommendedForYou = () => {
         </div>
 
         <Link
-          to="/consumer/blueprint"
+          to="/consumer/customer-products"
           className="inline-flex items-center gap-1.5 text-sm text-[#FBBF24] hover:opacity-80 transition-opacity"
         >
           Explore suggestion

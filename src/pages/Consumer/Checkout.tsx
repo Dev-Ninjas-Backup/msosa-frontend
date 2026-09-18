@@ -59,7 +59,7 @@ const Checkout = () => {
     <div className="pb-10">
       {/* Breadcrumb */}
       <p className="text-[11px] tracking-[0.14em] text-secondary-text uppercase mb-4">
-        Blueprint <span className="mx-1.5">›</span> Checkout
+        Products <span className="mx-1.5">›</span> Checkout
       </p>
 
       <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_400px] gap-8 lg:gap-10">
@@ -265,7 +265,7 @@ const Checkout = () => {
 
               <button
                 type="button"
-                onClick={() => navigate("/consumer/blueprint")}
+                onClick={() => navigate("/consumer/customer-products")}
                 className="w-full text-center text-sm text-secondary-text hover:text-primary-text transition-colors border-0 bg-transparent cursor-pointer py-1"
               >
                 Cancel Purchase

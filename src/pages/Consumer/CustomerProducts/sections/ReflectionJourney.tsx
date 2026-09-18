@@ -1,5 +1,5 @@
 // src/components/consumer/marketplace/ReflectionJourney.tsx
-import { ShoppingCart, Mic, Sparkles, FileText, Infinity, User } from "lucide-react";
+import { ShoppingCart, Mic, FileText, Infinity, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const STEPS = [
@@ -16,9 +16,9 @@ const STEPS = [
     active: false,
   },
   {
-    icon: User ,
+    icon: User,
     label: "Illumination Bridge™",
-    sub: "HUMAN & AI\nTRANSFORMATION STAGE",
+    sub: "HUMAN & AI\nTRANSIT STAGE",
     active: false,
   },
   {
@@ -37,7 +37,7 @@ const STEPS = [
 
 const ReflectionJourney = () => {
   return (
-    <div className="text-center">
+    <div className="text-center pt-20 ">
       <h2 className="font-playfair text-2xl sm:text-3xl text-primary-text mb-2">
         The Reflection Journey
       </h2>
@@ -46,7 +46,7 @@ const ReflectionJourney = () => {
         FAR Systems™ Continuum architecture.
       </p>
 
-      <div className="relative flex items-start justify-between max-w-3xl mx-auto px-2">
+      <div className="relative flex items-start justify-between max-w-4xl mx-auto px-2">
         {/* Connecting line */}
         <div className="absolute top-6 left-[10%] right-[10%] h-px bg-white/10 hidden sm:block" />
 

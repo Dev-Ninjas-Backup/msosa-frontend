@@ -16,8 +16,8 @@ const Dashboard = Loadable(
   lazy(() => import("@/pages/Consumer/Dashboard/Dashboard")),
   AdminSkeleton
 );
-const Blueprint = Loadable(
-  lazy(() => import("@/pages/Consumer/Blueprint/Blueprint")),
+const CustomerProducts = Loadable(
+  lazy(() => import("@/pages/Consumer/CustomerProducts/CustomerProducts")),
   AdminSkeleton
 );
 const Checkout = Loadable(
@@ -75,10 +75,14 @@ export const consumerRoutes = [
         element: <Dashboard />,
       },
       {
-        name: "Blueprints",
-        path: "blueprint",
+        name: "Customer Products",
+        path: "customer-products",
         icon: <Columns />,
-        element: <Blueprint />,
+        element: <CustomerProducts />,
+      },
+      {
+        path: "blueprint",
+        element: <Navigate to="/consumer/customer-products" replace />,
       },
       {
         path: "checkout",

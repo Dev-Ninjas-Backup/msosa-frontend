@@ -1,109 +1,45 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
+  ChevronDown,
   ChevronRight,
   Clock3,
   Globe,
-  List,
-  Lock,
+  Keyboard,
+  Menu,
   Mic,
-  Music2,
   Pause,
   Play,
   RotateCcw,
   Save,
-  Settings,
-  SlidersHorizontal,
+  Send,
   Square,
+  X,
 } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { cn } from "@/lib/utils";
-import SettingsPanel from "./SettingsPanel";
-import VibePanel from "./VibePanel";
 import TypeEditor from "./TypeEditor";
 import {
   copy,
-  DEFAULT_SETTINGS,
   InputMode,
   Language,
-  RoomSettings,
+  PRIMARY,
+  ROOM_BG,
   SessionPhase,
-  VibeId,
 } from "./types";
-
-const formatTime = (seconds: number) => {
-  const m = Math.floor(seconds / 60);
-  const s = seconds % 60;
-  return `${m}:${s.toString().padStart(2, "0")}`;
-};
-
-const Waveform = ({
-  active,
-  color,
-}: {
-  active: boolean;
-  color: string;
-}) => (
-  <div className="flex items-end justify-center gap-[3px] h-[72px] sm:h-[100px] w-full max-w-md mx-auto">
-    {Array.from({ length: 42 }).map((_, i) => {
-      const mid = Math.abs(i - 21);
-      const base = active
-        ? 18 + ((i * 37 + mid * 11) % 55)
-        : 10 + (i % 7) * 3;
-      return (
-        <span
-          key={i}
-          className={cn(
-            "w-[3px] sm:w-1 rounded-full origin-bottom transition-all duration-300",
-            active && "animate-pulse"
-          )}
-          style={{
-            height: `${base}px`,
-            backgroundColor: color,
-            opacity: active ? 0.85 : 0.35,
-            animationDelay: `${i * 30}ms`,
-          }}
-        />
-      );
-    })}
-  </div>
-);
-
-const Glass = ({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) => (
-  <div
-    className={cn(
-      "rounded-2xl border border-white/15 bg-black/45 backdrop-blur-xl shadow-[0_8px_40px_rgba(0,0,0,0.35)]",
-      className
-    )}
-  >
-    {children}
-  </div>
-);
 
 const ReflectionRoom = () => {
   const navigate = useNavigate();
-  const [settings, setSettings] = useState<RoomSettings>(DEFAULT_SETTINGS);
-  const [draft, setDraft] = useState<RoomSettings>(DEFAULT_SETTINGS);
-  const [settingsOpen, setSettingsOpen] = useState(false);
-  const [vibeOpen, setVibeOpen] = useState(false);
   const [language, setLanguage] = useState<Language>("en");
-  const [vibe, setVibe] = useState<VibeId>("calm");
+  const [langOpen, setLangOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [inputMode, setInputMode] = useState<InputMode>("voice");
   const [phase, setPhase] = useState<SessionPhase>("idle");
   const [seconds, setSeconds] = useState(0);
   const [notes, setNotes] = useState("");
-  const [endConfirm, setEndConfirm] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
 
   const t = copy[language];
-  const primary = settings.primaryColor;
-  const accent = settings.accentColor;
 
   useEffect(() => {
     if (phase !== "recording") return;
@@ -122,25 +58,31 @@ const ReflectionRoom = () => {
   const startRecording = () => {
     setInputMode("voice");
     setPhase("recording");
-    if (seconds === 0) setSeconds(0);
+  };
+
+  const toggleMic = () => {
+    if (phase === "idle" || phase === "recorded") {
+      startRecording();
+      return;
+    }
+    setPhase((p) => (p === "recording" ? "paused" : "recording"));
   };
 
   const stopRecording = () => {
+    if (phase !== "recording" && phase !== "paused") return;
     setPhase("recorded");
     showToast(language === "en" ? "Recording saved" : "Grabación guardada");
   };
 
-  const pauseRecording = () => {
-    setPhase((p) => (p === "recording" ? "paused" : "recording"));
-  };
-
   const rerecord = () => {
     setSeconds(0);
-    setPhase("recording");
     setNotes("");
+    setPhase("recording");
+    setInputMode("voice");
   };
 
   const submitReflection = () => {
+    if (phase === "idle" && !notes.trim()) return;
     setPhase("submitted");
     showToast(
       language === "en"
@@ -150,327 +92,242 @@ const ReflectionRoom = () => {
     window.setTimeout(() => navigate("/consumer/dashboard"), 1200);
   };
 
-  const saveContinue = () => {
-    showToast(language === "en" ? "Progress saved" : "Progreso guardado");
-    navigate("/consumer/dashboard");
-  };
-
-  const resumeLater = () => {
-    showToast(language === "en" ? "Session paused for later" : "Sesión pausada");
-    navigate("/consumer/dashboard");
-  };
-
-  const restoreSession = () => {
-    setPhase("paused");
-    setSeconds((s) => (s > 0 ? s : 147));
-    showToast(language === "en" ? "Session restored" : "Sesión restaurada");
-  };
-
-  const overlayOpacity = useMemo(() => {
-    const darkBoost = settings.darkMode ? 0.25 : 0;
-    return Math.min(0.75, (100 - settings.brightness) / 120 + darkBoost);
-  }, [settings.brightness, settings.darkMode]);
+  const canSubmit =
+    inputMode === "type" ? notes.trim().length > 0 : phase !== "idle";
 
   return (
-    <div className="relative h-screen w-full overflow-hidden text-primary-text">
-      {/* Wallpaper */}
+    <div className="relative h-screen w-full overflow-hidden text-white">
       <div
-        className="absolute inset-0 bg-cover bg-center transition-[filter] duration-500"
-        style={{
-          backgroundImage: `url(${settings.wallpaper})`,
-          filter: `brightness(${settings.brightness / 100}) blur(${settings.blur / 8}px)`,
-          transform: settings.blur > 0 ? "scale(1.05)" : undefined,
-        }}
+        className="absolute inset-0 bg-cover bg-center scale-105"
+        style={{ backgroundImage: `url(${ROOM_BG})`, filter: "brightness(0.55)" }}
       />
-      <div
-        className="absolute inset-0"
-        style={{ backgroundColor: `rgba(0,0,0,${overlayOpacity})` }}
-      />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/35 to-black/80" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.55)_100%)]" />
 
-      {/* Content */}
       <div className="relative z-10 flex h-full flex-col">
         {/* Header */}
-        <header className="flex items-center justify-between gap-3 px-4 sm:px-6 lg:px-10 py-4 sm:py-5">
-          <div className="flex items-center gap-3 min-w-0">
-            <Link to="/consumer/dashboard" className="shrink-0">
-              <img src={logo} alt="FAR" className="size-9 sm:size-10 object-contain" />
-            </Link>
-            <div className="min-w-0 hidden sm:block">
-              <h1 className="text-base sm:text-lg font-semibold text-white truncate">
-                Reflection Room
-                <sup className="text-[10px] ml-0.5" style={{ color: primary }}>
-                  ™
-                </sup>
-              </h1>
-              <p className="text-[11px] sm:text-xs text-white/60 truncate">
-                {t.tagline}
-              </p>
-            </div>
-          </div>
+        <header className="flex items-center justify-between gap-3 px-4 sm:px-8 lg:px-12 pt-5 sm:pt-7 pb-2">
+          <Link to="/consumer/dashboard" className="flex items-center gap-2.5 shrink-0">
+            <img src={logo} alt="FAR Systems" className="size-9 sm:size-10 object-contain" />
+            <span
+              className="hidden sm:inline text-sm font-semibold tracking-[0.18em] uppercase"
+              style={{ color: PRIMARY }}
+            >
+              FAR Systems
+            </span>
+          </Link>
 
-          <div className="flex items-center gap-2 shrink-0">
-            <button
-              type="button"
-              onClick={() => setEndConfirm(true)}
-              className="inline-flex items-center gap-2 h-9 px-3 sm:px-4 rounded-full border border-white/20 bg-black/40 backdrop-blur text-sm text-white hover:bg-black/55 cursor-pointer"
-            >
-              <span className="size-2.5 rounded-full bg-rose-500" />
-              <span className="hidden sm:inline">{t.endSession}</span>
-            </button>
-            <button
-              type="button"
-              aria-label="Open settings"
-              onClick={() => {
-                setDraft(settings);
-                setSettingsOpen(true);
-              }}
-              className="flex size-9 items-center justify-center rounded-full border border-white/20 bg-black/40 backdrop-blur text-white/80 hover:text-white cursor-pointer"
-            >
-              <Settings className="size-4" />
-            </button>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => {
+                  setLangOpen((o) => !o);
+                  setMenuOpen(false);
+                }}
+                className="inline-flex items-center gap-2 h-10 px-3 rounded-full border border-white/20 bg-black/35 backdrop-blur-md text-sm text-white/90 hover:bg-black/50 cursor-pointer"
+              >
+                <Globe className="size-4" style={{ color: PRIMARY }} />
+                <span className="hidden xs:inline sm:inline">
+                  {language === "en" ? t.english : t.spanish}
+                </span>
+                <ChevronDown className="size-3.5 opacity-70" />
+              </button>
+              {langOpen && (
+                <>
+                  <button
+                    type="button"
+                    className="fixed inset-0 z-20 border-0 bg-transparent cursor-default"
+                    aria-label="Close language menu"
+                    onClick={() => setLangOpen(false)}
+                  />
+                  <div className="absolute right-0 mt-2 z-30 min-w-[140px] overflow-hidden rounded-xl border border-white/15 bg-black/85 backdrop-blur-xl shadow-xl">
+                    {(["en", "es"] as Language[]).map((lang) => (
+                      <button
+                        key={lang}
+                        type="button"
+                        onClick={() => {
+                          setLanguage(lang);
+                          setLangOpen(false);
+                        }}
+                        className={cn(
+                          "w-full px-4 py-2.5 text-left text-sm cursor-pointer border-0",
+                          language === lang
+                            ? "bg-white/10 text-white"
+                            : "bg-transparent text-white/70 hover:bg-white/5 hover:text-white"
+                        )}
+                      >
+                        {lang === "en" ? t.english : t.spanish}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+
+            <div className="relative">
+              <button
+                type="button"
+                aria-label="Open menu"
+                onClick={() => {
+                  setMenuOpen((o) => !o);
+                  setLangOpen(false);
+                }}
+                className="flex size-10 items-center justify-center rounded-full border border-white/20 bg-black/35 backdrop-blur-md text-white/90 hover:bg-black/50 cursor-pointer"
+              >
+                {menuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+              </button>
+              {menuOpen && (
+                <>
+                  <button
+                    type="button"
+                    className="fixed inset-0 z-20 border-0 bg-transparent cursor-default"
+                    aria-label="Close menu"
+                    onClick={() => setMenuOpen(false)}
+                  />
+                  <div className="absolute right-0 mt-2 z-30 min-w-[180px] overflow-hidden rounded-xl border border-white/15 bg-black/85 backdrop-blur-xl shadow-xl">
+                    <Link
+                      to="/consumer/dashboard"
+                      className="block px-4 py-2.5 text-sm text-white/80 hover:bg-white/5 hover:text-white"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      Dashboard
+                    </Link>
+                    <Link
+                      to="/consumer/customer-products"
+                      className="block px-4 py-2.5 text-sm text-white/80 hover:bg-white/5 hover:text-white"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      Products
+                    </Link>
+                    <Link
+                      to="/consumer/profile"
+                      className="block px-4 py-2.5 text-sm text-white/80 hover:bg-white/5 hover:text-white"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      Profile
+                    </Link>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </header>
 
-        {/* Main grid */}
-        <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-[280px_minmax(0,1fr)_280px] xl:grid-cols-[320px_minmax(0,1fr)_320px] gap-4 lg:gap-6 px-4 sm:px-6 lg:px-10 pb-2 overflow-y-auto lg:overflow-visible">
-          {/* Left panels */}
-          <div className="hidden lg:flex flex-col justify-center gap-4">
-            <Glass className="p-5">
-              <div className="flex items-center gap-2 mb-4">
-                <Globe className="size-4" style={{ color: primary }} />
-                <p className="text-sm font-medium">{t.language}</p>
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                {(["en", "es"] as Language[]).map((lang) => (
-                  <button
-                    key={lang}
-                    type="button"
-                    onClick={() => setLanguage(lang)}
-                    className={cn(
-                      "h-12 rounded-xl text-sm font-medium transition-colors cursor-pointer",
-                      language === lang
-                        ? "bg-black/40 text-white"
-                        : "border border-white/10 bg-white/5 text-white/70 hover:bg-white/10"
-                    )}
-                    style={
-                      language === lang
-                        ? { border: `1px solid ${primary}` }
-                        : undefined
-                    }
-                  >
-                    {lang === "en" ? "English" : "Español"}
-                  </button>
-                ))}
-              </div>
-            </Glass>
-
-            <button
-              type="button"
-              onClick={() => setVibeOpen(true)}
-              className="text-left cursor-pointer border-0 p-0 bg-transparent"
-            >
-              <Glass className="p-5 hover:bg-black/55 transition-colors">
-                <div className="flex items-center gap-3">
-                  <span
-                    className="flex size-12 items-center justify-center rounded-xl shrink-0"
-                    style={{ backgroundColor: `${primary}22`, color: primary }}
-                  >
-                    <Music2 className="size-5" />
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <p className="text-sm font-medium">{t.music}</p>
-                    <p className="text-xs text-white/55 mt-1 leading-snug">
-                      {t.musicHint}
-                    </p>
-                    <p className="text-xs mt-2 capitalize" style={{ color: accent }}>
-                      {vibe}
-                    </p>
-                  </div>
-                  <ChevronRight className="size-4 text-white/40 shrink-0" />
-                </div>
-              </Glass>
-            </button>
-          </div>
-
-          {/* Center */}
-          <div className="flex flex-col items-center justify-center text-center px-2 py-4 lg:py-0 min-w-0">
-            {inputMode === "type" ? (
-              <>
-                <h2 className="font-playfair text-2xl sm:text-3xl lg:text-4xl text-white max-w-xl leading-tight">
-                  {t.welcome}
-                </h2>
-                <p className="mt-2 text-sm sm:text-base text-white/65 max-w-md">
-                  {t.prompt}
-                </p>
-              </>
-            ) : (
-              <>
-                <p className="text-sm sm:text-base text-white/80">{t.welcome}</p>
-                <h2 className="mt-2 font-playfair text-2xl sm:text-3xl lg:text-4xl text-white max-w-xl leading-tight">
-                  {settings.mainText || t.prompt}
-                </h2>
-                <p className="mt-3 text-sm text-white/55 max-w-md">
-                  {settings.subText}
-                </p>
-              </>
-            )}
+        {/* Center stage */}
+        <div className="flex-1 min-h-0 flex flex-col items-center justify-center px-4 sm:px-6 overflow-y-auto">
+          <div className="w-full max-w-3xl flex flex-col items-center text-center">
+            <h1 className="text-2xl sm:text-3xl lg:text-[34px] font-semibold tracking-tight text-white">
+              {t.welcome}
+            </h1>
+            <p className="mt-2 text-sm sm:text-base text-white/70">
+              {t.prompt}
+            </p>
 
             {inputMode === "voice" ? (
-              <div className="mt-8 sm:mt-10 w-full">
-                <div className="flex items-center justify-center gap-3 sm:gap-4">
-                  <button
-                    type="button"
-                    onClick={
-                      phase === "idle" || phase === "recorded"
-                        ? startRecording
-                        : pauseRecording
-                    }
-                    className="flex size-12 sm:size-14 items-center justify-center rounded-full shrink-0 cursor-pointer border-0 shadow-lg"
-                    style={{ backgroundColor: primary, color: "#111" }}
-                    aria-label={phase === "recording" ? "Pause" : "Record"}
+              <div className="mt-8 sm:mt-10 flex flex-col items-center">
+                <button
+                  type="button"
+                  onClick={toggleMic}
+                  aria-label={
+                    phase === "recording"
+                      ? "Pause recording"
+                      : phase === "paused"
+                        ? "Resume recording"
+                        : "Start reflection"
+                  }
+                  className="relative flex size-[120px] sm:size-[148px] items-center justify-center rounded-full border-0 bg-transparent cursor-pointer group"
+                >
+                  {/* Ripple rings */}
+                  <span
+                    className={cn(
+                      "absolute inset-[-10px] rounded-full border opacity-40",
+                      phase === "recording" && "animate-ping"
+                    )}
+                    style={{ borderColor: `${PRIMARY}55` }}
+                  />
+                  <span
+                    className="absolute inset-[-22px] rounded-full border opacity-25"
+                    style={{ borderColor: `${PRIMARY}40` }}
+                  />
+                  <span
+                    className="absolute inset-[-34px] rounded-full border opacity-15 hidden sm:block"
+                    style={{ borderColor: `${PRIMARY}30` }}
+                  />
+                  <span
+                    className="relative flex size-full items-center justify-center rounded-full border-2 bg-black/55 backdrop-blur-md shadow-[0_0_40px_rgba(251,191,36,0.35)] transition-transform group-hover:scale-[1.03]"
+                    style={{ borderColor: PRIMARY }}
                   >
                     {phase === "recording" ? (
-                      <Pause className="size-5" />
+                      <Pause className="size-10 sm:size-12" style={{ color: PRIMARY }} />
                     ) : phase === "paused" ? (
-                      <Play className="size-5" />
+                      <Play className="size-10 sm:size-12" style={{ color: PRIMARY }} />
                     ) : (
-                      <Mic className="size-5" />
+                      <Mic className="size-10 sm:size-12" style={{ color: PRIMARY }} />
                     )}
-                  </button>
+                  </span>
+                </button>
 
-                  <div className="flex-1 max-w-lg">
-                    <Waveform
-                      active={phase === "recording"}
-                      color={phase === "recording" ? "#fff" : `${primary}cc`}
-                    />
-                  </div>
-
-                  <p className="font-mono text-sm sm:text-base text-white/80 tabular-nums w-12 text-left">
-                    {formatTime(seconds)}
+                {(phase === "recording" || phase === "paused" || phase === "recorded") && (
+                  <p
+                    className="mt-6 font-mono text-sm tabular-nums tracking-wider"
+                    style={{ color: PRIMARY }}
+                  >
+                    {Math.floor(seconds / 60)
+                      .toString()
+                      .padStart(2, "0")}
+                    :{(seconds % 60).toString().padStart(2, "0")}
                   </p>
-                </div>
-
-                <p
-                  className="mt-4 text-[11px] sm:text-xs font-semibold tracking-[0.16em] uppercase"
-                  style={{ color: primary }}
-                >
-                  {phase === "recording"
-                    ? t.recording
-                    : phase === "recorded"
-                      ? t.answer
-                      : settings.instructionText}
-                </p>
-
-                <div className="mt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setInputMode("type")}
-                    className="inline-flex items-center gap-2 h-10 px-4 rounded-full border border-white/20 bg-black/40 text-sm text-white hover:bg-black/55 cursor-pointer"
-                  >
-                    {t.type}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={submitReflection}
-                    disabled={phase === "idle" && !notes.trim()}
-                    className="inline-flex items-center gap-2 h-10 px-5 rounded-full text-sm font-semibold text-black border-0 cursor-pointer disabled:opacity-40"
-                    style={{ backgroundColor: primary }}
-                  >
-                    {t.submit}
-                  </button>
-                </div>
+                )}
               </div>
             ) : (
-              <div className="mt-6 sm:mt-8 w-full px-0 sm:px-2">
+              <div className="mt-6 sm:mt-8 w-full">
                 <TypeEditor
                   value={notes}
                   onChange={setNotes}
-                  primaryColor={primary}
+                  primaryColor={PRIMARY}
                   onSwitchToVoice={() => setInputMode("voice")}
                   placeholder={t.placeholder}
                 />
-                <div className="mt-4 flex justify-center">
-                  <button
-                    type="button"
-                    onClick={submitReflection}
-                    disabled={!notes.trim()}
-                    className="inline-flex items-center gap-2 h-10 px-5 rounded-full text-sm font-semibold text-black border-0 cursor-pointer disabled:opacity-40"
-                    style={{ backgroundColor: primary }}
-                  >
-                    {t.submit}
-                  </button>
-                </div>
               </div>
             )}
 
-            {/* Mobile language / vibe */}
-            <div className="lg:hidden mt-6 flex flex-wrap justify-center gap-2 w-full">
+            {/* Reflect / Type */}
+            <div className="mt-8 flex items-center gap-2 sm:gap-3">
               <button
                 type="button"
-                onClick={() => setLanguage((l) => (l === "en" ? "es" : "en"))}
-                className="h-9 px-3 rounded-full border border-white/20 bg-black/40 text-xs text-white cursor-pointer"
+                onClick={() => setInputMode("voice")}
+                className={cn(
+                  "h-10 sm:h-11 px-5 sm:px-6 rounded-full text-sm font-medium cursor-pointer transition-colors",
+                  inputMode === "voice"
+                    ? "bg-black/50 text-[#FBBF24] border border-[#FBBF24]"
+                    : "bg-black/40 text-white/80 border border-white/20 hover:bg-black/55"
+                )}
               >
-                {language === "en" ? "EN" : "ES"}
+                {t.reflect}
               </button>
               <button
                 type="button"
-                onClick={() => setVibeOpen(true)}
-                className="h-9 px-3 rounded-full border border-white/20 bg-black/40 text-xs text-white cursor-pointer inline-flex items-center gap-1.5"
+                onClick={() => setInputMode("type")}
+                className={cn(
+                  "inline-flex items-center gap-2 h-10 sm:h-11 px-5 sm:px-6 rounded-full text-sm font-medium cursor-pointer transition-colors",
+                  inputMode === "type"
+                    ? "bg-black/50 text-[#FBBF24] border border-[#FBBF24]"
+                    : "bg-black/40 text-white/80 border border-white/20 hover:bg-black/55"
+                )}
               >
-                <Music2 className="size-3.5" style={{ color: primary }} />
-                {vibe}
+                <Keyboard className="size-3.5" />
+                {t.type}
               </button>
             </div>
           </div>
-
-          {/* Right session card */}
-          <div className="hidden lg:flex flex-col justify-center">
-            <Glass className="p-5 sm:p-6">
-              <h3 className="text-lg font-medium mb-6">{t.session}</h3>
-              <ul className="space-y-6">
-                <li className="flex items-start gap-3">
-                  <Clock3 className="size-5 mt-0.5 text-white/50" />
-                  <div>
-                    <p className="text-xs uppercase tracking-wider text-white/45">
-                      {t.time}
-                    </p>
-                    <p className="mt-1 text-sm font-medium" style={{ color: primary }}>
-                      04:00 AM
-                    </p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <SlidersHorizontal className="size-5 mt-0.5 text-white/50" />
-                  <div>
-                    <p className="text-xs uppercase tracking-wider text-white/45">
-                      {t.focus}
-                    </p>
-                    <p className="mt-1 text-sm font-medium" style={{ color: primary }}>
-                      {t.general}
-                    </p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <List className="size-5 mt-0.5 text-white/50" />
-                  <div>
-                    <p className="text-xs uppercase tracking-wider text-white/45">
-                      {t.protocol}
-                    </p>
-                    <p className="mt-1 text-sm font-medium" style={{ color: primary }}>
-                      {t.protocolValue}
-                    </p>
-                  </div>
-                </li>
-              </ul>
-            </Glass>
-          </div>
         </div>
 
-        {/* Footer controls */}
-        <div className="px-3 sm:px-6 lg:px-10 pb-4 sm:pb-5 pt-2">
-          <Glass className="mx-auto max-w-5xl px-2 sm:px-3 py-2 sm:py-2.5">
-            <div className="flex items-stretch justify-between gap-1 sm:gap-2 overflow-x-auto">
-              <FooterAction
+        {/* Bottom stack */}
+        <div className="px-3 sm:px-6 lg:px-10 pb-4 sm:pb-6 pt-2 space-y-3 sm:space-y-4">
+          <div className="mx-auto max-w-4xl rounded-2xl border border-white/15 bg-black/50 backdrop-blur-xl px-1 sm:px-2 py-2 shadow-[0_12px_40px_rgba(0,0,0,0.45)]">
+            <div className="flex items-stretch justify-between gap-0.5 sm:gap-1 overflow-x-auto">
+              <ToolbarAction
                 icon={<Square className="size-4 fill-current" />}
                 title={t.stop}
                 subtitle={t.recording}
@@ -478,12 +335,10 @@ const ReflectionRoom = () => {
                 onClick={stopRecording}
                 disabled={phase !== "recording" && phase !== "paused"}
               />
-              <Divider />
-              <FooterAction
-                icon={<Play className="size-4" />}
+              <ToolbarAction
+                icon={<Play className="size-4 fill-current" />}
                 title={t.replay}
                 subtitle={t.answer}
-                color={primary}
                 onClick={() =>
                   showToast(
                     language === "en" ? "Replaying answer…" : "Reproduciendo…"
@@ -491,113 +346,109 @@ const ReflectionRoom = () => {
                 }
                 disabled={phase === "idle"}
               />
-              <FooterAction
+              <ToolbarAction
                 icon={<RotateCcw className="size-4" />}
                 title={t.rerecord}
                 subtitle={t.answer}
-                color={primary}
                 onClick={rerecord}
               />
-              <Divider className="hidden sm:block" />
-              <FooterAction
+              <ToolbarAction
                 icon={<Save className="size-4" />}
                 title={t.saveContinue}
                 subtitle={t.continue}
-                color={primary}
-                onClick={saveContinue}
+                onClick={() => {
+                  showToast(
+                    language === "en" ? "Progress saved" : "Progreso guardado"
+                  );
+                  navigate("/consumer/dashboard");
+                }}
                 className="hidden sm:flex"
               />
-              <FooterAction
+              <ToolbarAction
                 icon={<Clock3 className="size-4" />}
                 title={t.resume}
                 subtitle={t.later}
-                color={primary}
-                onClick={resumeLater}
+                onClick={() => {
+                  showToast(
+                    language === "en"
+                      ? "Session paused for later"
+                      : "Sesión pausada"
+                  );
+                  navigate("/consumer/dashboard");
+                }}
                 className="hidden md:flex"
               />
-              <FooterAction
+              <ToolbarAction
                 icon={<RotateCcw className="size-4" />}
                 title={t.restore}
                 subtitle={t.sessionWord}
-                color={primary}
-                onClick={restoreSession}
+                onClick={() => {
+                  setPhase("paused");
+                  setSeconds((s) => (s > 0 ? s : 147));
+                  showToast(
+                    language === "en"
+                      ? "Session restored"
+                      : "Sesión restaurada"
+                  );
+                }}
                 className="hidden md:flex"
               />
             </div>
-          </Glass>
-          <p className="mt-3 flex items-center justify-center gap-1.5 text-[11px] text-white/50">
-            <Lock className="size-3" />
-            {t.privacy}
-          </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={submitReflection}
+            disabled={!canSubmit}
+            className="group mx-auto flex w-full max-w-xl items-center justify-between gap-3 rounded-full border-2 px-2 sm:px-3 py-2 sm:py-2.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-transform hover:scale-[1.01] active:scale-[0.99]"
+            style={{
+              borderColor: PRIMARY,
+              background:
+                "linear-gradient(180deg, rgba(251,191,36,0.18) 0%, rgba(0,0,0,0.55) 100%)",
+              boxShadow:
+                "0 0 28px rgba(251,191,36,0.35), inset 0 0 20px rgba(251,191,36,0.08)",
+            }}
+          >
+            <span
+              className="flex size-11 sm:size-12 items-center justify-center rounded-full shrink-0"
+              style={{ backgroundColor: `${PRIMARY}22`, color: PRIMARY }}
+            >
+              <Send className="size-5" />
+            </span>
+            <span className="flex-1 text-center min-w-0">
+              <span
+                className="block text-xs sm:text-sm font-bold tracking-[0.14em] uppercase truncate"
+                style={{ color: PRIMARY }}
+              >
+                {t.submitTitle}
+              </span>
+              <span
+                className="block text-[10px] sm:text-xs tracking-[0.12em] uppercase opacity-80 truncate"
+                style={{ color: PRIMARY }}
+              >
+                {t.submitSub}
+              </span>
+            </span>
+            <span
+              className="flex size-11 sm:size-12 items-center justify-center rounded-full shrink-0"
+              style={{ color: PRIMARY }}
+            >
+              <ChevronRight className="size-6" />
+            </span>
+          </button>
+
+          <div className="flex items-center justify-center gap-3 sm:gap-5 pt-1">
+            <span className="h-px flex-1 max-w-24 sm:max-w-40 bg-white/25" />
+            <p className="text-[10px] sm:text-[11px] tracking-[0.22em] uppercase text-white/70 text-center whitespace-nowrap">
+              {t.tagline}
+            </p>
+            <span className="h-px flex-1 max-w-24 sm:max-w-40 bg-white/25" />
+          </div>
         </div>
       </div>
 
-      <VibePanel
-        open={vibeOpen}
-        language={language}
-        selected={vibe}
-        primaryColor={primary}
-        onSelect={setVibe}
-        onClose={() => setVibeOpen(false)}
-      />
-
-      <SettingsPanel
-        open={settingsOpen}
-        draft={draft}
-        onDraftChange={setDraft}
-        onClose={() => setSettingsOpen(false)}
-        onSave={() => {
-          setSettings(draft);
-          setSettingsOpen(false);
-          showToast(
-            language === "en" ? "Settings saved" : "Ajustes guardados"
-          );
-        }}
-        onPreview={() => {
-          setSettings(draft);
-          showToast(
-            language === "en" ? "Preview applied" : "Vista previa aplicada"
-          );
-        }}
-      />
-
-      {/* End session confirm */}
-      {endConfirm && (
-        <>
-          <button
-            type="button"
-            className="fixed inset-0 z-[80] bg-black/70 border-0 cursor-pointer"
-            onClick={() => setEndConfirm(false)}
-          />
-          <div className="fixed left-1/2 top-1/2 z-[90] w-[min(100%-2rem,400px)] -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-white/15 bg-[#0d1117] p-6 shadow-2xl">
-            <h3 className="font-playfair text-xl text-white">{t.endSession}?</h3>
-            <p className="mt-2 text-sm text-secondary-text">
-              {language === "en"
-                ? "Your progress is auto-saved. You can restore this session later."
-                : "Tu progreso se guarda automáticamente."}
-            </p>
-            <div className="mt-5 flex gap-2">
-              <button
-                type="button"
-                onClick={() => setEndConfirm(false)}
-                className="flex-1 h-11 rounded-xl border border-white/15 bg-white/5 text-sm text-white cursor-pointer"
-              >
-                {language === "en" ? "Stay" : "Quedarme"}
-              </button>
-              <button
-                type="button"
-                onClick={() => navigate("/consumer/dashboard")}
-                className="flex-1 h-11 rounded-xl bg-rose-500 text-sm font-semibold text-white border-0 cursor-pointer"
-              >
-                {t.endSession}
-              </button>
-            </div>
-          </div>
-        </>
-      )}
-
       {toast && (
-        <div className="fixed bottom-24 left-1/2 z-[100] -translate-x-1/2 rounded-full border border-white/15 bg-black/80 px-4 py-2 text-xs text-white backdrop-blur">
+        <div className="fixed bottom-28 left-1/2 z-[100] -translate-x-1/2 rounded-full border border-white/15 bg-black/80 px-4 py-2 text-xs text-white backdrop-blur">
           {toast}
         </div>
       )}
@@ -605,18 +456,13 @@ const ReflectionRoom = () => {
   );
 };
 
-const Divider = ({ className }: { className?: string }) => (
-  <div className={cn("w-px self-stretch bg-white/15 mx-1 shrink-0", className)} />
-);
-
-const FooterAction = ({
+const ToolbarAction = ({
   icon,
   title,
   subtitle,
   onClick,
   disabled,
   tone,
-  color,
   className,
 }: {
   icon: React.ReactNode;
@@ -625,7 +471,6 @@ const FooterAction = ({
   onClick: () => void;
   disabled?: boolean;
   tone?: "danger";
-  color?: string;
   className?: string;
 }) => (
   <button
@@ -633,29 +478,28 @@ const FooterAction = ({
     onClick={onClick}
     disabled={disabled}
     className={cn(
-      "flex flex-col sm:flex-row items-center gap-1 sm:gap-2.5 px-2 sm:px-3 py-2 rounded-xl hover:bg-white/5 transition-colors cursor-pointer border-0 bg-transparent disabled:opacity-35 disabled:cursor-not-allowed min-w-[64px] sm:min-w-0",
+      "flex flex-col items-center justify-center gap-1 px-2 sm:px-3 py-2 rounded-xl hover:bg-white/5 transition-colors cursor-pointer border-0 bg-transparent disabled:opacity-35 disabled:cursor-not-allowed min-w-[56px] sm:min-w-[88px] flex-1",
       className
     )}
   >
     <span
       className={cn(
-        "flex size-9 items-center justify-center rounded-lg shrink-0",
-        tone === "danger" ? "bg-rose-500/20 text-rose-400" : "bg-white/5"
+        "flex size-8 items-center justify-center",
+        tone === "danger" ? "text-rose-500" : "text-[#FBBF24]"
       )}
-      style={tone !== "danger" && color ? { color } : undefined}
     >
       {icon}
     </span>
-    <span className="text-left">
+    <span className="text-center leading-tight">
       <span
         className={cn(
-          "block text-[10px] sm:text-xs font-semibold uppercase tracking-wide leading-tight",
+          "block text-[9px] sm:text-[10px] font-semibold uppercase tracking-wide",
           tone === "danger" ? "text-rose-400" : "text-white"
         )}
       >
         {title}
       </span>
-      <span className="hidden sm:block text-[11px] text-white/45 leading-tight">
+      <span className="block text-[9px] sm:text-[10px] text-white/55">
         {subtitle}
       </span>
     </span>

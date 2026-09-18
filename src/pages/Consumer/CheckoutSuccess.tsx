@@ -122,7 +122,7 @@ const CheckoutSuccess = () => {
               </Link>
 
               <Link
-                to="/consumer/blueprint"
+                to="/consumer/customer-products"
                 className="text-sm text-secondary-text hover:text-primary-text transition-colors"
               >
                 View All Reflections →

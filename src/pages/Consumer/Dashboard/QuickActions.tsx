@@ -18,7 +18,7 @@ const QuickActions = () => {
 
         <div className="space-y-2.5">
           <Link
-            to="/consumer/blueprint"
+            to="/consumer/customer-products"
             className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3.5 hover:bg-white/[0.06] transition-colors no-underline!"
           >
             <div className="flex items-center gap-3">

@@ -104,7 +104,7 @@ const ActiveReflections = () => {
               Start a new journey of personal discovery.
             </p>
 
-            <Link to="/consumer/blueprint">
+            <Link to="/consumer/customer-products">
               <button
                 type="button"
                 className="h-10 px-6 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 text-primary-text text-sm font-medium transition-colors cursor-pointer"

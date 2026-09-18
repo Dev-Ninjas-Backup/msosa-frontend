@@ -9,17 +9,23 @@ const pageMeta: Record<string, { title: string; description: string }> = {
     title: "Welcome back, Sarah.",
     description: "You are currently working on FuturePath Blueprint™.",
   },
+  "Customer Products": {
+    title: "Customer Products",
+    description:
+      "Discover guided reflection experiences for deeper self-awareness and clarity.",
+  },
   Blueprints: {
-    title: "Blueprint Marketplace",
-    description: "",
+    title: "Customer Products MarketPlace",
+    description:
+      "Discover guided reflection experiences for deeper self-awareness and clarity.",
   },
   Checkout: {
     title: "Checkout",
-    description: "Complete your Blueprint purchase securely.",
+    description: "Complete your product purchase securely.",
   },
   "Checkout Success": {
     title: "Purchase Complete",
-    description: "Your Blueprint is ready — continue your reflection journey.",
+    description: "Your product is ready — continue your reflection journey.",
   },
   "Reflection Room": {
     title: "Reflection Room™",

@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 
 const JOURNEY = [
   {
-    label: "BLUEPRINT\nSELECTED",
+    label: "PRODUCT\nSELECTED",
     desc: "Your journey is ready to begin.",
     done: true,
   },
@@ -29,7 +29,7 @@ const JOURNEY = [
     active: true,
   },
   {
-    label: "REPORT\nREADY",
+    label: "REPORT/DASHBOARD OR\nOTHER EXTERNAL\nOUTPUT",
     desc: "Your personalized report is available.",
     done: false,
   },
