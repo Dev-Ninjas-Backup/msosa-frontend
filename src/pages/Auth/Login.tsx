@@ -218,12 +218,12 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {/* Fast Routing to 4 Dashboards */}
+        {/* Fast Routing to Dashboards */}
         <div className="pt-4 border-t border-white/10 flex flex-col gap-2.5 w-full">
           <span className="text-[11px] uppercase tracking-wider text-white/50 text-center font-medium">
             Fast Dashboard Access
           </span>
-          <div className="grid grid-cols-2 gap-2 w-full">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 w-full">
             <button
               type="button"
               onClick={() => navigate("/founder/dashboard")}
@@ -255,6 +255,14 @@ export default function LoginPage() {
             >
               <span className="size-1.5 rounded-full bg-purple-400" />
               <span>Employee</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate("/refiner/dashboard")}
+              className="h-9 px-3 bg-white/5 hover:bg-primary-brand/15 hover:border-primary-brand/40 border border-white/10 rounded-lg text-xs font-medium text-white/90 transition-all flex items-center justify-center gap-1.5 cursor-pointer col-span-2 sm:col-span-1"
+            >
+              <span className="size-1.5 rounded-full bg-amber-300" />
+              <span>Refiner</span>
             </button>
           </div>
         </div>

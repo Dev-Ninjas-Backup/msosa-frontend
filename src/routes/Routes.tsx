@@ -6,6 +6,7 @@ import { founderRoutes } from "./FounderRoutes";
 import { consumerRoutes } from "./ConsumerRoutes";
 import { enterpriseRoutes } from "./EnterpriseRoutes";
 import { employeeRoutes } from "./EmployeeRoutes";
+import { refinerRoutes } from "./RefinerRoutes";
 import { publicRoutes } from "./PublicRoutes";
 
 
@@ -90,6 +91,7 @@ const routes = createBrowserRouter([
   ...routesGenerator(consumerRoutes),
   ...routesGenerator(enterpriseRoutes),
   ...routesGenerator(employeeRoutes),
+  ...routesGenerator(refinerRoutes),
 
   {
     path: "*",

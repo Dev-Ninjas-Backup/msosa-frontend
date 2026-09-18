@@ -2,18 +2,23 @@ import { useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
-import Breadcrumbs from "./Breadcrumbs";
 import { menuGenerator } from "@/utils/Generator/MenuGenerator";
 
 const routeDescriptions: Record<string, string> = {
-  "Overview": "Welcome back to your reseller dashboard.",
-  "Founder Control Center™": "Founder Operating System for the FAR Platform Engine™",
+  Overview: "Welcome back to your reseller dashboard.",
+  "Founder Control Center™":
+    "Founder Operating System for the FAR Platform Engine™",
   "Dashboard™": "Founder Operating System for the FAR Platform Engine™",
+  Dashboard: "Review refinement metrics and reports needing attention.",
+  "Review Queue": " ",
+  "Review History": " ",
+  "Profile & Settings": " ",
   "Dynamic Table": "Manage database records using a powerful dynamic table.",
   "Dynamic Form": "Build and submit validation-ready dynamic forms.",
-  "Employees": "Manage staff records, roles, and profiles.",
-  "Marketing": "Monitor campaigns, traffic growth, and outreach stats.",
-  "System Settings": "Configure system settings, integrations, and preferences.",
+  Employees: "Manage staff records, roles, and profiles.",
+  Marketing: "Monitor campaigns, traffic growth, and outreach stats.",
+  "System Settings":
+    "Configure system settings, integrations, and preferences.",
   "Help & Support": "Access documentation and raise customer support tickets.",
 };
 
@@ -21,7 +26,6 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const location = useLocation();
 
-  // Dynamically resolve active route name
   const menu = menuGenerator(config);
 
   const findActiveItem = (items: any[]): any => {
@@ -32,10 +36,19 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
         if (found) return found;
       }
     }
-    // Fallback: match prefix if not exact match (excluding base paths)
-    const basePaths = ["/founder", "/consumer", "/enterprise", "/employee"];
+    const basePaths = [
+      "/founder",
+      "/consumer",
+      "/enterprise",
+      "/employee",
+      "/refiner",
+    ];
     for (const item of items) {
-      if (item.path && !basePaths.includes(item.path) && location.pathname.startsWith(item.path)) {
+      if (
+        item.path &&
+        !basePaths.includes(item.path) &&
+        location.pathname.startsWith(item.path)
+      ) {
         return item;
       }
     }
@@ -43,17 +56,24 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
   };
 
   const activeItem = findActiveItem(menu);
+  const isReportDetail = /\/refiner\/review-queue\/[^/]+/.test(
+    location.pathname
+  );
   const title = activeItem ? activeItem.label : "Overview";
-  const description = activeItem && routeDescriptions[activeItem.label]
-    ? routeDescriptions[activeItem.label]
-    : "Welcome back to your dashboard.";
+  const description = isReportDetail
+    ? ""
+    : activeItem && routeDescriptions[activeItem.label]
+      ? routeDescriptions[activeItem.label]
+      : "Welcome back to your dashboard.";
 
   return (
     <div className="flex h-screen overflow-hidden bg-primary-bg">
-      {/* 1. Fixed Sidebar */}
-      <Sidebar isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} menu={menu} />
+      <Sidebar
+        isMobileOpen={isMobileOpen}
+        setIsMobileOpen={setIsMobileOpen}
+        menu={menu}
+      />
 
-      {/* Backdrop overlay for mobile */}
       {isMobileOpen && (
         <div
           className="fixed inset-0 bg-slate-900/30 backdrop-blur-xs z-40 sm:hidden transition-opacity duration-200"
@@ -61,18 +81,14 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
         />
       )}
 
-      {/* 2. Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto overscroll-contain">
         <Header
-          title={title}
+          title={isReportDetail ? "" : title}
           description={description}
           onMenuClick={() => setIsMobileOpen(true)}
         />
 
         <main className="flex-1 px-4 sm:px-6 py-4 sm:py-6">
-          <div className="mb-4">
-            <Breadcrumbs config={config} />
-          </div>
           <Outlet />
         </main>
       </div>
