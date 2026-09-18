@@ -49,12 +49,12 @@ const Toggle = ({
 const ProfileSettings = () => {
   const [tab, setTab] = useState<Tab>("profile");
 
-  const [firstName, setFirstName] = useState(REFINER_PROFILE.firstName);
-  const [lastName, setLastName] = useState(REFINER_PROFILE.lastName);
-  const [email, setEmail] = useState(REFINER_PROFILE.email);
-  const [phone, setPhone] = useState(REFINER_PROFILE.phone);
-  const [timezone, setTimezone] = useState(REFINER_PROFILE.timezone);
-  const [language, setLanguage] = useState(REFINER_PROFILE.language);
+  const [firstName, setFirstName] = useState<string>(REFINER_PROFILE.firstName);
+  const [lastName, setLastName] = useState<string>(REFINER_PROFILE.lastName);
+  const [email, setEmail] = useState<string>(REFINER_PROFILE.email);
+  const [phone, setPhone] = useState<string>(REFINER_PROFILE.phone);
+  const [timezone, setTimezone] = useState<string>(REFINER_PROFILE.timezone);
+  const [language, setLanguage] = useState<string>(REFINER_PROFILE.language);
 
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
