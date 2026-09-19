@@ -14,7 +14,7 @@ const ActiveReflections = () => {
           <h2 className="font-playfair text-xl text-primary-text">
             Active Reflections
           </h2>
-          <Info className="size-3.5 text-secondary-text/80" />
+          <Info className="size-4.5 text-black fill-[#FFFFFF99]" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

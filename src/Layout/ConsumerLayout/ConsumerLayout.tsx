@@ -13,7 +13,7 @@ const pageMeta: Record<string, { title: string; description: string }> = {
   "Customer Products": {
     title: "Customer Products",
     description:
-      "Discover guided reflection experiences for deeper self-awareness and clarity.",
+      "  ",
   },
   Blueprints: {
     title: "Customer Products MarketPlace",

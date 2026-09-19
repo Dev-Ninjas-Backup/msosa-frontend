@@ -31,7 +31,7 @@ const RecentActivity = () => {
             <h3 className="text-xs font-semibold tracking-[0.12em] text-secondary-text uppercase">
               Recent Activity
             </h3>
-            <Info className="size-3.5 text-secondary-text" />
+             <Info className="size-4.5 text-black fill-[#FFFFFF99]" />
           </div>
           <button
             type="button"

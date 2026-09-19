@@ -1,6 +1,6 @@
 // src/pages/consumer/sections/ActiveReflectionCard.tsx
 import { Link } from "react-router-dom";
-import { ArrowRight, FileText, ImageIcon } from "lucide-react";
+import { ArrowRight, FileText, ImageIcon, LayoutPanelTop } from "lucide-react";
 import Card from "@/ui/Card"; // or relative path
 import { useMemberPortal } from "@/pages/shared/member/MemberPortalContext";
 
@@ -36,7 +36,12 @@ const ActiveReflectionCard = ({
 
       <div className="flex items-start justify-between gap-2 mb-2">
         <div className="flex items-center gap-2">
-          <FileText className="size-4 text-[#FBBF24] shrink-0" />
+          
+          <Card className="p-2 rounded-lg flex flex-col bg-[#FFFFFF]" borderColor="#FFFFFF1A" >
+            <LayoutPanelTop  className="size-4 text-white  shrink-0 fill-[#FFFFFF99]" />
+          </Card>
+
+
           <h3 className="text-base font-medium text-white">
             {title}
             <sup className="text-[#FBBF24] text-[10px]">™</sup>
@@ -50,12 +55,12 @@ const ActiveReflectionCard = ({
       <p className="text-sm text-white/60 leading-relaxed mb-4">{description}</p>
 
       {/* Progress */}
-      <div className="mb-4">
+      <div className="mb-6 space-y-4">
         <div className="flex items-center justify-between text-xs mb-1.5">
           <span className="text-white/50">Progress</span>
           <span className="text-white font-medium">{progress}%</span>
         </div>
-        <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
+        <div className="h-1.5 rounded-full bg-white/10 overflow-hidden ">
           <div
             className="h-full rounded-full bg-[#FBBF24]"
             style={{ width: `${progress}%` }}
@@ -63,7 +68,7 @@ const ActiveReflectionCard = ({
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-x-5 gap-y-1 text-xs text-white/50 mb-2">
+      <div className="flex flex-wrap gap-x-5 gap-y-1 text-xs text-white/50 mb-2 space-y-2 ">
         <span>
           Started: <span className="text-white">{started}</span>
         </span>

@@ -1,6 +1,6 @@
 // src/components/consumer/dashboard/JourneyTracker.tsx
 import { useState, useRef, useEffect } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Clock } from "lucide-react";
 import AnimatedContainer from "@/common/AnimatedContainer";
 import Card from "@/ui/Card";
 
@@ -175,15 +175,16 @@ const JourneyTracker = () => {
           </div>
 
           {/* Right: Expected Completion */}
-          <div className="lg:border-l lg:border-white/10 lg:pl-6 shrink-0">
-            <p className="text-[10px] font-semibold tracking-[0.12em] text-secondary-text uppercase">
+          <div className="lg:border-l lg:border-white/10 lg:pl-6 mt-6 pt-4 shrink-0 space-y-4">
+            <p className="text-[10px] font-semibold tracking-[0.12em]  uppercase">
               Expected Completion
             </p>
-            <p className="mt-1 text-lg font-medium text-primary-text">
+            <p className="mt-1 text-xl font-medium text-primary-text font-playfair">
+              
               Oct 28, 2026
             </p>
-            <p className="mt-2 text-xs text-[#10B7BA] flex items-center gap-1.5">
-              <span className="size-1.5 rounded-full bg-[#10B7BA] animate-pulse" />
+            <p className="mt-2 text-xs text-primary-brand flex items-center gap-1.5">
+              <Clock className="size-5 text-black fill-primary-brand inline-block mr-1.5" />
               In processing · ~12 mins remaining
             </p>
           </div>

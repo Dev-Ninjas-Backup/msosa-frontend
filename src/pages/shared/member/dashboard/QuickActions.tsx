@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, FileText, Info, Plus } from "lucide-react";
+import { ArrowRight, ChevronRight, FileText, Info, Plus } from "lucide-react";
 import AnimatedContainer from "@/common/AnimatedContainer";
 import Card from "@/ui/Card";
 import { useMemberPortal } from "@/pages/shared/member/MemberPortalContext";
@@ -14,7 +14,7 @@ const QuickActions = () => {
           <h3 className="text-xs font-semibold tracking-[0.12em] text-secondary-text uppercase">
             Quick Actions
           </h3>
-          <Info className="size-3.5 text-secondary-text" />
+          <Info className="size-4.5 text-black fill-[#FFFFFF99]" />
         </div>
 
         <div className="space-y-2.5">
@@ -24,13 +24,13 @@ const QuickActions = () => {
           >
             <div className="flex items-center gap-3">
               <span className="size-8 rounded-lg bg-white/5 flex items-center justify-center text-secondary-text">
-                <Plus className="size-4" />
+                <Plus className="size-4 text-white" />
               </span>
               <span className="text-sm text-primary-text font-medium">
                 Start New Reflection
               </span>
             </div>
-            <ArrowRight className="size-4 text-secondary-text" />
+            <ChevronRight className="size-4 text-secondary-text" />
           </Link>
 
           <Link
@@ -39,13 +39,13 @@ const QuickActions = () => {
           >
             <div className="flex items-center gap-3">
               <span className="size-8 rounded-lg bg-white/5 flex items-center justify-center text-secondary-text">
-                <FileText className="size-4" />
+                <FileText className="size-4 text-white" />
               </span>
               <span className="text-sm text-primary-text font-medium">
                 View All Reports
               </span>
             </div>
-            <ArrowRight className="size-4 text-secondary-text" />
+            <ChevronRight className="size-4 text-secondary-text" />
           </Link>
         </div>
       </Card>

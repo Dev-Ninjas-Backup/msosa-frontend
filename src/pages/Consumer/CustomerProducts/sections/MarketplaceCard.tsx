@@ -36,7 +36,7 @@ const MarketplaceCard = ({
 
       <div className="p-4 sm:p-5 flex flex-col flex-1">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-[10px] font-semibold tracking-[0.1em] text-[#10B7BA] uppercase">
+          <span className="text-[10px] font-semibold tracking-[0.1em] text-primary-brand uppercase">
             {category}
           </span>
           <span className="text-xs text-secondary-text">{duration}</span>
@@ -51,8 +51,8 @@ const MarketplaceCard = ({
           {description}
         </p>
 
-        <div className="flex items-center gap-1.5 mb-4">
-          <span className="inline-flex items-center gap-1 rounded-md bg-white/5 border border-white/10 px-2 py-0.5 text-[11px] text-secondary-text">
+        <div className="flex items-center py-2 gap-1.5 mb-4">
+          <span className="inline-flex items-center gap-1 rounded-full p-2 bg-white/5 border border-white/10 px-2 py-0.5 text-[11px] text-secondary-text">
             <Mic className="size-3" />
             Voice & Text
           </span>

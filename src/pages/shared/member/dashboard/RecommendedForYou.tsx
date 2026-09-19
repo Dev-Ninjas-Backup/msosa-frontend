@@ -14,7 +14,7 @@ const RecommendedForYou = () => {
           <h3 className="text-xs font-semibold tracking-[0.12em] text-secondary-text uppercase">
             Recommended For You
           </h3>
-          <Info className="size-3.5 text-secondary-text" />
+           <Info className="size-4.5 text-black fill-[#FFFFFF99]" />
         </div>
 
         <div className="flex items-center gap-2 mb-3">
