@@ -8,7 +8,7 @@ export type SessionPhase =
   | "submitted";
 
 export const ROOM_BG =
-  "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1920&q=80";
+  "/bg/sunset.png";
 export const PRIMARY = "#FBBF24";
 
 export const copy = {

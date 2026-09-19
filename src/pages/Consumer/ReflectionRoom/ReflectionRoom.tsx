@@ -28,6 +28,7 @@ import {
   SessionPhase,
 } from "./types";
 import { useMemberPortal } from "@/pages/shared/member/MemberPortalContext";
+import { ToolbarAction } from "./ToolbarAction";
 
 const ReflectionRoom = () => {
   const navigate = useNavigate();
@@ -101,7 +102,7 @@ const ReflectionRoom = () => {
     <div className="relative h-screen w-full overflow-hidden text-white">
       <div
         className="absolute inset-0 bg-cover bg-center scale-105"
-        style={{ backgroundImage: `url(${ROOM_BG})`, filter: "brightness(0.55)" }}
+        style={{ backgroundImage: `url(${ROOM_BG})`, filter: "brightness(0.95)" }}
       />
       <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/35 to-black/80" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.55)_100%)]" />
@@ -217,7 +218,9 @@ const ReflectionRoom = () => {
         </header>
 
         {/* Center stage */}
-        <div className="flex-1 min-h-0 flex flex-col items-center justify-center px-4 sm:px-6 overflow-y-auto">
+        <div className={` min-h-0 flex flex-col items-center justify-center px-4 sm:px-6 overflow-y-auto 
+          ${inputMode === "voice" ? "min-h-140" : "min-h-160"} 
+          `}>
           <div className="w-full max-w-3xl flex flex-col items-center text-center">
             <h1 className="text-2xl sm:text-3xl lg:text-[34px] font-semibold tracking-tight text-white">
               {t.welcome}
@@ -240,24 +243,30 @@ const ReflectionRoom = () => {
                   }
                   className="relative flex size-[120px] sm:size-[148px] items-center justify-center rounded-full border-0 bg-transparent cursor-pointer group"
                 >
-                  {/* Ripple rings */}
+                  {/* Ring 1 - Inner Ripple */}
                   <span
                     className={cn(
-                      "absolute inset-[-10px] rounded-full border opacity-40",
-                      phase === "recording" && "animate-ping"
+                      "absolute inset-[-10px] rounded-full border opacity-80 transition-all duration-300",
+                      phase === "recording" ? "animate-ping" : "animate-pulse"
                     )}
                     style={{ borderColor: `${PRIMARY}55` }}
                   />
+
+                  {/* Ring 2 - Middle Ripple */}
                   <span
-                    className="absolute inset-[-22px] rounded-full border opacity-25"
+                    className="absolute inset-[-22px] rounded-full border opacity-60 animate-pulse"
                     style={{ borderColor: `${PRIMARY}40` }}
                   />
+
+                  {/* Ring 3 - Outer Ripple */}
                   <span
-                    className="absolute inset-[-34px] rounded-full border opacity-15 hidden sm:block"
+                    className="absolute inset-[-34px] rounded-full border opacity-30 animate-pulse hidden sm:block"
                     style={{ borderColor: `${PRIMARY}30` }}
                   />
+
+                  {/* Main Button Container */}
                   <span
-                    className="relative flex size-full items-center justify-center rounded-full border-2 bg-black/55 backdrop-blur-md shadow-[0_0_40px_rgba(251,191,36,0.35)] transition-transform group-hover:scale-[1.03]"
+                    className="relative flex size-full items-center justify-center rounded-full border-2 bg-black/85 backdrop-blur-md shadow-[0_0_40px_rgba(251,191,36,0.35)] transition-transform group-hover:scale-[1.03]"
                     style={{ borderColor: PRIMARY }}
                   >
                     {phase === "recording" ? (
@@ -265,7 +274,9 @@ const ReflectionRoom = () => {
                     ) : phase === "paused" ? (
                       <Play className="size-10 sm:size-12" style={{ color: PRIMARY }} />
                     ) : (
-                      <Mic className="size-10 sm:size-12" style={{ color: PRIMARY }} />
+                      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="80" viewBox="0 0 65 94" fill="none">
+                        <path d="M32.5 0C22.7131 0 14.7727 7.89453 14.7727 17.625V47C14.7727 56.7305 22.7131 64.625 32.5 64.625C42.2869 64.625 50.2273 56.7305 50.2273 47V17.625C50.2273 7.89453 42.2869 0 32.5 0ZM8.86364 39.6562C8.86364 37.2145 6.88778 35.25 4.43182 35.25C1.97585 35.25 0 37.2145 0 39.6562V47C0 63.3582 12.2244 76.8707 28.0682 79.0187V85.1875H19.2045C16.7486 85.1875 14.7727 87.152 14.7727 89.5938C14.7727 92.0355 16.7486 94 19.2045 94H32.5H45.7955C48.2514 94 50.2273 92.0355 50.2273 89.5938C50.2273 87.152 48.2514 85.1875 45.7955 85.1875H36.9318V79.0187C52.7756 76.8707 65 63.3582 65 47V39.6562C65 37.2145 63.0241 35.25 60.5682 35.25C58.1122 35.25 56.1364 37.2145 56.1364 39.6562V47C56.1364 59.9801 45.5554 70.5 32.5 70.5C19.4446 70.5 8.86364 59.9801 8.86364 47V39.6562Z" fill="white" />
+                      </svg>
                     )}
                   </span>
                 </button>
@@ -326,7 +337,7 @@ const ReflectionRoom = () => {
         </div>
 
         {/* Bottom stack */}
-        <div className="px-3 sm:px-6 lg:px-10 pb-4 sm:pb-6 pt-2 space-y-3 sm:space-y-4">
+        <div className="flex-1 px-3 sm:px-6 lg:px-10 pb-4 sm:pb-6 pt-2 space-y-3 sm:space-y-4 ">
           <div className="mx-auto max-w-4xl rounded-2xl border border-white/15 bg-black/50 backdrop-blur-xl px-1 sm:px-2 py-2 shadow-[0_12px_40px_rgba(0,0,0,0.45)]">
             <div className="flex items-stretch justify-between gap-0.5 sm:gap-1 overflow-x-auto">
               <ToolbarAction
@@ -402,25 +413,25 @@ const ReflectionRoom = () => {
             type="button"
             onClick={submitReflection}
             disabled={!canSubmit}
-            className="group mx-auto flex w-full max-w-xl items-center justify-between gap-3 rounded-full border-2 px-2 sm:px-3 py-2 sm:py-2.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed transition-transform hover:scale-[1.01] active:scale-[0.99]"
+            className="group mx-auto flex w-full max-w-lg  items-center justify-between gap-3 border-3 rounded-full border-2 px-2 sm:px-3 py-2 sm:py-2.5 cursor-pointer disabled:cursor-not-allowed  transition-transform hover:scale-[1.01] active:scale-[0.99]"
             style={{
               borderColor: PRIMARY,
               background:
-                "linear-gradient(180deg, rgba(251,191,36,0.18) 0%, rgba(0,0,0,0.55) 100%)",
+                "linear-gradient(180deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.55) 100%)",
               boxShadow:
                 "0 0 28px rgba(251,191,36,0.35), inset 0 0 20px rgba(251,191,36,0.08)",
             }}
           >
             <span
-              className="flex size-11 sm:size-12 items-center justify-center rounded-full shrink-0"
+              className="flex size-11 sm:size-16 items-center justify-center rounded-full shrink-0 space-y-1"
               style={{ backgroundColor: `${PRIMARY}22`, color: PRIMARY }}
             >
-              <Send className="size-5" />
+              <Send className="size-8" />
             </span>
-            <span className="flex-1 text-center min-w-0">
+            <span className="flex-1 text-center min-w-0 space-y-1">
               <span
-                className="block text-xs sm:text-sm font-bold tracking-[0.14em] uppercase truncate"
-                style={{ color: PRIMARY }}
+                className="block text-xs sm:text-lg font-bold tracking-[0.14em] uppercase truncate"
+                style={{ color: "#FBBF24" }}
               >
                 {t.submitTitle}
               </span>
@@ -439,7 +450,7 @@ const ReflectionRoom = () => {
             </span>
           </button>
 
-          <div className="flex items-center justify-center gap-3 sm:gap-5 pt-1">
+          <div className="flex md:pt-12 items-center justify-center gap-3 sm:gap-5 pt-1">
             <span className="h-px flex-1 max-w-24 sm:max-w-40 bg-white/25" />
             <p className="text-[10px] sm:text-[11px] tracking-[0.22em] uppercase text-white/70 text-center whitespace-nowrap">
               {t.tagline}
@@ -457,55 +468,5 @@ const ReflectionRoom = () => {
     </div>
   );
 };
-
-const ToolbarAction = ({
-  icon,
-  title,
-  subtitle,
-  onClick,
-  disabled,
-  tone,
-  className,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  subtitle: string;
-  onClick: () => void;
-  disabled?: boolean;
-  tone?: "danger";
-  className?: string;
-}) => (
-  <button
-    type="button"
-    onClick={onClick}
-    disabled={disabled}
-    className={cn(
-      "flex flex-col items-center justify-center gap-1 px-2 sm:px-3 py-2 rounded-xl hover:bg-white/5 transition-colors cursor-pointer border-0 bg-transparent disabled:opacity-35 disabled:cursor-not-allowed min-w-[56px] sm:min-w-[88px] flex-1",
-      className
-    )}
-  >
-    <span
-      className={cn(
-        "flex size-8 items-center justify-center",
-        tone === "danger" ? "text-rose-500" : "text-[#FBBF24]"
-      )}
-    >
-      {icon}
-    </span>
-    <span className="text-center leading-tight">
-      <span
-        className={cn(
-          "block text-[9px] sm:text-[10px] font-semibold uppercase tracking-wide",
-          tone === "danger" ? "text-rose-400" : "text-white"
-        )}
-      >
-        {title}
-      </span>
-      <span className="block text-[9px] sm:text-[10px] text-white/55">
-        {subtitle}
-      </span>
-    </span>
-  </button>
-);
 
 export default ReflectionRoom;
