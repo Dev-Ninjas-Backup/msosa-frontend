@@ -101,7 +101,7 @@ export const enterpriseRoutes = [
           },
           {
             icon: <BookOpen />,
-            name: "Blueprint Management",
+            name: "Enterprise Management",
             path: "blueprint-management",
             element: <BlueprintManagement />,
           },

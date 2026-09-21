@@ -3,6 +3,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import { menuGenerator } from "@/utils/Generator/MenuGenerator";
+import { getBlueprint } from "@/pages/Enterprise/BlueprintManagement/data";
 
 const routeDescriptions: Record<string, string> = {
   Overview: "Welcome back to your reseller dashboard.",
@@ -14,7 +15,8 @@ const routeDescriptions: Record<string, string> = {
   "Review History": " ",
   "Profile & Settings": " ",
   "Employee Management": "Manage workforce roster, roles, and access.",
-  "Blueprint Management": "Assign and track organizational Blueprints™.",
+  "Enterprise Management": "Assign and track organizational Reflections™.",
+  "Blueprint Management": "Assign and track organizational Reflections™.",
   "Invitation Management": "Send and monitor employee invitations.",
   "Participation Monitoring": "Track reflection and assessment participation.",
   "Reports™": "Organizational reports and exportable insights.",
@@ -76,6 +78,12 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
   const isBlueprintDetail = /\/enterprise\/blueprint-management\/[^/]+/.test(
     location.pathname
   );
+  const blueprintMatch = location.pathname.match(
+    /\/enterprise\/blueprint-management\/([^/]+)/
+  );
+  const blueprintName = blueprintMatch
+    ? getBlueprint(blueprintMatch[1])?.name
+    : undefined;
   const isInvitationDetail = /\/enterprise\/invitation-management\/[^/]+/.test(
     location.pathname
   );
@@ -89,7 +97,7 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
       : isBlueprintList
         ? "Enterprise Solutions™"
         : isBlueprintDetail
-          ? "Blueprint Detail"
+          ? blueprintName ?? "Reflection Detail"
           : isInvitationDetail
             ? "Invitation Detail"
             : isReportDetailPage
@@ -106,7 +114,7 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
         isInvitationDetail ||
         isReportDetailPage ||
         location.pathname.startsWith("/enterprise/")
-      ? "Organization Administrator for ABC Healthcare"
+      ? "Organization Administrator for Encounters Corporation"
       : activeItem && routeDescriptions[activeItem.label]
         ? routeDescriptions[activeItem.label]
         : "Welcome back to your dashboard.";

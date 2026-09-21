@@ -7,6 +7,7 @@ type CardProps = {
   backgroundColor?: string;
   shadow?: string;
   backdropBlur?: string;
+  id?: string;
 };
 
 const Card = ({
@@ -16,9 +17,11 @@ const Card = ({
   backgroundColor = "#0D1117",
   shadow = "0 0 40px rgba(255, 255, 255, 0.05)",
   backdropBlur = "6px",
+  id,
 }: CardProps) => {
   return (
     <div
+      id={id}
       className={cn("rounded-[16px] border", className)}
       style={{
         borderColor,

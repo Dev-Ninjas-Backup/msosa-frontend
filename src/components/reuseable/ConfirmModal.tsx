@@ -80,18 +80,18 @@ export default function ConfirmModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div 
-        className="absolute inset-0 bg-black/50 dark:bg-black/75 backdrop-blur-xs transition-opacity duration-300"
+      <div
+        className="absolute inset-0 bg-black/80 backdrop-blur-xs transition-opacity duration-300"
         onClick={onClose}
       />
-      
+
       {/* Modal Card */}
-      <div className="relative w-full max-w-md bg-white dark:bg-slate-900 border border-gray-150 dark:border-slate-800 rounded-2xl p-6 shadow-2xl transition-all duration-300 transform scale-100 flex flex-col gap-4 text-left">
+      <div className="relative w-full max-w-md bg-black border border-white/10 rounded-2xl p-6 shadow-2xl transition-all duration-300 transform scale-100 flex flex-col gap-4 text-left">
         {/* Close Button */}
-        <button 
+        <button
           onClick={onClose}
           disabled={loading}
-          className="absolute top-4 right-4 p-1 rounded-lg text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-700 dark:hover:text-white transition-colors"
+          className="absolute top-4 right-4 p-1 rounded-lg text-white/40 hover:bg-white/5 hover:text-white transition-colors cursor-pointer"
         >
           <X className="w-4 h-4" />
         </button>
@@ -102,10 +102,10 @@ export default function ConfirmModal({
             <Icon className="w-5 h-5" />
           </div>
           <div className="space-y-1.5">
-            <h3 className="text-lg font-black text-slate-900 dark:text-white leading-tight">
+            <h3 className="text-lg font-black text-white leading-tight">
               {title}
             </h3>
-            <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+            <p className="text-xs text-white/50 font-medium">
               {description}
             </p>
           </div>
@@ -118,7 +118,7 @@ export default function ConfirmModal({
             variant="soft"
             onClick={onClose}
             disabled={loading}
-            className="flex-1 rounded-xl h-11 border-gray-200 dark:border-slate-800 hover:bg-gray-50 dark:hover:bg-slate-800 text-slate-700 dark:text-gray-300 font-bold text-xs"
+            className="flex-1 rounded-xl h-11 border-white/10 hover:bg-white/5 text-white/70 font-bold text-xs"
           >
             {cancelText}
           </Button>
