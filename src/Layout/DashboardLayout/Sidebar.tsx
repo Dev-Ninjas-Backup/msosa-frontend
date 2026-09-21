@@ -128,7 +128,12 @@ const Sidebar = ({ isMobileOpen, setIsMobileOpen, menu }: SidebarProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const isRefiner = location.pathname.startsWith("/refiner");
-  const profilePath = isRefiner ? "/refiner/profile-settings" : undefined;
+  const isEnterprise = location.pathname.startsWith("/enterprise");
+  const profilePath = isRefiner
+    ? "/refiner/profile-settings"
+    : isEnterprise
+      ? "/enterprise/profile"
+      : undefined;
 
   const [isCollapsed, setIsCollapsed] = useState<boolean>(() => {
     if (typeof window === "undefined") return false;

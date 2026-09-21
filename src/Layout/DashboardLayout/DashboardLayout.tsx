@@ -100,6 +100,7 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
   const isBillingPage = location.pathname === "/enterprise/billing";
   const isBillingHistory =
     location.pathname === "/enterprise/billing/history";
+  const isProfilePage = location.pathname === "/enterprise/profile";
   const reportMatch = location.pathname.match(
     /\/enterprise\/reports\/([^/]+)/
   );
@@ -128,12 +129,14 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
                       ? "Billing & Subscription™"
                       : isBillingHistory
                         ? "Historical Reports™"
-                        : activeItem
-                          ? activeItem.label
-                          : "Overview";
+                        : isProfilePage
+                          ? "Encounters Profile"
+                          : activeItem
+                            ? activeItem.label
+                            : "Overview";
   const description = isReportDetail
     ? ""
-    : isNotificationsPage
+    : isNotificationsPage || isProfilePage
       ? ""
       : isEnterpriseDash ||
           isEmployeeDetail ||

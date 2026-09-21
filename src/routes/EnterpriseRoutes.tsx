@@ -78,6 +78,10 @@ const HistoricalReports = Loadable(
   ),
   AdminSkeleton
 );
+const Profile = Loadable(
+  lazy(() => import("@/pages/Enterprise/Profile/Profile")),
+  AdminSkeleton
+);
 
 const EnterpriseDashboardLayout = () => <DashboardLayout config={enterpriseRoutes} />;
 
@@ -179,6 +183,10 @@ export const enterpriseRoutes = [
       {
         path: "notifications",
         element: <Notifications />,
+      },
+      {
+        path: "profile",
+        element: <Profile />,
       },
     ],
   },
