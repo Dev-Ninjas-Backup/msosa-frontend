@@ -87,6 +87,8 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
   const isInvitationDetail = /\/enterprise\/invitation-management\/[^/]+/.test(
     location.pathname
   );
+  const isParticipationDetail =
+    /\/enterprise\/participation-monitoring\/[^/]+/.test(location.pathname);
   const isReportDetailPage = /\/enterprise\/reports\/[^/]+/.test(
     location.pathname
   );
@@ -100,11 +102,13 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
           ? blueprintName ?? "Reflection Detail"
           : isInvitationDetail
             ? "Invitation Profile"
-            : isReportDetailPage
-              ? "Report Detail"
-              : activeItem
-                ? activeItem.label
-                : "Overview";
+            : isParticipationDetail
+              ? "Participation Detail"
+              : isReportDetailPage
+                ? "Report Detail"
+                : activeItem
+                  ? activeItem.label
+                  : "Overview";
   const description = isReportDetail
     ? ""
     : isEnterpriseDash ||
@@ -112,6 +116,7 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
         isBlueprintList ||
         isBlueprintDetail ||
         isInvitationDetail ||
+        isParticipationDetail ||
         isReportDetailPage ||
         location.pathname.startsWith("/enterprise/")
       ? "Organization Administrator for Encounters Corporation"

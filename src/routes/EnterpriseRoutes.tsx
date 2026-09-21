@@ -48,6 +48,10 @@ const ParticipationMonitoring = Loadable(
   lazy(() => import("@/pages/Enterprise/ParticipationMonitoring/ParticipationMonitoring")),
   AdminSkeleton
 );
+const ParticipationDetail = Loadable(
+  lazy(() => import("@/pages/Enterprise/ParticipationMonitoring/ParticipationDetail")),
+  AdminSkeleton
+);
 const Reports = Loadable(
   lazy(() => import("@/pages/Enterprise/Reports/Reports")),
   AdminSkeleton
@@ -124,6 +128,10 @@ export const enterpriseRoutes = [
             name: "Participation Monitoring",
             path: "participation-monitoring",
             element: <ParticipationMonitoring />,
+          },
+          {
+            path: "participation-monitoring/:participationId",
+            element: <ParticipationDetail />,
           },
         ],
       },
