@@ -22,6 +22,7 @@ const routeDescriptions: Record<string, string> = {
   "Participation Monitoring": "Track reflection and assessment participation.",
   "Reports™": "Organizational reports and exportable insights.",
   "QCV™": "Quarterly Capability Value comparison analysis.",
+  "Notifications™": "Enterprise notification center.",
   "Billing™": "Plan, seats, invoices, and subscription.",
 
   "Dynamic Table": "Manage database records using a powerful dynamic table.",
@@ -94,6 +95,8 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
   const isReportDetailPage = /\/enterprise\/reports\/[^/]+/.test(
     location.pathname
   );
+  const isNotificationsPage =
+    location.pathname === "/enterprise/notifications";
   const reportMatch = location.pathname.match(
     /\/enterprise\/reports\/([^/]+)/
   );
@@ -116,24 +119,28 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
                 ? "Reports Center™"
                 : isReportDetailPage
                   ? reportName ?? "Report Detail"
-                  : activeItem
-                    ? activeItem.label
-                    : "Overview";
+                  : isNotificationsPage
+                    ? "Notifications™"
+                    : activeItem
+                      ? activeItem.label
+                      : "Overview";
   const description = isReportDetail
     ? ""
-    : isEnterpriseDash ||
-        isEmployeeDetail ||
-        isBlueprintList ||
-        isBlueprintDetail ||
-        isInvitationDetail ||
-        isParticipationDetail ||
-        isReportsList ||
-        isReportDetailPage ||
-        location.pathname.startsWith("/enterprise/")
-      ? "Organization Administrator for Encounters Corporation"
-      : activeItem && routeDescriptions[activeItem.label]
-        ? routeDescriptions[activeItem.label]
-        : "Welcome back to your dashboard.";
+    : isNotificationsPage
+      ? ""
+      : isEnterpriseDash ||
+          isEmployeeDetail ||
+          isBlueprintList ||
+          isBlueprintDetail ||
+          isInvitationDetail ||
+          isParticipationDetail ||
+          isReportsList ||
+          isReportDetailPage ||
+          location.pathname.startsWith("/enterprise/")
+        ? "Organization Administrator for Encounters Corporation"
+        : activeItem && routeDescriptions[activeItem.label]
+          ? routeDescriptions[activeItem.label]
+          : "Welcome back to your dashboard.";
 
   return (
     <div className="flex h-screen overflow-hidden bg-primary-bg">

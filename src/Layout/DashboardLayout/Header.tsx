@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   Search,
   Bell,
@@ -65,6 +66,8 @@ const initialNotifications: NotificationItem[] = [
 ];
 
 const Header = ({ title, description, onMenuClick }: HeaderProps) => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchVal, setSearchVal] = useState("");
   const searchRef = useRef<HTMLDivElement>(null);
@@ -74,6 +77,17 @@ const Header = ({ title, description, onMenuClick }: HeaderProps) => {
   const [isNotifOpen, setIsNotifOpen] = useState(false);
   const notifRef = useRef<HTMLDivElement>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const enterpriseNotifs = location.pathname.startsWith("/enterprise");
+
+  const openAllNotifications = () => {
+    setIsNotifOpen(false);
+    if (enterpriseNotifs) {
+      navigate("/enterprise/notifications");
+      return;
+    }
+    setIsModalOpen(true);
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -252,10 +266,7 @@ const Header = ({ title, description, onMenuClick }: HeaderProps) => {
                 <div className="border-t border-white/10 mt-1 pt-1.5 px-3">
                   <button
                     type="button"
-                    onClick={() => {
-                      setIsNotifOpen(false);
-                      setIsModalOpen(true);
-                    }}
+                    onClick={openAllNotifications}
                     className="w-full text-center text-xs font-semibold text-secondary-text hover:text-primary-brand py-1.5 hover:bg-white/5 rounded-lg transition-colors cursor-pointer border-0 bg-transparent"
                   >
                     View all notifications

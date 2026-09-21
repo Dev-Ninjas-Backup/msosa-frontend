@@ -64,6 +64,10 @@ const QCV = Loadable(
   lazy(() => import("@/pages/Enterprise/QCV/QCV")),
   AdminSkeleton
 );
+const Notifications = Loadable(
+  lazy(() => import("@/pages/Enterprise/Notifications/Notifications")),
+  AdminSkeleton
+);
 const Billing = Loadable(
   lazy(() => import("@/pages/Enterprise/Billing/Billing")),
   AdminSkeleton
@@ -161,6 +165,10 @@ export const enterpriseRoutes = [
             element: <Billing />,
           },
         ],
+      },
+      {
+        path: "notifications",
+        element: <Notifications />,
       },
     ],
   },
