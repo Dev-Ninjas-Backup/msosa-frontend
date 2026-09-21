@@ -29,7 +29,7 @@ const triggerVariants = cva(
           "h-12 px-2 sm:px-4 bg-brand-gradient text-white! shadow-sm hover:opacity-90 font-normal! active:scale-[0.98]",
         filterOutline:
           "h-12 px-2 sm:px-4 bg-slate-50 dark:bg-slate-800 text-body surface hover:bg-slate-100 dark:hover:bg-slate-700",
-        soft: "h-11 px-4 bg-light-bg border border-border text-primary-text font-normal hover:bg-light-bg/80",
+        soft: "h-11 px-4 bg-[#FFFFFF0D] border border-white/10 text-primary-text font-normal focus:border-[#F5C542]/60 focus:ring-1 focus:ring-[#F5C542]/40 data-[state=open]:border-[#F5C542]/60 data-[state=open]:ring-1 data-[state=open]:ring-[#F5C542]/40",
       },
       error: {
         true: "border-red-500",

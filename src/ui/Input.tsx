@@ -17,7 +17,7 @@ const inputVariants = cva(
         default:
           "h-11 px-4 rounded-xl bg-light-bg border border-black/10! text-primary-text placeholder:text-secondary-text focus:border-primary-brand/60! focus:ring-1 focus:ring-primary-brand/40",
         auth: "h-13 px-4 rounded-xl bg-white/10 hover:bg-white/[0.13] focus:bg-white/[0.14] border border-white/10 text-white placeholder:text-white/40 focus:border-primary-brand/60 focus:ring-1 focus:ring-primary-brand/40",
-        soft: "h-9 px-3 rounded-md border border-white/10 bg-white/[0.03] bg-transparent shadow-xs text-primary-text placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] md:text-sm",
+        soft: "h-9 px-3 rounded-md border border-white/10 bg-white/[0.03] bg-transparent shadow-xs text-primary-text placeholder:text-muted-foreground focus:border-[#F5C542]/60 focus:ring-1 focus:ring-[#F5C542]/40 focus-visible:border-[#F5C542]/60 focus-visible:ring-1 focus-visible:ring-[#F5C542]/40 md:text-sm",
         ghost:
           "h-10 px-0 bg-transparent border-0 border-b border-border/80 rounded-none text-primary-text focus:border-primary-brand",
         search:

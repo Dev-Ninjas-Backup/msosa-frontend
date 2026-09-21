@@ -21,7 +21,7 @@ const buttonVariants = cva(
           "bg-white/5 border border-white/10 text-white hover:bg-white/10",
         soft: "bg-light-bg border border-border text-primary-text font-normal hover:bg-light-bg/80 shadow-none active:scale-100",
         ghost:
-          "bg-transparent text-white font-semibold uppercase tracking-[0.08em] hover:bg-white/5",
+          "bg-transparent text-white font-semibold uppercase tracking-[0.08em] hover:bg-white/5 border border-[#FBBF244D]",
         danger:
           "bg-red-600 text-white border border-red-600 hover:bg-red-700 shadow-sm",
         success:

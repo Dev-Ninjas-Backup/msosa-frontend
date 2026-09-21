@@ -118,7 +118,9 @@ const ReviewQueue = () => {
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
                         <span className="flex size-9 items-center justify-center rounded-lg bg-white/5 border border-white/10 text-primary-brand">
-                          <FileText className="size-4" />
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M11.6663 1.66797H4.99967C4.08301 1.66797 3.33301 2.41797 3.33301 3.33464V16.668C3.33301 17.5846 4.08301 18.3346 4.99967 18.3346H14.9997C15.9163 18.3346 16.6663 17.5846 16.6663 16.668V6.66797L11.6663 1.66797ZM14.9997 16.668H4.99967V3.33464H10.833V7.5013H14.9997V16.668ZM6.66634 12.5013H13.333V14.168H6.66634V12.5013ZM6.66634 9.16797H13.333V10.8346H6.66634V9.16797ZM6.66634 5.83464H10.833V7.5013H6.66634V5.83464Z" fill="#A8B6B8" />
+                          </svg>
                         </span>
                         <span className="text-sm text-primary-text">
                           {row.title}

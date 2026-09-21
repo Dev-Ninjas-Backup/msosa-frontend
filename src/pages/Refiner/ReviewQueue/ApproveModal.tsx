@@ -1,4 +1,4 @@
-import { CheckCircle2, X } from "lucide-react";
+import { BadgeCheck, CheckCircle2, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { QueueRow } from "./data";
 
@@ -34,7 +34,7 @@ const ApproveModal = ({
         role="dialog"
         aria-modal="true"
         aria-labelledby="approve-report-title"
-        className="relative z-[1] w-full max-w-lg rounded-2xl border border-white/10 bg-[#0d1117] p-5 sm:p-6 shadow-2xl"
+        className="relative z-[1] w-full max-w-3xl rounded-2xl border border-white/10 bg-[#0d1117] p-5 sm:p-6 shadow-2xl"
       >
         <button
           type="button"
@@ -44,9 +44,9 @@ const ApproveModal = ({
           <X className="size-4" />
         </button>
 
-        <div className="flex items-start gap-3 pr-8">
-          <span className="flex size-11 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-400 shrink-0">
-            <CheckCircle2 className="size-6" />
+        <div className="flex items-start gap-3 pr-8 border-b pb-2 border-[#FFFFFF1A] px-[4px]">
+          <span className="flex size-11 items-center justify-center justify-center  text-emerald-400 shrink-0">
+            <BadgeCheck className="size-10 text-black fill-emerald-400 mt-2" />
           </span>
           <div>
             <h2
@@ -63,27 +63,27 @@ const ApproveModal = ({
 
         <p className="mt-5 text-sm text-secondary-text leading-relaxed">
           You are about to approve and finalize{" "}
-          <span className="text-primary-text font-semibold">{report.title}</span>{" "}
+          <span className="text-[#FFFFFFD9] font-semibold">{report.title}</span>{" "}
           for client{" "}
-          <span className="text-primary-text font-medium">
+          <span className="text-[#FFFFFFD9] font-medium">
             {report.client} ({report.company})
           </span>
           . Once approved, the final PDF will be generated and authorized for
           delivery.
         </p>
 
-        <div className="mt-5 rounded-xl border border-[#F5C542]/40 bg-[#F5C542]/5 px-4 py-3.5 space-y-2.5 text-sm">
+        <div className="mt-5 rounded-xl border border-[#FBBF2433] bg-[#FBBF240D] px-4 py-3.5 space-y-2.5 text-sm">
           <div className="flex justify-between gap-3">
             <span className="text-secondary-text">Report ID</span>
-            <span className="text-primary-text font-medium">#{report.id}</span>
+            <span className="text-[#FFFFFFCA] font-medium">#{report.id}</span>
           </div>
           <div className="flex justify-between gap-3">
             <span className="text-secondary-text">Lead Refiner</span>
-            <span className="text-primary-text font-medium">You</span>
+            <span className="text-[#FFFFFFCA] font-medium">You</span>
           </div>
           <div className="flex justify-between gap-3">
             <span className="text-secondary-text">Generated</span>
-            <span className="text-primary-text font-medium">
+            <span className="text-[#FFFFFFCA] font-medium">
               {report.generated}
             </span>
           </div>
@@ -95,14 +95,14 @@ const ApproveModal = ({
 
         <label
           className={cn(
-            "mt-5 flex items-start gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3.5 cursor-pointer"
+            "mt-5 flex items-start gap-3 justify-center  rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3.5 cursor-pointer"
           )}
         >
           <input
             type="checkbox"
             checked={confirmed}
             onChange={(e) => onConfirmChange(e.target.checked)}
-            className="mt-0.5 size-4 accent-[#3B82F6] cursor-pointer"
+            className="mt-0.5 size-6 pt-2 accent-[#3B82F6] cursor-pointer"
           />
           <span className="text-sm text-secondary-text leading-relaxed">
             I confirm that I have rigorously reviewed, refined, and validated
@@ -114,7 +114,7 @@ const ApproveModal = ({
           <button
             type="button"
             onClick={onClose}
-            className="h-11 px-5 rounded-xl border border-white/10 bg-white/5 text-sm font-medium text-primary-text hover:bg-white/10 cursor-pointer"
+            className="h-11 px-5 rounded-xl border border-white/10 bg-[#FFFFFF4D] text-sm font-medium text-primary-text hover:bg-white/10 cursor-pointer"
           >
             Cancel
           </button>
@@ -122,7 +122,7 @@ const ApproveModal = ({
             type="button"
             disabled={!confirmed}
             onClick={onApprove}
-            className="h-11 px-5 rounded-xl bg-[#3B82F6] hover:bg-[#2563EB] text-sm font-semibold text-white border-0 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+            className="h-11 px-5 rounded-xl bg-[#3B6CF6] hover:bg-[#2563EB] text-sm font-semibold text-white border-0 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
           >
             Approve & Generate Final PDF
           </button>

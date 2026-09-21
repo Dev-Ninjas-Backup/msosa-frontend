@@ -9,7 +9,7 @@ const routeDescriptions: Record<string, string> = {
   "Founder Control Center™":
     "Founder Operating System for the FAR Platform Engine™",
   "Dashboard™": "Founder Operating System for the FAR Platform Engine™",
-  Dashboard: "Review refinement metrics and reports needing attention.",
+  Dashboard: " ",
   "Review Queue": " ",
   "Review History": " ",
   "Profile & Settings": " ",
