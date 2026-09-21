@@ -135,7 +135,7 @@ const TypeEditor = ({
       </div>
 
       <div className="p-3 sm:p-4">
-        <div className="relative min-h-[140px] sm:min-h-[300px] max-h-[28vh] sm:max-h-none overflow-y-auto rounded-xl border border-white/10 bg-black/40 px-4 sm:px-5 py-4">
+        <div className="relative min-h-[140px] sm:min-h-[220px] xl:min-h-[180px] max-h-[28vh] sm:max-h-[min(260px,36vh)] xl:max-h-[min(220px,28vh)] overflow-y-auto rounded-xl border border-white/10 bg-black/40 px-4 sm:px-5 py-4">
           <div
             ref={editorRef}
             contentEditable
@@ -148,7 +148,7 @@ const TypeEditor = ({
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
             className={cn(
-              "relative z-[1] min-h-[100px] sm:min-h-[240px] outline-none text-sm sm:text-base text-white/90 leading-relaxed whitespace-pre-wrap break-words",
+              "relative z-[1] min-h-[100px] sm:min-h-[160px] xl:min-h-[120px] outline-none text-sm sm:text-base text-white/90 leading-relaxed whitespace-pre-wrap break-words",
               isEmpty && "empty-editor"
             )}
           />
@@ -156,26 +156,26 @@ const TypeEditor = ({
           {isEmpty && (
             <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center px-4 sm:px-6 text-center">
               <span
-                className="flex size-12 sm:size-16 items-center justify-center rounded-full border shadow-[0_0_28px_rgba(251,191,36,0.25)]"
+                className="flex size-12 sm:size-14 xl:size-12 items-center justify-center rounded-full border shadow-[0_0_28px_rgba(251,191,36,0.25)]"
                 style={{
                   borderColor: `${primaryColor}66`,
                   backgroundColor: `${primaryColor}18`,
                   color: primaryColor,
                 }}
               >
-                <Feather className="size-5 sm:size-7" />
+                <Feather className="size-5 sm:size-6 xl:size-5" />
               </span>
-              <p className="mt-3 sm:mt-4 text-sm sm:text-base font-medium text-white/80">
+              <p className="mt-3 sm:mt-3 xl:mt-2.5 text-sm sm:text-base xl:text-sm font-medium text-white/80">
                 A moment of stillness
               </p>
-              <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-white/50 max-w-sm leading-relaxed line-clamp-2 sm:line-clamp-none">
+              <p className="mt-1.5 sm:mt-2 xl:mt-1 text-xs sm:text-sm xl:text-xs text-white/50 max-w-sm leading-relaxed line-clamp-2 sm:line-clamp-none">
                 Every reflection starts with a single ripple. What is surfacing
                 in your mind today?
               </p>
               <button
                 type="button"
                 onClick={onSwitchToVoice}
-                className="pointer-events-auto mt-3 sm:mt-5 inline-flex items-center gap-2 h-9 px-4 rounded-full border text-xs font-medium text-white bg-black/45 hover:bg-black/60 cursor-pointer"
+                className="pointer-events-auto mt-3 sm:mt-4 xl:mt-3 inline-flex items-center gap-2 h-9 px-4 rounded-full border text-xs font-medium text-white bg-black/45 hover:bg-black/60 cursor-pointer"
                 style={{ borderColor: `${primaryColor}99` }}
               >
                 <Mic className="size-3.5" style={{ color: primaryColor }} />
