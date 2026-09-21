@@ -99,7 +99,7 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
         : isBlueprintDetail
           ? blueprintName ?? "Reflection Detail"
           : isInvitationDetail
-            ? "Invitation Detail"
+            ? "Invitation Profile"
             : isReportDetailPage
               ? "Report Detail"
               : activeItem
