@@ -337,7 +337,7 @@ const ReflectionRoom = () => {
         </div>
 
         {/* Bottom stack */}
-        <div className="flex-1 px-3 sm:px-6 lg:px-10 pb-4 sm:pb-6 pt-2 space-y-3 sm:space-y-4 ">
+        <div className="flex-1 px-3 sm:px-6 lg:px-10 pb-4 sm:pb-6 sm:-mt-8 xl:pt-2 space-y-3 sm:space-y-4 ">
           <div className="mx-auto max-w-4xl rounded-2xl border border-white/15 bg-black/50 backdrop-blur-xl px-1 sm:px-2 py-2 shadow-[0_12px_40px_rgba(0,0,0,0.45)]">
             <div className="flex items-stretch justify-between gap-0.5 sm:gap-1 overflow-x-auto">
               <ToolbarAction
@@ -450,9 +450,9 @@ const ReflectionRoom = () => {
             </span>
           </button>
 
-          <div className="flex md:pt-12 items-center justify-center gap-3 sm:gap-5 pt-1">
+          <div className="flex xl:pt-12 items-center justify-center gap-3 sm:gap-5 pt-1">
             <span className="h-px flex-1 max-w-24 sm:max-w-40 bg-white/25" />
-            <p className="text-[10px] sm:text-[11px] tracking-[0.22em] uppercase text-white/70 text-center whitespace-nowrap">
+            <p className="text-[10px] flex flex-wrap sm:text-[11px] tracking-[0.22em] uppercase text-white/70 text-center ">
               {t.tagline}
             </p>
             <span className="h-px flex-1 max-w-24 sm:max-w-40 bg-white/25" />

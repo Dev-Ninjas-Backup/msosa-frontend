@@ -10,13 +10,13 @@ const pageMeta: Record<string, { title: string; description: string }> = {
     title: "Welcome back, Sarah.",
     description: "You are currently working on FuturePath Blueprint™.",
   },
-  "Customer Products": {
-    title: "Customer Products",
+  "Cunsumer Products": {
+    title: "Cunsumer Products",
     description:
       "  ",
   },
   Blueprints: {
-    title: "Customer Products MarketPlace",
+    title: "Cunsumer Products MarketPlace",
     description:
       "Discover guided reflection experiences for deeper self-awareness and clarity.",
   },
@@ -102,9 +102,9 @@ const ConsumerLayout = ({ config }: ConsumerLayoutProps) => {
       ? pageMeta.Checkout
       : isReportDetail
         ? {
-            title: "Report Details",
-            description: "Deep dive into your delivered Blueprint narrative.",
-          }
+          title: "Report Details",
+          description: "Deep dive into your delivered Blueprint narrative.",
+        }
         : isProfile
           ? pageMeta.Profile
           : isNotifications

@@ -92,7 +92,7 @@ const CustomerProducts = () => {
       <AnimatedContainer delay={0.1}>
         <div>
           <h2 className="font-playfair text-xl text-primary-text mb-4">
-            Active Customer Products
+            Active Cunsumer Products
             <sup className="text-[#10B7BA] text-sm">™</sup>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

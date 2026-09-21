@@ -81,7 +81,7 @@ export const employeeRoutes = [
         element: <Dashboard />,
       },
       {
-        name: "Customer Products",
+        name: "Cunsumer Products",
         path: "customer-products",
         icon: <Columns />,
         element: <CustomerProducts />,
