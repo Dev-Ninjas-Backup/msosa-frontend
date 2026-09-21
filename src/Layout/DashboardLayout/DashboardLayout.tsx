@@ -4,6 +4,7 @@ import Sidebar from "./Sidebar";
 import Header from "./Header";
 import { menuGenerator } from "@/utils/Generator/MenuGenerator";
 import { getBlueprint } from "@/pages/Enterprise/BlueprintManagement/data";
+import { getReport } from "@/pages/Enterprise/Reports/data";
 
 const routeDescriptions: Record<string, string> = {
   Overview: "Welcome back to your reseller dashboard.",
@@ -89,9 +90,16 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
   );
   const isParticipationDetail =
     /\/enterprise\/participation-monitoring\/[^/]+/.test(location.pathname);
+  const isReportsList = location.pathname === "/enterprise/reports";
   const isReportDetailPage = /\/enterprise\/reports\/[^/]+/.test(
     location.pathname
   );
+  const reportMatch = location.pathname.match(
+    /\/enterprise\/reports\/([^/]+)/
+  );
+  const reportName = reportMatch
+    ? getReport(reportMatch[1])?.name
+    : undefined;
   const title = isEnterpriseDash
     ? "Enterprise Dashboard"
     : isEmployeeDetail
@@ -104,11 +112,13 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
             ? "Invitation Profile"
             : isParticipationDetail
               ? "Participation Detail"
-              : isReportDetailPage
-                ? "Report Detail"
-                : activeItem
-                  ? activeItem.label
-                  : "Overview";
+              : isReportsList
+                ? "Reports Center™"
+                : isReportDetailPage
+                  ? reportName ?? "Report Detail"
+                  : activeItem
+                    ? activeItem.label
+                    : "Overview";
   const description = isReportDetail
     ? ""
     : isEnterpriseDash ||
@@ -117,6 +127,7 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
         isBlueprintDetail ||
         isInvitationDetail ||
         isParticipationDetail ||
+        isReportsList ||
         isReportDetailPage ||
         location.pathname.startsWith("/enterprise/")
       ? "Organization Administrator for Encounters Corporation"
