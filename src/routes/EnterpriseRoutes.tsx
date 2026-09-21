@@ -72,6 +72,12 @@ const Billing = Loadable(
   lazy(() => import("@/pages/Enterprise/Billing/Billing")),
   AdminSkeleton
 );
+const HistoricalReports = Loadable(
+  lazy(
+    () => import("@/pages/Enterprise/HistoricalReports/HistoricalReports")
+  ),
+  AdminSkeleton
+);
 
 const EnterpriseDashboardLayout = () => <DashboardLayout config={enterpriseRoutes} />;
 
@@ -163,6 +169,10 @@ export const enterpriseRoutes = [
             name: "Billing™",
             path: "billing",
             element: <Billing />,
+          },
+          {
+            path: "billing/history",
+            element: <HistoricalReports />,
           },
         ],
       },

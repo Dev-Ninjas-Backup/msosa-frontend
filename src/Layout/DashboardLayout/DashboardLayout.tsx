@@ -97,6 +97,9 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
   );
   const isNotificationsPage =
     location.pathname === "/enterprise/notifications";
+  const isBillingPage = location.pathname === "/enterprise/billing";
+  const isBillingHistory =
+    location.pathname === "/enterprise/billing/history";
   const reportMatch = location.pathname.match(
     /\/enterprise\/reports\/([^/]+)/
   );
@@ -121,9 +124,13 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
                   ? reportName ?? "Report Detail"
                   : isNotificationsPage
                     ? "Notifications™"
-                    : activeItem
-                      ? activeItem.label
-                      : "Overview";
+                    : isBillingPage
+                      ? "Billing & Subscription™"
+                      : isBillingHistory
+                        ? "Historical Reports™"
+                        : activeItem
+                          ? activeItem.label
+                          : "Overview";
   const description = isReportDetail
     ? ""
     : isNotificationsPage
@@ -136,6 +143,8 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
           isParticipationDetail ||
           isReportsList ||
           isReportDetailPage ||
+          isBillingPage ||
+          isBillingHistory ||
           location.pathname.startsWith("/enterprise/")
         ? "Organization Administrator for Encounters Corporation"
         : activeItem && routeDescriptions[activeItem.label]
