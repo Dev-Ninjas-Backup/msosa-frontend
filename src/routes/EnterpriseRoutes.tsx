@@ -24,12 +24,24 @@ const EmployeeManagement = Loadable(
   lazy(() => import("@/pages/Enterprise/EmployeeManagement/EmployeeManagement")),
   AdminSkeleton
 );
+const EmployeeDetail = Loadable(
+  lazy(() => import("@/pages/Enterprise/EmployeeManagement/EmployeeDetail")),
+  AdminSkeleton
+);
 const BlueprintManagement = Loadable(
   lazy(() => import("@/pages/Enterprise/BlueprintManagement/BlueprintManagement")),
   AdminSkeleton
 );
+const BlueprintDetail = Loadable(
+  lazy(() => import("@/pages/Enterprise/BlueprintManagement/BlueprintDetail")),
+  AdminSkeleton
+);
 const InvitationManagement = Loadable(
   lazy(() => import("@/pages/Enterprise/InvitationManagement/InvitationManagement")),
+  AdminSkeleton
+);
+const InvitationDetail = Loadable(
+  lazy(() => import("@/pages/Enterprise/InvitationManagement/InvitationDetail")),
   AdminSkeleton
 );
 const ParticipationMonitoring = Loadable(
@@ -38,6 +50,10 @@ const ParticipationMonitoring = Loadable(
 );
 const Reports = Loadable(
   lazy(() => import("@/pages/Enterprise/Reports/Reports")),
+  AdminSkeleton
+);
+const ReportDetail = Loadable(
+  lazy(() => import("@/pages/Enterprise/Reports/ReportDetail")),
   AdminSkeleton
 );
 const QCV = Loadable(
@@ -80,16 +96,28 @@ export const enterpriseRoutes = [
             element: <EmployeeManagement />,
           },
           {
+            path: "employee-management/:employeeId",
+            element: <EmployeeDetail />,
+          },
+          {
             icon: <BookOpen />,
             name: "Blueprint Management",
             path: "blueprint-management",
             element: <BlueprintManagement />,
           },
           {
+            path: "blueprint-management/:blueprintId",
+            element: <BlueprintDetail />,
+          },
+          {
             icon: <Share2 />,
             name: "Invitation Management",
             path: "invitation-management",
             element: <InvitationManagement />,
+          },
+          {
+            path: "invitation-management/:invitationId",
+            element: <InvitationDetail />,
           },
           {
             icon: <Network />,
@@ -107,6 +135,10 @@ export const enterpriseRoutes = [
             name: "Reports™",
             path: "reports",
             element: <Reports />,
+          },
+          {
+            path: "reports/:reportId",
+            element: <ReportDetail />,
           },
           {
             icon: <Settings />,

@@ -13,6 +13,14 @@ const routeDescriptions: Record<string, string> = {
   "Review Queue": " ",
   "Review History": " ",
   "Profile & Settings": " ",
+  "Employee Management": "Manage workforce roster, roles, and access.",
+  "Blueprint Management": "Assign and track organizational Blueprints™.",
+  "Invitation Management": "Send and monitor employee invitations.",
+  "Participation Monitoring": "Track reflection and assessment participation.",
+  "Reports™": "Organizational reports and exportable insights.",
+  "QCV™": "Quarterly Capability Value comparison analysis.",
+  "Billing™": "Plan, seats, invoices, and subscription.",
+
   "Dynamic Table": "Manage database records using a powerful dynamic table.",
   "Dynamic Form": "Build and submit validation-ready dynamic forms.",
   Employees: "Manage staff records, roles, and profiles.",
@@ -59,12 +67,49 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
   const isReportDetail = /\/refiner\/review-queue\/[^/]+/.test(
     location.pathname
   );
-  const title = activeItem ? activeItem.label : "Overview";
+  const isEnterpriseDash = location.pathname.startsWith("/enterprise/dashboard");
+  const isEmployeeDetail = /\/enterprise\/employee-management\/[^/]+/.test(
+    location.pathname
+  );
+  const isBlueprintList =
+    location.pathname === "/enterprise/blueprint-management";
+  const isBlueprintDetail = /\/enterprise\/blueprint-management\/[^/]+/.test(
+    location.pathname
+  );
+  const isInvitationDetail = /\/enterprise\/invitation-management\/[^/]+/.test(
+    location.pathname
+  );
+  const isReportDetailPage = /\/enterprise\/reports\/[^/]+/.test(
+    location.pathname
+  );
+  const title = isEnterpriseDash
+    ? "Enterprise Dashboard"
+    : isEmployeeDetail
+      ? "Employee Profile"
+      : isBlueprintList
+        ? "Enterprise Solutions™"
+        : isBlueprintDetail
+          ? "Blueprint Detail"
+          : isInvitationDetail
+            ? "Invitation Detail"
+            : isReportDetailPage
+              ? "Report Detail"
+              : activeItem
+                ? activeItem.label
+                : "Overview";
   const description = isReportDetail
     ? ""
-    : activeItem && routeDescriptions[activeItem.label]
-      ? routeDescriptions[activeItem.label]
-      : "Welcome back to your dashboard.";
+    : isEnterpriseDash ||
+        isEmployeeDetail ||
+        isBlueprintList ||
+        isBlueprintDetail ||
+        isInvitationDetail ||
+        isReportDetailPage ||
+        location.pathname.startsWith("/enterprise/")
+      ? "Organization Administrator for ABC Healthcare"
+      : activeItem && routeDescriptions[activeItem.label]
+        ? routeDescriptions[activeItem.label]
+        : "Welcome back to your dashboard.";
 
   return (
     <div className="flex h-screen overflow-hidden bg-primary-bg">

@@ -99,7 +99,7 @@ const ReflectionRoom = () => {
     inputMode === "type" ? notes.trim().length > 0 : phase !== "idle";
 
   return (
-    <div className="relative h-screen w-full overflow-hidden text-white">
+    <div className="relative h-dvh w-full overflow-hidden text-white">
       <div
         className="absolute inset-0 bg-cover bg-center scale-105"
         style={{ backgroundImage: `url(${ROOM_BG})`, filter: "brightness(0.95)" }}
@@ -109,7 +109,7 @@ const ReflectionRoom = () => {
 
       <div className="relative z-10 flex h-full flex-col">
         {/* Header */}
-        <header className="flex items-center justify-between gap-3 px-4 sm:px-8 lg:px-12 pt-5 sm:pt-7 pb-2">
+        <header className="shrink-0 flex items-center justify-between gap-3 px-4 sm:px-8 lg:px-12 pt-5 sm:pt-7 pb-2">
           <Link to={path("dashboard")} className="flex items-center gap-2.5 shrink-0">
             <img src={logo} alt="FAR Systems" className="size-9 sm:size-10 object-contain" />
             <span
@@ -217,251 +217,248 @@ const ReflectionRoom = () => {
           </div>
         </header>
 
-        {/* Center stage */}
-        <div className={` min-h-0 flex flex-col items-center justify-center px-4 sm:px-6 overflow-y-auto 
-          ${inputMode === "voice" ? "min-h-140" : "min-h-160"} 
-          `}>
-          <div className="w-full max-w-3xl flex flex-col items-center text-center">
-            <h1 className="text-2xl sm:text-3xl lg:text-[34px] font-semibold tracking-tight text-white">
-              {t.welcome}
-            </h1>
-            <p className="mt-2 text-sm sm:text-base text-white/70">
-              {t.prompt}
-            </p>
+        {/* Main content — mic, then toolbar + submit directly below */}
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 sm:px-6 lg:px-10 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:pb-6">
+          <div
+            className={cn(
+              "mx-auto w-full max-w-4xl flex flex-col items-center",
+              "py-3 sm:py-6",
+              inputMode === "voice" ? "sm:min-h-[min(100%,35rem)] sm:justify-center" : "sm:min-h-[min(100%,40rem)] sm:justify-center"
+            )}
+          >
+            <div className="w-full max-w-3xl flex flex-col items-center text-center">
+              <h1 className="text-xl sm:text-3xl lg:text-[34px] font-semibold tracking-tight text-white">
+                {t.welcome}
+              </h1>
+              <p className="mt-1.5 sm:mt-2 text-sm sm:text-base text-white/70">
+                {t.prompt}
+              </p>
 
-            {inputMode === "voice" ? (
-              <div className="mt-8 sm:mt-10 flex flex-col items-center">
+              {inputMode === "voice" ? (
+                <div className="mt-5 sm:mt-10 flex flex-col items-center">
+                  <button
+                    type="button"
+                    onClick={toggleMic}
+                    aria-label={
+                      phase === "recording"
+                        ? "Pause recording"
+                        : phase === "paused"
+                          ? "Resume recording"
+                          : "Start reflection"
+                    }
+                    className="relative flex size-[100px] sm:size-[148px] items-center justify-center rounded-full border-0 bg-transparent cursor-pointer group"
+                  >
+                    <span
+                      className={cn(
+                        "absolute inset-[-10px] rounded-full border opacity-80 transition-all duration-300",
+                        phase === "recording" ? "animate-ping" : "animate-pulse"
+                      )}
+                      style={{ borderColor: `${PRIMARY}55` }}
+                    />
+                    <span
+                      className="absolute inset-[-22px] rounded-full border opacity-60 animate-pulse"
+                      style={{ borderColor: `${PRIMARY}40` }}
+                    />
+                    <span
+                      className="absolute inset-[-34px] rounded-full border opacity-30 animate-pulse hidden sm:block"
+                      style={{ borderColor: `${PRIMARY}30` }}
+                    />
+                    <span
+                      className="relative flex size-full items-center justify-center rounded-full border-2 bg-black/85 backdrop-blur-md shadow-[0_0_40px_rgba(251,191,36,0.35)] transition-transform group-hover:scale-[1.03]"
+                      style={{ borderColor: PRIMARY }}
+                    >
+                      {phase === "recording" ? (
+                        <Pause className="size-9 sm:size-12" style={{ color: PRIMARY }} />
+                      ) : phase === "paused" ? (
+                        <Play className="size-9 sm:size-12" style={{ color: PRIMARY }} />
+                      ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="72" viewBox="0 0 65 94" fill="none" className="sm:w-10 sm:h-20">
+                          <path d="M32.5 0C22.7131 0 14.7727 7.89453 14.7727 17.625V47C14.7727 56.7305 22.7131 64.625 32.5 64.625C42.2869 64.625 50.2273 56.7305 50.2273 47V17.625C50.2273 7.89453 42.2869 0 32.5 0ZM8.86364 39.6562C8.86364 37.2145 6.88778 35.25 4.43182 35.25C1.97585 35.25 0 37.2145 0 39.6562V47C0 63.3582 12.2244 76.8707 28.0682 79.0187V85.1875H19.2045C16.7486 85.1875 14.7727 87.152 14.7727 89.5938C14.7727 92.0355 16.7486 94 19.2045 94H32.5H45.7955C48.2514 94 50.2273 92.0355 50.2273 89.5938C50.2273 87.152 48.2514 85.1875 45.7955 85.1875H36.9318V79.0187C52.7756 76.8707 65 63.3582 65 47V39.6562C65 37.2145 63.0241 35.25 60.5682 35.25C58.1122 35.25 56.1364 37.2145 56.1364 39.6562V47C56.1364 59.9801 45.5554 70.5 32.5 70.5C19.4446 70.5 8.86364 59.9801 8.86364 47V39.6562Z" fill="white" />
+                        </svg>
+                      )}
+                    </span>
+                  </button>
+
+                  {(phase === "recording" || phase === "paused" || phase === "recorded") && (
+                    <p
+                      className="mt-4 sm:mt-6 font-mono text-sm tabular-nums tracking-wider"
+                      style={{ color: PRIMARY }}
+                    >
+                      {Math.floor(seconds / 60)
+                        .toString()
+                        .padStart(2, "0")}
+                      :{(seconds % 60).toString().padStart(2, "0")}
+                    </p>
+                  )}
+                </div>
+              ) : (
+                <div className="mt-4 sm:mt-8 w-full">
+                  <TypeEditor
+                    value={notes}
+                    onChange={setNotes}
+                    primaryColor={PRIMARY}
+                    onSwitchToVoice={() => setInputMode("voice")}
+                    placeholder={t.placeholder}
+                  />
+                </div>
+              )}
+
+              {/* Reflect / Type */}
+              <div className="mt-5 sm:mt-8 flex items-center gap-2 sm:gap-3">
                 <button
                   type="button"
-                  onClick={toggleMic}
-                  aria-label={
-                    phase === "recording"
-                      ? "Pause recording"
-                      : phase === "paused"
-                        ? "Resume recording"
-                        : "Start reflection"
-                  }
-                  className="relative flex size-[120px] sm:size-[148px] items-center justify-center rounded-full border-0 bg-transparent cursor-pointer group"
+                  onClick={() => setInputMode("voice")}
+                  className={cn(
+                    "h-10 sm:h-11 px-5 sm:px-6 rounded-full text-sm font-medium cursor-pointer transition-colors",
+                    inputMode === "voice"
+                      ? "bg-black/50 text-[#FBBF24] border border-[#FBBF24]"
+                      : "bg-black/40 text-white/80 border border-white/20 hover:bg-black/55"
+                  )}
                 >
-                  {/* Ring 1 - Inner Ripple */}
-                  <span
-                    className={cn(
-                      "absolute inset-[-10px] rounded-full border opacity-80 transition-all duration-300",
-                      phase === "recording" ? "animate-ping" : "animate-pulse"
-                    )}
-                    style={{ borderColor: `${PRIMARY}55` }}
-                  />
-
-                  {/* Ring 2 - Middle Ripple */}
-                  <span
-                    className="absolute inset-[-22px] rounded-full border opacity-60 animate-pulse"
-                    style={{ borderColor: `${PRIMARY}40` }}
-                  />
-
-                  {/* Ring 3 - Outer Ripple */}
-                  <span
-                    className="absolute inset-[-34px] rounded-full border opacity-30 animate-pulse hidden sm:block"
-                    style={{ borderColor: `${PRIMARY}30` }}
-                  />
-
-                  {/* Main Button Container */}
-                  <span
-                    className="relative flex size-full items-center justify-center rounded-full border-2 bg-black/85 backdrop-blur-md shadow-[0_0_40px_rgba(251,191,36,0.35)] transition-transform group-hover:scale-[1.03]"
-                    style={{ borderColor: PRIMARY }}
-                  >
-                    {phase === "recording" ? (
-                      <Pause className="size-10 sm:size-12" style={{ color: PRIMARY }} />
-                    ) : phase === "paused" ? (
-                      <Play className="size-10 sm:size-12" style={{ color: PRIMARY }} />
-                    ) : (
-                      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="80" viewBox="0 0 65 94" fill="none">
-                        <path d="M32.5 0C22.7131 0 14.7727 7.89453 14.7727 17.625V47C14.7727 56.7305 22.7131 64.625 32.5 64.625C42.2869 64.625 50.2273 56.7305 50.2273 47V17.625C50.2273 7.89453 42.2869 0 32.5 0ZM8.86364 39.6562C8.86364 37.2145 6.88778 35.25 4.43182 35.25C1.97585 35.25 0 37.2145 0 39.6562V47C0 63.3582 12.2244 76.8707 28.0682 79.0187V85.1875H19.2045C16.7486 85.1875 14.7727 87.152 14.7727 89.5938C14.7727 92.0355 16.7486 94 19.2045 94H32.5H45.7955C48.2514 94 50.2273 92.0355 50.2273 89.5938C50.2273 87.152 48.2514 85.1875 45.7955 85.1875H36.9318V79.0187C52.7756 76.8707 65 63.3582 65 47V39.6562C65 37.2145 63.0241 35.25 60.5682 35.25C58.1122 35.25 56.1364 37.2145 56.1364 39.6562V47C56.1364 59.9801 45.5554 70.5 32.5 70.5C19.4446 70.5 8.86364 59.9801 8.86364 47V39.6562Z" fill="white" />
-                      </svg>
-                    )}
-                  </span>
+                  {t.reflect}
                 </button>
-
-                {(phase === "recording" || phase === "paused" || phase === "recorded") && (
-                  <p
-                    className="mt-6 font-mono text-sm tabular-nums tracking-wider"
-                    style={{ color: PRIMARY }}
-                  >
-                    {Math.floor(seconds / 60)
-                      .toString()
-                      .padStart(2, "0")}
-                    :{(seconds % 60).toString().padStart(2, "0")}
-                  </p>
-                )}
+                <button
+                  type="button"
+                  onClick={() => setInputMode("type")}
+                  className={cn(
+                    "inline-flex items-center gap-2 h-10 sm:h-11 px-5 sm:px-6 rounded-full text-sm font-medium cursor-pointer transition-colors",
+                    inputMode === "type"
+                      ? "bg-black/50 text-[#FBBF24] border border-[#FBBF24]"
+                      : "bg-black/40 text-white/80 border border-white/20 hover:bg-black/55"
+                  )}
+                >
+                  <Keyboard className="size-3.5" />
+                  {t.type}
+                </button>
               </div>
-            ) : (
-              <div className="mt-6 sm:mt-8 w-full">
-                <TypeEditor
-                  value={notes}
-                  onChange={setNotes}
-                  primaryColor={PRIMARY}
-                  onSwitchToVoice={() => setInputMode("voice")}
-                  placeholder={t.placeholder}
+            </div>
+
+            {/* Toolbar — directly under mic / Reflect-Type */}
+            <div className="mt-5 sm:mt-8 w-full rounded-2xl border border-white/15 bg-black/50 backdrop-blur-xl px-1 sm:px-2 py-1.5 sm:py-2 shadow-[0_12px_40px_rgba(0,0,0,0.45)]">
+              <div className="flex items-stretch justify-between gap-0.5 sm:gap-1 overflow-x-auto">
+                <ToolbarAction
+                  icon={<Square className="size-4 fill-current" />}
+                  title={t.stop}
+                  subtitle={t.recording}
+                  tone="danger"
+                  onClick={stopRecording}
+                  disabled={phase !== "recording" && phase !== "paused"}
+                />
+                <ToolbarAction
+                  icon={<Play className="size-4 fill-current" />}
+                  title={t.replay}
+                  subtitle={t.answer}
+                  onClick={() =>
+                    showToast(
+                      language === "en" ? "Replaying answer…" : "Reproduciendo…"
+                    )
+                  }
+                  disabled={phase === "idle"}
+                />
+                <ToolbarAction
+                  icon={<RotateCcw className="size-4" />}
+                  title={t.rerecord}
+                  subtitle={t.answer}
+                  onClick={rerecord}
+                />
+                <ToolbarAction
+                  icon={<Save className="size-4" />}
+                  title={t.saveContinue}
+                  subtitle={t.continue}
+                  onClick={() => {
+                    showToast(
+                      language === "en" ? "Progress saved" : "Progreso guardado"
+                    );
+                    navigate(path("dashboard"));
+                  }}
+                  className="hidden sm:flex"
+                />
+                <ToolbarAction
+                  icon={<Clock3 className="size-4" />}
+                  title={t.resume}
+                  subtitle={t.later}
+                  onClick={() => {
+                    showToast(
+                      language === "en"
+                        ? "Session paused for later"
+                        : "Sesión pausada"
+                    );
+                    navigate(path("dashboard"));
+                  }}
+                  className="hidden md:flex"
+                />
+                <ToolbarAction
+                  icon={<RotateCcw className="size-4" />}
+                  title={t.restore}
+                  subtitle={t.sessionWord}
+                  onClick={() => {
+                    setPhase("paused");
+                    setSeconds((s) => (s > 0 ? s : 147));
+                    showToast(
+                      language === "en"
+                        ? "Session restored"
+                        : "Sesión restaurada"
+                    );
+                  }}
+                  className="hidden md:flex"
                 />
               </div>
-            )}
-
-            {/* Reflect / Type */}
-            <div className="mt-8 flex items-center gap-2 sm:gap-3">
-              <button
-                type="button"
-                onClick={() => setInputMode("voice")}
-                className={cn(
-                  "h-10 sm:h-11 px-5 sm:px-6 rounded-full text-sm font-medium cursor-pointer transition-colors",
-                  inputMode === "voice"
-                    ? "bg-black/50 text-[#FBBF24] border border-[#FBBF24]"
-                    : "bg-black/40 text-white/80 border border-white/20 hover:bg-black/55"
-                )}
-              >
-                {t.reflect}
-              </button>
-              <button
-                type="button"
-                onClick={() => setInputMode("type")}
-                className={cn(
-                  "inline-flex items-center gap-2 h-10 sm:h-11 px-5 sm:px-6 rounded-full text-sm font-medium cursor-pointer transition-colors",
-                  inputMode === "type"
-                    ? "bg-black/50 text-[#FBBF24] border border-[#FBBF24]"
-                    : "bg-black/40 text-white/80 border border-white/20 hover:bg-black/55"
-                )}
-              >
-                <Keyboard className="size-3.5" />
-                {t.type}
-              </button>
             </div>
-          </div>
-        </div>
 
-        {/* Bottom stack */}
-        <div className="flex-1 px-3 sm:px-6 lg:px-10 pb-4 sm:pb-6 sm:-mt-8 xl:pt-2 space-y-3 sm:space-y-4 ">
-          <div className="mx-auto max-w-4xl rounded-2xl border border-white/15 bg-black/50 backdrop-blur-xl px-1 sm:px-2 py-2 shadow-[0_12px_40px_rgba(0,0,0,0.45)]">
-            <div className="flex items-stretch justify-between gap-0.5 sm:gap-1 overflow-x-auto">
-              <ToolbarAction
-                icon={<Square className="size-4 fill-current" />}
-                title={t.stop}
-                subtitle={t.recording}
-                tone="danger"
-                onClick={stopRecording}
-                disabled={phase !== "recording" && phase !== "paused"}
-              />
-              <ToolbarAction
-                icon={<Play className="size-4 fill-current" />}
-                title={t.replay}
-                subtitle={t.answer}
-                onClick={() =>
-                  showToast(
-                    language === "en" ? "Replaying answer…" : "Reproduciendo…"
-                  )
-                }
-                disabled={phase === "idle"}
-              />
-              <ToolbarAction
-                icon={<RotateCcw className="size-4" />}
-                title={t.rerecord}
-                subtitle={t.answer}
-                onClick={rerecord}
-              />
-              <ToolbarAction
-                icon={<Save className="size-4" />}
-                title={t.saveContinue}
-                subtitle={t.continue}
-                onClick={() => {
-                  showToast(
-                    language === "en" ? "Progress saved" : "Progreso guardado"
-                  );
-                  navigate(path("dashboard"));
-                }}
-                className="hidden sm:flex"
-              />
-              <ToolbarAction
-                icon={<Clock3 className="size-4" />}
-                title={t.resume}
-                subtitle={t.later}
-                onClick={() => {
-                  showToast(
-                    language === "en"
-                      ? "Session paused for later"
-                      : "Sesión pausada"
-                  );
-                  navigate(path("dashboard"));
-                }}
-                className="hidden md:flex"
-              />
-              <ToolbarAction
-                icon={<RotateCcw className="size-4" />}
-                title={t.restore}
-                subtitle={t.sessionWord}
-                onClick={() => {
-                  setPhase("paused");
-                  setSeconds((s) => (s > 0 ? s : 147));
-                  showToast(
-                    language === "en"
-                      ? "Session restored"
-                      : "Sesión restaurada"
-                  );
-                }}
-                className="hidden md:flex"
-              />
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={submitReflection}
-            disabled={!canSubmit}
-            className="group mx-auto flex w-full max-w-lg  items-center justify-between gap-3 border-3 rounded-full border-2 px-2 sm:px-3 py-2 sm:py-2.5 cursor-pointer disabled:cursor-not-allowed  transition-transform hover:scale-[1.01] active:scale-[0.99]"
-            style={{
-              borderColor: PRIMARY,
-              background:
-                "linear-gradient(180deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.55) 100%)",
-              boxShadow:
-                "0 0 28px rgba(251,191,36,0.35), inset 0 0 20px rgba(251,191,36,0.08)",
-            }}
-          >
-            <span
-              className="flex size-11 sm:size-16 items-center justify-center rounded-full shrink-0 space-y-1"
-              style={{ backgroundColor: `${PRIMARY}22`, color: PRIMARY }}
+            <button
+              type="button"
+              onClick={submitReflection}
+              disabled={!canSubmit}
+              className="group mt-3 sm:mt-4 mx-auto flex w-full max-w-lg items-center justify-between gap-3 rounded-full border-2 px-2 sm:px-3 py-1.5 sm:py-2.5 cursor-pointer disabled:cursor-not-allowed transition-transform hover:scale-[1.01] active:scale-[0.99]"
+              style={{
+                borderColor: PRIMARY,
+                background:
+                  "linear-gradient(180deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.55) 100%)",
+                boxShadow:
+                  "0 0 28px rgba(251,191,36,0.35), inset 0 0 20px rgba(251,191,36,0.08)",
+              }}
             >
-              <Send className="size-8" />
-            </span>
-            <span className="flex-1 text-center min-w-0 space-y-1">
               <span
-                className="block text-xs sm:text-lg font-bold tracking-[0.14em] uppercase truncate"
-                style={{ color: "#FBBF24" }}
+                className="flex size-10 sm:size-16 items-center justify-center rounded-full shrink-0"
+                style={{ backgroundColor: `${PRIMARY}22`, color: PRIMARY }}
               >
-                {t.submitTitle}
+                <Send className="size-5 sm:size-8" />
+              </span>
+              <span className="flex-1 text-center min-w-0 space-y-0.5 sm:space-y-1">
+                <span
+                  className="block text-xs sm:text-lg font-bold tracking-[0.14em] uppercase truncate"
+                  style={{ color: "#FBBF24" }}
+                >
+                  {t.submitTitle}
+                </span>
+                <span
+                  className="block text-[10px] sm:text-xs tracking-[0.12em] uppercase opacity-80 truncate"
+                  style={{ color: PRIMARY }}
+                >
+                  {t.submitSub}
+                </span>
               </span>
               <span
-                className="block text-[10px] sm:text-xs tracking-[0.12em] uppercase opacity-80 truncate"
+                className="flex size-10 sm:size-12 items-center justify-center rounded-full shrink-0"
                 style={{ color: PRIMARY }}
               >
-                {t.submitSub}
+                <ChevronRight className="size-5 sm:size-6" />
               </span>
-            </span>
-            <span
-              className="flex size-11 sm:size-12 items-center justify-center rounded-full shrink-0"
-              style={{ color: PRIMARY }}
-            >
-              <ChevronRight className="size-6" />
-            </span>
-          </button>
+            </button>
 
-          <div className="flex xl:pt-12 items-center justify-center gap-3 sm:gap-5 pt-1">
-            <span className="h-px flex-1 max-w-24 sm:max-w-40 bg-white/25" />
-            <p className="text-[10px] flex flex-wrap sm:text-[11px] tracking-[0.22em] uppercase text-white/70 text-center ">
-              {t.tagline}
-            </p>
-            <span className="h-px flex-1 max-w-24 sm:max-w-40 bg-white/25" />
+            <div className="mt-4 sm:mt-6 xl:mt-10 flex w-full items-center justify-center gap-3 sm:gap-5">
+              <span className="h-px flex-1 max-w-24 sm:max-w-40 bg-white/25" />
+              <p className="text-[10px] sm:text-[11px] tracking-[0.22em] uppercase text-white/70 text-center">
+                {t.tagline}
+              </p>
+              <span className="h-px flex-1 max-w-24 sm:max-w-40 bg-white/25" />
+            </div>
           </div>
         </div>
       </div>
 
       {toast && (
-        <div className="fixed bottom-28 left-1/2 z-[100] -translate-x-1/2 rounded-full border border-white/15 bg-black/80 px-4 py-2 text-xs text-white backdrop-blur">
+        <div className="fixed bottom-24 sm:bottom-28 left-1/2 z-[100] -translate-x-1/2 rounded-full border border-white/15 bg-black/80 px-4 py-2 text-xs text-white backdrop-blur">
           {toast}
         </div>
       )}
