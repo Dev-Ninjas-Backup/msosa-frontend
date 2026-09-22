@@ -36,6 +36,8 @@ export const MemberPortalProvider = ({
   );
 };
 
+export const useMemberPortalOptional = () => useContext(MemberPortalContext);
+
 export const useMemberPortal = () => {
   const ctx = useContext(MemberPortalContext);
   if (!ctx) {

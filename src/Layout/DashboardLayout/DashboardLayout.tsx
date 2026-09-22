@@ -11,6 +11,8 @@ import {
 } from "@/lib/dashboardTheme";
 
 const routeDescriptions: Record<string, string> = {
+  "Create Product™":
+    "Build and configure a new FAR Platform product by setting up its workflows, Reflections, protocols, AI behavior, dashboards, reports, user access, and operational settings.",
   Overview: "Welcome back to your reseller dashboard.",
   "Founder Control Center™":
     "Founder Operating System for the FAR Platform Engine™",

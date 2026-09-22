@@ -26,12 +26,45 @@ import {
   ROOM_BG,
   SessionPhase,
 } from "./types";
-import { useMemberPortal } from "@/pages/shared/member/MemberPortalContext";
+import { useMemberPortalOptional } from "@/pages/shared/member/MemberPortalContext";
 import { ToolbarAction } from "./ToolbarAction";
 
-const ReflectionRoom = () => {
+export type ReflectionRoomProps = {
+  /** Product-creation mode reuses the same room UI without member portal. */
+  variant?: "member" | "product-creation";
+  onComplete?: () => void;
+  onExit?: () => void;
+};
+
+const ReflectionRoom = ({
+  variant = "member",
+  onComplete,
+  onExit,
+}: ReflectionRoomProps = {}) => {
   const navigate = useNavigate();
-  const { path } = useMemberPortal();
+  const portal = useMemberPortalOptional();
+  const isProduct = variant === "product-creation";
+
+  const exitTo = () => {
+    if (onExit) {
+      onExit();
+      return;
+    }
+    if (portal) navigate(portal.path("dashboard"));
+    else navigate("/founder/create-product");
+  };
+
+  const completeTo = () => {
+    if (onComplete) {
+      onComplete();
+      return;
+    }
+    exitTo();
+  };
+
+  const path = (segment?: string) =>
+    portal ? portal.path(segment) : "/founder/dashboard";
+
   const [language, setLanguage] = useState<Language>("en");
   const [langOpen, setLangOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -42,6 +75,16 @@ const ReflectionRoom = () => {
   const [toast, setToast] = useState<string | null>(null);
 
   const t = copy[language];
+  const headline = isProduct
+    ? language === "en"
+      ? "CREATE NEW PRODUCT"
+      : "CREAR NUEVO PRODUCTO"
+    : t.welcome;
+  const subhead = isProduct
+    ? language === "en"
+      ? "Describe what product will be"
+      : "Describe qué será el producto"
+    : t.prompt;
 
   useEffect(() => {
     if (phase !== "recording") return;
@@ -88,19 +131,21 @@ const ReflectionRoom = () => {
     setPhase("submitted");
     showToast(
       language === "en"
-        ? "Reflection submitted — continuing journey"
+        ? isProduct
+          ? "Product description captured — continuing setup"
+          : "Reflection submitted — continuing journey"
         : "Reflexión enviada"
     );
-    window.setTimeout(() => navigate(path("dashboard")), 1200);
+    window.setTimeout(() => completeTo(), 1200);
   };
 
   const stage = (
     <div className="w-full max-w-3xl xl:max-w-none flex flex-col items-center text-center">
       <h1 className="text-xl sm:text-3xl lg:text-[34px] xl:text-[40px] font-semibold tracking-tight text-white">
-        {t.welcome}
+        {headline}
       </h1>
       <p className="mt-1.5 sm:mt-2 xl:mt-3 text-sm sm:text-base xl:text-lg text-white/75">
-        {t.prompt}
+        {subhead}
       </p>
 
       {inputMode === "voice" ? (
@@ -244,7 +289,7 @@ const ReflectionRoom = () => {
           subtitle={t.continue}
           onClick={() => {
             showToast(language === "en" ? "Progress saved" : "Progreso guardado");
-            navigate(path("dashboard"));
+            completeTo();
           }}
           className="hidden sm:flex"
         />
@@ -256,7 +301,7 @@ const ReflectionRoom = () => {
             showToast(
               language === "en" ? "Session paused for later" : "Sesión pausada"
             );
-            navigate(path("dashboard"));
+            exitTo();
           }}
           className="hidden md:flex"
         />
@@ -402,17 +447,45 @@ const ReflectionRoom = () => {
 
       <div className="relative z-10 flex h-full flex-col">
         <header className="shrink-0 flex items-center justify-between gap-3 px-4 sm:px-8 lg:px-12 xl:px-16 pt-5 sm:pt-7 xl:pt-8 pb-2">
-          <Link to={path("dashboard")} className="flex items-center gap-2.5 shrink-0">
-            <img src={logo} alt="FAR Systems" className="size-9 sm:size-10 xl:size-11 object-contain" />
-            <span
-              className="hidden sm:inline text-sm xl:text-base font-semibold tracking-[0.18em] uppercase"
-              style={{ color: PRIMARY }}
+          {isProduct ? (
+            <button
+              type="button"
+              onClick={exitTo}
+              className="flex items-center gap-2.5 shrink-0 border-0 bg-transparent cursor-pointer p-0"
             >
-              FAR Systems
-            </span>
-          </Link>
+              <img src={logo} alt="FAR Systems" className="size-9 sm:size-10 xl:size-11 object-contain" />
+              <span className="hidden sm:flex flex-col items-start text-left">
+                <span className="text-sm xl:text-base font-medium text-white tracking-tight">
+                  Reflection Room™
+                </span>
+                <span className="text-[11px] text-white/60 font-light">
+                  A private space for clarity, insight, and personal growth.
+                </span>
+              </span>
+            </button>
+          ) : (
+            <Link to={path("dashboard")} className="flex items-center gap-2.5 shrink-0">
+              <img src={logo} alt="FAR Systems" className="size-9 sm:size-10 xl:size-11 object-contain" />
+              <span
+                className="hidden sm:inline text-sm xl:text-base font-semibold tracking-[0.18em] uppercase"
+                style={{ color: PRIMARY }}
+              >
+                FAR Systems
+              </span>
+            </Link>
+          )}
 
           <div className="flex items-center gap-2 sm:gap-3 xl:gap-4">
+            {isProduct && (
+              <button
+                type="button"
+                onClick={exitTo}
+                className="inline-flex items-center gap-2 h-10 xl:h-11 px-3 xl:px-4 rounded-full border border-red-500/60 bg-black/35 backdrop-blur-md text-sm text-white hover:bg-black/50 cursor-pointer"
+              >
+                <span className="size-2 rounded-full bg-red-500" />
+                End Session
+              </button>
+            )}
             <div className="relative">
               <button
                 type="button"
@@ -481,27 +554,42 @@ const ReflectionRoom = () => {
                     onClick={() => setMenuOpen(false)}
                   />
                   <div className="absolute right-0 mt-2 z-30 min-w-[180px] overflow-hidden rounded-xl border border-white/15 bg-black/85 backdrop-blur-xl shadow-xl">
-                    <Link
-                      to={path("dashboard")}
-                      className="block px-4 py-2.5 text-sm text-white/80 hover:bg-white/5 hover:text-white"
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      Dashboard
-                    </Link>
-                    <Link
-                      to={path("customer-products")}
-                      className="block px-4 py-2.5 text-sm text-white/80 hover:bg-white/5 hover:text-white"
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      Products
-                    </Link>
-                    <Link
-                      to={path("profile")}
-                      className="block px-4 py-2.5 text-sm text-white/80 hover:bg-white/5 hover:text-white"
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      Profile
-                    </Link>
+                    {isProduct ? (
+                      <button
+                        type="button"
+                        className="block w-full px-4 py-2.5 text-left text-sm text-white/80 hover:bg-white/5 hover:text-white border-0 bg-transparent cursor-pointer"
+                        onClick={() => {
+                          setMenuOpen(false);
+                          exitTo();
+                        }}
+                      >
+                        Exit to Product List
+                      </button>
+                    ) : (
+                      <>
+                        <Link
+                          to={path("dashboard")}
+                          className="block px-4 py-2.5 text-sm text-white/80 hover:bg-white/5 hover:text-white"
+                          onClick={() => setMenuOpen(false)}
+                        >
+                          Dashboard
+                        </Link>
+                        <Link
+                          to={path("customer-products")}
+                          className="block px-4 py-2.5 text-sm text-white/80 hover:bg-white/5 hover:text-white"
+                          onClick={() => setMenuOpen(false)}
+                        >
+                          Products
+                        </Link>
+                        <Link
+                          to={path("profile")}
+                          className="block px-4 py-2.5 text-sm text-white/80 hover:bg-white/5 hover:text-white"
+                          onClick={() => setMenuOpen(false)}
+                        >
+                          Profile
+                        </Link>
+                      </>
+                    )}
                   </div>
                 </>
               )}
