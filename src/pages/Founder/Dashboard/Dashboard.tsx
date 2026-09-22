@@ -1,22 +1,13 @@
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  ArrowDownRight,
   ArrowRight,
-  ArrowUpRight,
-  Bell,
   Box,
-  Building2,
   ChevronDown,
-  FileBarChart,
   Link2,
-  Package,
   Plus,
   QrCode,
   Sparkles,
-  Users,
-  Workflow,
-  Zap,
 } from "lucide-react";
 import {
   Area,
@@ -28,210 +19,75 @@ import {
   YAxis,
 } from "recharts";
 import AnimatedContainer from "@/common/AnimatedContainer";
-import Button from "@/ui/Button";
 import { cn } from "@/lib/utils";
+import { getCssVarValue, DASHBOARD_THEME_APPLIED_EVENT } from "@/lib/dashboardTheme";
+import { useDashboardTheme } from "@/hooks/useDashboardTheme";
+import DashboardSettingsModal from "./DashboardSettingsModal";
+import EditableWidgetShell from "./EditableWidgetShell";
+import AddWidgetModal from "./AddWidgetModal";
+import EditWidgetPanel from "./EditWidgetPanel";
+import WidgetAddedModal from "./WidgetAddedModal";
+import LayoutPresetsStrip, {
+  type LayoutPresetId,
+} from "./LayoutPresetsStrip";
+import trendUp from "./assets/trend-up.svg";
+import trendDown from "./assets/trend-down.svg";
+import trendFlat from "./assets/trend-flat.svg";
+import {
+  ACTIVITIES,
+  ALERTS,
+  DEFAULT_WIDGET_COLORS,
+  GROWTH_DATA,
+  KPI_CARDS,
+  LAYOUT_CANCEL_EVENT,
+  LAYOUT_PENDING_KEY,
+  LAYOUT_RESUME_EVENT,
+  LINK_ACTIONS,
+  OPEN_DASHBOARD_SETTINGS_EVENT,
+  OPEN_LAYOUT_EDIT_EVENT,
+  PRODUCTS,
+  SNAPSHOT_STATS,
+  SOLUTION_TABS,
+  readLayoutPreset,
+  readLayoutWidgets,
+  saveLayoutPreset,
+  saveLayoutWidgets,
+  setLayoutEditingBroadcast,
+  type TrendTone,
+  type WidgetInstance,
+  type WidgetTemplate,
+} from "./data";
+import { toast } from "sonner";
 
-const SOLUTION_TABS = [
-  { id: "consumer", label: "Consumer Solutions™", icon: Users },
-  { id: "readiness", label: "Professional Readiness™", icon: Zap },
-  { id: "org", label: "Organizational Solutions™", icon: Building2 },
-  { id: "enterprise", label: "Enterprise", icon: Workflow },
-] as const;
-
-const KPI_CARDS = [
-  {
-    value: "27",
-    label: "Active Products™",
-    change: "12.5%",
-    up: true,
-    icon: Package,
-  },
-  {
-    value: "18",
-    label: "Organizations™",
-    change: "5.6%",
-    up: true,
-    icon: Building2,
-  },
-  {
-    value: "278",
-    label: "Founder Protocols™",
-    change: "8.3%",
-    up: true,
-    icon: Workflow,
-  },
-  {
-    value: "12",
-    label: "Active Live Exp.™",
-    change: "9.1%",
-    up: true,
-    icon: Zap,
-  },
-  {
-    value: "46",
-    label: "Products Purchased™",
-    change: "18.4%",
-    up: true,
-    icon: Box,
-  },
-  {
-    value: "312",
-    label: "Reports Generated™",
-    change: "22.6%",
-    up: true,
-    icon: FileBarChart,
-  },
-] as const;
-
-const SNAPSHOT_STATS = [
-  { value: "23", label: "New Customers", change: "12.5%", up: true },
-  { value: "2", label: "New Organizations", change: "8.3%", up: false },
-  { value: "46", label: "Products Purchased", change: "5.6%", up: true },
-  { value: "5", label: "Renewals", change: "9.1%", up: false },
-  { value: "$2,986", label: "Revenue", change: "18.4%", up: false },
-  { value: "18", label: "Reports Pending", change: "18.4%", up: false },
-] as const;
-
-const GROWTH_DATA = [
-  { label: "1st Jan", value: 42000 },
-  { label: "3d Jan", value: 48000 },
-  { label: "5th Jan", value: 51000 },
-  { label: "7th Jan", value: 47000 },
-  { label: "9th Jan", value: 62000 },
-  { label: "11th Jan", value: 58000 },
-  { label: "13th Jan", value: 71000 },
-  { label: "15th Jan", value: 68000 },
-  { label: "17th Jan", value: 79000 },
-  { label: "19th Jan", value: 86000 },
-  { label: "21th Jan", value: 82000 },
-  { label: "23th Jan", value: 94000 },
-];
-
-const PRODUCTS = [
-  {
-    id: 1,
-    name: "Blueprint 1",
-    division: "Division 1",
-    purchases: 186,
-    completion: 82,
-    reports: 186,
-    revenue: "$6,120",
-  },
-  {
-    id: 2,
-    name: "Blueprint 4",
-    division: "Division 1",
-    purchases: 97,
-    completion: 76,
-    reports: 97,
-    revenue: "$2,450",
-  },
-  {
-    id: 3,
-    name: "Blueprint 5",
-    division: "Division 1",
-    purchases: 58,
-    completion: 74,
-    reports: 58,
-    revenue: "$1,420",
-  },
-  {
-    id: 4,
-    name: "Readiness Product 1",
-    division: "Division 2",
-    purchases: 156,
-    completion: 81,
-    reports: 156,
-    revenue: "$6,860",
-  },
-  {
-    id: 5,
-    name: "Readiness Product 2",
-    division: "Division 2",
-    purchases: 112,
-    completion: 80,
-    reports: 112,
-    revenue: "$4,180",
-  },
-  {
-    id: 6,
-    name: "Readiness Product 6",
-    division: "Division 2",
-    purchases: 71,
-    completion: 75,
-    reports: 71,
-    revenue: "$2,429",
-  },
-] as const;
-
-const LINK_ACTIONS = [
-  { label: "Create New Link™", icon: Plus, to: "/founder/link-center" },
-  { label: "Manage Links™", icon: Link2, to: "/founder/link-center" },
-  { label: "Link Templates™", icon: Box, to: "/founder/link-center" },
-  { label: "QR Code Generator™", icon: QrCode, to: "/founder/link-center" },
-] as const;
-
-const ACTIVITIES = [
-  { text: 'New organization "Apex Corp" registered', time: "5 min ago" },
-  {
-    text: "Blueprint 1 report generated for user #4821",
-    time: "12 min ago",
-  },
-  {
-    text: "Readiness Product 1 purchased — 3 seats",
-    time: "18 min ago",
-  },
-  { text: "Protocol #112 updated by admin", time: "25 min ago" },
-  { text: "Live Experience session ended", time: "35 min ago" },
-] as const;
-
-const ALERTS = [
-  {
-    text: "Storage usage approaching 80% threshold",
-    tone: "warn" as const,
-  },
-  {
-    text: "API rate limit at 85% for endpoint /reports",
-    tone: "warn" as const,
-  },
-  {
-    text: "Payment gateway timeout — 3 failed txns",
-    tone: "danger" as const,
-  },
-  {
-    text: "Email delivery failure for 2 org accounts",
-    tone: "danger" as const,
-  },
-  { text: "Backup completed successfully", tone: "ok" as const },
-  { text: "Platform update v1.0.1 available", tone: "info" as const },
-] as const;
+const LINK_ICONS = [Plus, Link2, Box, QrCode] as const;
 
 const TrendBadge = ({
   change,
-  up,
+  tone,
   compact,
 }: {
   change: string;
-  up: boolean;
+  tone: TrendTone;
   compact?: boolean;
-}) => (
-  <span
-    className={cn(
-      "inline-flex items-center gap-0.5 rounded-md px-1.5 py-0.5 text-[11px] font-medium",
-      up
-        ? "bg-emerald-500/10 text-emerald-400"
-        : "bg-rose-500/10 text-rose-400",
-      compact && "px-1"
-    )}
-  >
-    {up ? (
-      <ArrowUpRight className="size-3" />
-    ) : (
-      <ArrowDownRight className="size-3" />
-    )}
-    {change}
-  </span>
-);
+}) => {
+  const icon =
+    tone === "up" ? trendUp : tone === "down" ? trendDown : trendFlat;
+
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center gap-1 rounded-full px-2 py-1 text-[10px] font-bold",
+        tone === "up" && "bg-button-bg/10 text-button-bg",
+        tone === "down" && "bg-primary-orange/10 text-primary-orange",
+        tone === "flat" && "bg-primary-text/10 text-primary-text",
+        compact && "px-1.5 py-0.5"
+      )}
+    >
+      <img src={icon} alt="" className="size-2 object-contain" />
+      {change}
+    </span>
+  );
+};
 
 const Panel = ({
   children,
@@ -242,7 +98,7 @@ const Panel = ({
 }) => (
   <div
     className={cn(
-      "rounded-2xl border border-white/10 bg-light-bg/60 backdrop-blur-sm",
+      "rounded-2xl border border-border bg-card backdrop-blur-sm",
       className
     )}
   >
@@ -251,31 +107,189 @@ const Panel = ({
 );
 
 const FounderDashboard = () => {
-  const [activeTab, setActiveTab] = useState<(typeof SOLUTION_TABS)[number]["id"]>(
-    "consumer"
+  const [activeTab, setActiveTab] =
+    useState<(typeof SOLUTION_TABS)[number]["id"]>("consumer");
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [layoutEditing, setLayoutEditing] = useState(false);
+  const [layoutPreset, setLayoutPreset] = useState<LayoutPresetId>(() =>
+    readLayoutPreset()
   );
+  const [layoutPresetSnapshot, setLayoutPresetSnapshot] =
+    useState<LayoutPresetId>(() => readLayoutPreset());
+  const [widgets, setWidgets] = useState<WidgetInstance[]>(() =>
+    readLayoutWidgets()
+  );
+  const [widgetsSnapshot, setWidgetsSnapshot] = useState<WidgetInstance[]>(
+    () => readLayoutWidgets()
+  );
+  const [addWidgetOpen, setAddWidgetOpen] = useState(false);
+  const [editWidget, setEditWidget] = useState<WidgetInstance | null>(null);
+  const [addedTitle, setAddedTitle] = useState<string | null>(null);
+  const { theme, save, preview, cancelPreview } = useDashboardTheme();
+  const [chartColors, setChartColors] = useState({
+    accent: "#10b7ba",
+    muted: "#94A3B8",
+    card: "#0f172a",
+    border: "#FFFFFF1A",
+    text: "#FFFFFF",
+  });
+
+  const isVisible = (id: string) =>
+    widgets.find((w) => w.id === id)?.enabled !== false;
+
+  const syncChartColors = () => {
+    setChartColors({
+      accent: getCssVarValue("--accent", "#10b7ba"),
+      muted: getCssVarValue("--muted-blue", "#94A3B8"),
+      card: getCssVarValue("--card-bg", "#0f172a"),
+      border: getCssVarValue("--border-color", "#FFFFFF1A"),
+      text: getCssVarValue("--primary-text", "#FFFFFF"),
+    });
+  };
+
+  useEffect(() => {
+    syncChartColors();
+    const onApplied = () => syncChartColors();
+    window.addEventListener(DASHBOARD_THEME_APPLIED_EVENT, onApplied);
+    return () =>
+      window.removeEventListener(DASHBOARD_THEME_APPLIED_EVENT, onApplied);
+  }, [theme]);
+
+  const resumeLayoutRef = useRef(() => {});
+  const cancelLayoutRef = useRef(() => {});
+
+  const handleResume = () => {
+    saveLayoutWidgets(widgets);
+    saveLayoutPreset(layoutPreset);
+    setLayoutEditing(false);
+    setLayoutEditingBroadcast(false);
+    toast.success("Dashboard layout saved");
+  };
+
+  const handleCancelLayout = () => {
+    setWidgets(widgetsSnapshot.map((w) => ({ ...w, colors: { ...w.colors } })));
+    setLayoutPreset(layoutPresetSnapshot);
+    setLayoutEditing(false);
+    setLayoutEditingBroadcast(false);
+  };
+
+  resumeLayoutRef.current = handleResume;
+  cancelLayoutRef.current = handleCancelLayout;
+
+  useEffect(() => {
+    const enterLayoutEdit = () => {
+      setWidgets((current) => {
+        setWidgetsSnapshot(
+          current.map((w) => ({ ...w, colors: { ...w.colors } }))
+        );
+        return current;
+      });
+      setLayoutPreset((current) => {
+        setLayoutPresetSnapshot(current);
+        return current;
+      });
+      setLayoutEditing(true);
+      setLayoutEditingBroadcast(true);
+      requestAnimationFrame(() => {
+        const scroller = document
+          .getElementById("far-dashboard-theme")
+          ?.querySelector(".overflow-y-auto");
+        if (scroller instanceof HTMLElement) scroller.scrollTop = 0;
+      });
+    };
+
+    const openSettings = () => setSettingsOpen(true);
+    const onCancel = () => cancelLayoutRef.current();
+    const onResume = () => resumeLayoutRef.current();
+
+    window.addEventListener(OPEN_DASHBOARD_SETTINGS_EVENT, openSettings);
+    window.addEventListener(OPEN_LAYOUT_EDIT_EVENT, enterLayoutEdit);
+    window.addEventListener(LAYOUT_CANCEL_EVENT, onCancel);
+    window.addEventListener(LAYOUT_RESUME_EVENT, onResume);
+
+    if (sessionStorage.getItem(LAYOUT_PENDING_KEY) === "1") {
+      sessionStorage.removeItem(LAYOUT_PENDING_KEY);
+      enterLayoutEdit();
+    }
+
+    return () => {
+      window.removeEventListener(OPEN_DASHBOARD_SETTINGS_EVENT, openSettings);
+      window.removeEventListener(OPEN_LAYOUT_EDIT_EVENT, enterLayoutEdit);
+      window.removeEventListener(LAYOUT_CANCEL_EVENT, onCancel);
+      window.removeEventListener(LAYOUT_RESUME_EVENT, onResume);
+    };
+  }, []);
+
+  const removeWidget = (id: string) => {
+    setWidgets((prev) =>
+      prev.map((w) => (w.id === id ? { ...w, enabled: false } : w))
+    );
+    toast.success("Widget removed from layout");
+  };
+
+  const handleAddTemplate = (tpl: WidgetTemplate) => {
+    const instance: WidgetInstance = {
+      id: `custom-${tpl.id}-${Date.now()}`,
+      templateId: tpl.id,
+      title: tpl.title,
+      enabled: true,
+      showProgress: true,
+      enableAi: tpl.category === "analytics",
+      dataSource: "Historical Emotional Analysis (HE-A)",
+      colors: { ...DEFAULT_WIDGET_COLORS },
+    };
+    setWidgets((prev) => [...prev, instance]);
+    setAddWidgetOpen(false);
+    setAddedTitle(tpl.title);
+  };
+
+  const gradientId = useMemo(() => "founderGrowthGrad", []);
 
   return (
-    <div className="space-y-5 sm:space-y-6 lg:space-y-8 pb-8">
-      {/* Page actions */}
-      <AnimatedContainer delay={0.05}>
-        <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
-          <Button variant="secondary" size="sm" leftIcon={<Bell className="size-4" />}>
-            Alerts
-          </Button>
-          <Link to="/founder/create-product">
-            <Button variant="primary" size="sm" leftIcon={<Plus className="size-4" />}>
-              Create Product
-            </Button>
-          </Link>
-        </div>
-      </AnimatedContainer>
+    <div className="space-y-6 lg:space-y-8 pb-8">
+      <DashboardSettingsModal
+        open={settingsOpen}
+        initial={theme}
+        onClose={() => setSettingsOpen(false)}
+        onPreview={preview}
+        onSave={save}
+        onCancelPreview={cancelPreview}
+      />
+      <AddWidgetModal
+        open={addWidgetOpen}
+        onClose={() => setAddWidgetOpen(false)}
+        onAdd={handleAddTemplate}
+      />
+      <EditWidgetPanel
+        open={!!editWidget}
+        widget={editWidget}
+        onClose={() => setEditWidget(null)}
+        onApply={(next) => {
+          setWidgets((prev) =>
+            prev.map((w) => (w.id === next.id ? next : w))
+          );
+          setEditWidget(null);
+          toast.success("Widget updated");
+        }}
+      />
+      <WidgetAddedModal
+        open={!!addedTitle}
+        widgetTitle={addedTitle ?? undefined}
+        onClose={() => setAddedTitle(null)}
+        onGoDashboard={() => setAddedTitle(null)}
+      />
 
-      {/* Solution tabs */}
-      <AnimatedContainer delay={0.1}>
-        <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-3">
+      {layoutEditing && (
+        <LayoutPresetsStrip
+          selected={layoutPreset}
+          onSelect={setLayoutPreset}
+        />
+      )}
+
+      {/* Solution tabs — Figma: 2 equal tabs */}
+      <AnimatedContainer delay={0.05}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {SOLUTION_TABS.map((tab) => {
-            const Icon = tab.icon;
             const active = activeTab === tab.id;
             return (
               <button
@@ -283,26 +297,20 @@ const FounderDashboard = () => {
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
                 className={cn(
-                  "flex items-center gap-3 rounded-xl border px-4 py-3.5 text-left transition-all",
+                  "flex h-[72px] items-center gap-3 rounded-2xl border px-4 text-left transition-all cursor-pointer",
                   active
-                    ? "border-primary-brand/50 bg-primary-brand/10 shadow-[0_0_20px_rgba(212,175,55,0.12)]"
-                    : "border-white/10 bg-light-bg/40 hover:border-white/20 hover:bg-light-bg/70"
+                    ? "border-button-bg/50 bg-button-bg/10 shadow-[0_0_20px_color-mix(in_srgb,var(--button-bg)_12%,transparent)]"
+                    : "border-border bg-primary-text/5 hover:border-button-bg/30 hover:bg-primary-text/[0.07]"
                 )}
               >
-                <span
-                  className={cn(
-                    "flex size-9 items-center justify-center rounded-lg shrink-0",
-                    active ? "bg-primary-brand/20 text-primary-brand" : "bg-white/5 text-muted-blue"
-                  )}
-                >
-                  <Icon className="size-4" />
+                <span className="flex size-9 items-center justify-center rounded-lg bg-primary-text/10 shrink-0">
+                  <img
+                    src={tab.iconSrc}
+                    alt=""
+                    className="size-[18px] object-contain"
+                  />
                 </span>
-                <span
-                  className={cn(
-                    "text-sm font-medium truncate",
-                    active ? "text-primary-text" : "text-secondary-text"
-                  )}
-                >
+                <span className="text-base font-semibold text-primary-text truncate">
                   {tab.label}
                 </span>
               </button>
@@ -312,36 +320,77 @@ const FounderDashboard = () => {
       </AnimatedContainer>
 
       {/* KPI row */}
-      <AnimatedContainer delay={0.15}>
-        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 sm:gap-4">
-          {KPI_CARDS.map((kpi) => {
-            const Icon = kpi.icon;
-            return (
-              <Panel key={kpi.label} className="p-4 sm:p-5 flex flex-col gap-3 min-h-[140px] sm:min-h-[180px]">
-                <div className="flex items-start justify-between gap-2">
-                  <span className="flex size-10 sm:size-12 items-center justify-center rounded-xl bg-primary-brand/10 text-primary-brand">
-                    <Icon className="size-4 sm:size-5" />
-                  </span>
-                  <TrendBadge change={kpi.change} up={kpi.up} />
-                </div>
-                <p className="font-playfair text-2xl sm:text-3xl text-primary-text leading-none">
-                  {kpi.value}
+      {isVisible("core-kpis") && (
+      <AnimatedContainer delay={0.1}>
+        <EditableWidgetShell
+          editing={layoutEditing}
+          title="KPI Overview"
+          onEdit={() =>
+            setEditWidget(widgets.find((w) => w.id === "core-kpis") ?? null)
+          }
+          onRemove={() => removeWidget("core-kpis")}
+        >
+        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
+          {KPI_CARDS.map((kpi) => (
+            <Panel
+              key={kpi.label}
+              className="p-6 sm:p-8 flex flex-col gap-4 min-h-[200px] sm:min-h-[242px]"
+            >
+              <div className="flex items-center justify-between gap-2">
+                <span className="flex size-12 sm:size-14 items-center justify-center rounded-[12px] bg-primary-text/10 shrink-0">
+                  <img
+                    src={kpi.iconSrc}
+                    alt=""
+                    className="size-5 object-contain"
+                  />
+                </span>
+                <TrendBadge change={kpi.change} tone={kpi.tone} />
+              </div>
+              <p className="text-[28px] font-bold text-primary-text leading-[35px]">
+                {kpi.value}
+              </p>
+              <div className="mt-auto space-y-1">
+                <p className="text-sm sm:text-base font-medium text-primary-text leading-snug">
+                  {kpi.label}
                 </p>
-                <div>
-                  <p className="text-xs sm:text-sm text-secondary-text">{kpi.label}</p>
-                  <p className="mt-1 text-[11px] text-muted-blue">↑ vs yesterday</p>
-                </div>
-              </Panel>
-            );
-          })}
+                <p className="text-[13px] text-secondary-text">vs yesterday</p>
+              </div>
+            </Panel>
+          ))}
         </div>
+        </EditableWidgetShell>
       </AnimatedContainer>
+      )}
 
-      {/* Main + sidebar */}
-      <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_320px] 2xl:grid-cols-[minmax(0,1fr)_360px] gap-5 lg:gap-6">
-        <div className="space-y-5 lg:space-y-6 min-w-0">
+      <div
+        className={cn(
+          "grid grid-cols-1 gap-5 lg:gap-6",
+          layoutPreset === "dashboard-4"
+            ? "xl:grid-cols-[280px_minmax(0,1fr)] 2xl:grid-cols-[320px_minmax(0,1fr)]"
+            : layoutPreset === "dashboard-3"
+              ? "xl:grid-cols-[minmax(0,1fr)_280px] 2xl:grid-cols-[minmax(0,1fr)_300px]"
+              : "xl:grid-cols-[minmax(0,1fr)_320px] 2xl:grid-cols-[minmax(0,1fr)_360px]"
+        )}
+      >
+        <div
+          className={cn(
+            "space-y-5 lg:space-y-6 min-w-0",
+            layoutPreset === "dashboard-4" && "xl:order-2"
+          )}
+        >
           {/* Business Snapshot */}
-          <AnimatedContainer delay={0.18}>
+          {isVisible("core-snapshot") && (
+          <AnimatedContainer delay={0.12}>
+            <EditableWidgetShell
+              editing={layoutEditing}
+              title="Business Snapshot"
+              onEdit={() =>
+                setEditWidget(
+                  widgets.find((w) => w.id === "core-snapshot") ?? null
+                )
+              }
+              onRemove={() => removeWidget("core-snapshot")}
+            >
             <Panel className="p-4 sm:p-6">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between mb-5">
                 <div>
@@ -354,14 +403,14 @@ const FounderDashboard = () => {
                   <div className="mt-2 flex flex-wrap items-center gap-2">
                     <h3 className="text-base sm:text-lg text-primary-text font-medium">
                       Relationship
-                      <sup className="text-primary-brand text-xs">™</sup>
+                      <sup className="text-button-bg text-xs">™</sup>
                     </h3>
                     <ChevronDown className="size-3 text-muted-blue" />
                   </div>
                 </div>
                 <Link
                   to="/founder/analytics-insights"
-                  className="inline-flex items-center gap-1.5 text-sm text-primary-brand hover:opacity-80"
+                  className="inline-flex items-center gap-1.5 text-sm text-button-bg hover:opacity-80"
                 >
                   View Business Analytics
                   <ArrowRight className="size-3" />
@@ -372,13 +421,13 @@ const FounderDashboard = () => {
                 {SNAPSHOT_STATS.map((stat) => (
                   <div
                     key={stat.label}
-                    className="rounded-xl border border-white/10 bg-primary-bg/50 p-3 sm:p-4"
+                    className="rounded-xl border border-border bg-primary-bg/50 p-3 sm:p-4"
                   >
                     <div className="flex items-start justify-between gap-1">
-                      <p className="font-playfair text-xl sm:text-2xl text-primary-text">
+                      <p className="text-xl sm:text-2xl font-bold text-primary-text">
                         {stat.value}
                       </p>
-                      <TrendBadge change={stat.change} up={stat.up} compact />
+                      <TrendBadge change={stat.change} tone={stat.tone} compact />
                     </div>
                     <p className="mt-2 text-xs text-secondary-text leading-snug">
                       {stat.label}
@@ -387,22 +436,35 @@ const FounderDashboard = () => {
                 ))}
               </div>
             </Panel>
+            </EditableWidgetShell>
           </AnimatedContainer>
+          )}
 
-          {/* Growth chart */}
-          <AnimatedContainer delay={0.2}>
+          {/* Growth chart — accent line */}
+          {isVisible("core-growth") && (
+          <AnimatedContainer delay={0.14}>
+            <EditableWidgetShell
+              editing={layoutEditing}
+              title="FRC™ Continuum Growth"
+              onEdit={() =>
+                setEditWidget(
+                  widgets.find((w) => w.id === "core-growth") ?? null
+                )
+              }
+              onRemove={() => removeWidget("core-growth")}
+            >
             <Panel className="p-4 sm:p-6">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between mb-4">
                 <div>
                   <h2 className="font-playfair text-xl sm:text-2xl text-primary-text flex items-center gap-2">
                     FRC™ Continuum Growth
-                    <Sparkles className="size-4 text-primary-brand" />
+                    <Sparkles className="size-4 text-button-bg" />
                   </h2>
                   <p className="mt-1 text-sm text-secondary-text">
                     Longitudinal data from your reflection journey
                   </p>
                 </div>
-                <p className="font-playfair text-2xl sm:text-3xl text-primary-brand shrink-0">
+                <p className="font-playfair text-2xl sm:text-3xl text-button-bg shrink-0">
                   $22,779
                 </p>
               </div>
@@ -414,35 +476,43 @@ const FounderDashboard = () => {
                     margin={{ top: 8, right: 8, left: -12, bottom: 0 }}
                   >
                     <defs>
-                      <linearGradient id="founderGrowthGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#D4AF37" stopOpacity={0.35} />
-                        <stop offset="95%" stopColor="#D4AF37" stopOpacity={0} />
+                      <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+                        <stop
+                          offset="5%"
+                          stopColor={chartColors.accent}
+                          stopOpacity={0.35}
+                        />
+                        <stop
+                          offset="95%"
+                          stopColor={chartColors.accent}
+                          stopOpacity={0}
+                        />
                       </linearGradient>
                     </defs>
                     <CartesianGrid
                       strokeDasharray="3 3"
-                      stroke="rgba(255,255,255,0.06)"
+                      stroke="color-mix(in srgb, var(--primary-text) 6%, transparent)"
                       vertical={false}
                     />
                     <XAxis
                       dataKey="label"
                       tickLine={false}
                       axisLine={false}
-                      tick={{ fill: "#94A3B8", fontSize: 10 }}
+                      tick={{ fill: chartColors.muted, fontSize: 10 }}
                       interval="preserveStartEnd"
                     />
                     <YAxis
                       tickLine={false}
                       axisLine={false}
-                      tick={{ fill: "#94A3B8", fontSize: 10 }}
+                      tick={{ fill: chartColors.muted, fontSize: 10 }}
                       tickFormatter={(v) => `${Math.round(v / 1000)}K`}
                     />
                     <Tooltip
                       contentStyle={{
-                        backgroundColor: "#0f172a",
-                        border: "1px solid rgba(255,255,255,0.1)",
+                        backgroundColor: chartColors.card,
+                        border: `1px solid ${chartColors.border}`,
                         borderRadius: 8,
-                        color: "#fff",
+                        color: chartColors.text,
                       }}
                       formatter={(value) => [
                         `$${Number(value || 0).toLocaleString()}`,
@@ -452,15 +522,22 @@ const FounderDashboard = () => {
                     <Area
                       type="monotone"
                       dataKey="value"
-                      stroke="#D4AF37"
+                      stroke={chartColors.accent}
                       strokeWidth={2.5}
-                      fill="url(#founderGrowthGrad)"
+                      fill={`url(#${gradientId})`}
+                      dot={{
+                        r: 3,
+                        fill: chartColors.accent,
+                        stroke: chartColors.card,
+                        strokeWidth: 2,
+                      }}
+                      activeDot={{ r: 5, fill: chartColors.accent }}
                     />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
 
-              <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-t border-white/10 pt-4">
+              <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-t border-border pt-4">
                 <div className="flex flex-wrap gap-4 sm:gap-8">
                   <div>
                     <p className="text-xs text-muted-blue">Avg Daily</p>
@@ -473,28 +550,41 @@ const FounderDashboard = () => {
                 </div>
                 <Link
                   to="/founder/financial-center"
-                  className="inline-flex items-center gap-1.5 text-sm text-primary-brand hover:opacity-80"
+                  className="inline-flex items-center gap-1.5 text-sm text-button-bg hover:opacity-80"
                 >
                   View Financial Dashboard
                   <ArrowRight className="size-3" />
                 </Link>
               </div>
             </Panel>
+            </EditableWidgetShell>
           </AnimatedContainer>
+          )}
 
           {/* Continuum + Product performance */}
-          <AnimatedContainer delay={0.22}>
+          {isVisible("core-performance") && (
+          <AnimatedContainer delay={0.16}>
+            <EditableWidgetShell
+              editing={layoutEditing}
+              title="Product Performance"
+              onEdit={() =>
+                setEditWidget(
+                  widgets.find((w) => w.id === "core-performance") ?? null
+                )
+              }
+              onRemove={() => removeWidget("core-performance")}
+            >
             <div className="grid grid-cols-1 lg:grid-cols-[200px_minmax(0,1fr)] gap-4">
               <Panel className="p-5 flex flex-col justify-between min-h-[140px]">
                 <div>
                   <p className="text-xs uppercase tracking-wider text-muted-blue">
                     August 2023
                   </p>
-                  <p className="mt-2 font-playfair text-4xl text-primary-text">72</p>
+                  <p className="mt-2 text-4xl font-bold text-primary-text">72</p>
                 </div>
                 <p className="text-sm text-secondary-text mt-4">
                   Continuum Growth:{" "}
-                  <span className="text-emerald-400 font-medium">+12%</span>
+                  <span className="text-status-success font-medium">+12%</span>
                 </p>
               </Panel>
 
@@ -510,7 +600,7 @@ const FounderDashboard = () => {
                   </div>
                   <Link
                     to="/founder/analytics-insights"
-                    className="inline-flex items-center gap-1.5 text-sm text-primary-brand hover:opacity-80 whitespace-nowrap"
+                    className="inline-flex items-center gap-1.5 text-sm text-button-bg hover:opacity-80 whitespace-nowrap"
                   >
                     View All Products Analytics
                     <ArrowRight className="size-3" />
@@ -520,7 +610,7 @@ const FounderDashboard = () => {
                 <div className="overflow-x-auto -mx-1 px-1">
                   <table className="w-full min-w-[640px] text-left text-sm">
                     <thead>
-                      <tr className="border-b border-white/10 text-muted-blue text-xs uppercase tracking-wide">
+                      <tr className="border-b border-border text-muted-blue text-xs uppercase tracking-wide">
                         <th className="py-3 pr-3 font-medium">#</th>
                         <th className="py-3 pr-3 font-medium">Product Name</th>
                         <th className="py-3 pr-3 font-medium">Purchases</th>
@@ -533,19 +623,27 @@ const FounderDashboard = () => {
                       {PRODUCTS.map((product) => (
                         <tr
                           key={product.id}
-                          className="border-b border-white/5 last:border-0 hover:bg-white/[0.02]"
+                          className="border-b border-border/50 last:border-0 hover:bg-primary-bg/40"
                         >
-                          <td className="py-3.5 pr-3 text-muted-blue">{product.id}</td>
-                          <td className="py-3.5 pr-3">
-                            <p className="text-primary-text font-medium">{product.name}</p>
-                            <p className="text-xs text-muted-blue">{product.division}</p>
+                          <td className="py-3.5 pr-3 text-muted-blue">
+                            {product.id}
                           </td>
-                          <td className="py-3.5 pr-3 text-primary-text">{product.purchases}</td>
+                          <td className="py-3.5 pr-3">
+                            <p className="text-primary-text font-medium">
+                              {product.name}
+                            </p>
+                            <p className="text-xs text-muted-blue">
+                              {product.division}
+                            </p>
+                          </td>
+                          <td className="py-3.5 pr-3 text-primary-text">
+                            {product.purchases}
+                          </td>
                           <td className="py-3.5 pr-3">
                             <div className="flex items-center gap-2 min-w-[100px]">
-                              <div className="h-1.5 flex-1 rounded-full bg-white/10 overflow-hidden">
+                              <div className="h-1.5 flex-1 rounded-full bg-border overflow-hidden">
                                 <div
-                                  className="h-full rounded-full bg-primary-brand"
+                                  className="h-full rounded-full bg-accent"
                                   style={{ width: `${product.completion}%` }}
                                 />
                               </div>
@@ -554,8 +652,10 @@ const FounderDashboard = () => {
                               </span>
                             </div>
                           </td>
-                          <td className="py-3.5 pr-3 text-primary-text">{product.reports}</td>
-                          <td className="py-3.5 text-primary-brand font-medium">
+                          <td className="py-3.5 pr-3 text-primary-text">
+                            {product.reports}
+                          </td>
+                          <td className="py-3.5 text-button-bg font-medium">
                             {product.revenue}
                           </td>
                         </tr>
@@ -565,10 +665,23 @@ const FounderDashboard = () => {
                 </div>
               </Panel>
             </div>
+            </EditableWidgetShell>
           </AnimatedContainer>
+          )}
 
           {/* Link Center */}
-          <AnimatedContainer delay={0.24}>
+          {isVisible("core-links") && (
+          <AnimatedContainer delay={0.18}>
+            <EditableWidgetShell
+              editing={layoutEditing}
+              title="Link Center™"
+              onEdit={() =>
+                setEditWidget(
+                  widgets.find((w) => w.id === "core-links") ?? null
+                )
+              }
+              onRemove={() => removeWidget("core-links")}
+            >
             <Panel className="p-4 sm:p-6">
               <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between mb-4">
                 <h2 className="font-playfair text-xl sm:text-2xl text-primary-text">
@@ -576,22 +689,22 @@ const FounderDashboard = () => {
                 </h2>
                 <Link
                   to="/founder/link-center"
-                  className="inline-flex items-center gap-1.5 text-sm text-primary-brand hover:opacity-80"
+                  className="inline-flex items-center gap-1.5 text-sm text-button-bg hover:opacity-80"
                 >
                   View All Links
                   <ArrowRight className="size-3" />
                 </Link>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                {LINK_ACTIONS.map((action) => {
-                  const Icon = action.icon;
+                {LINK_ACTIONS.map((action, i) => {
+                  const Icon = LINK_ICONS[i] ?? Plus;
                   return (
                     <Link
                       key={action.label}
                       to={action.to}
-                      className="flex items-center gap-3 rounded-xl border border-white/10 bg-primary-bg/40 px-4 py-4 hover:border-primary-brand/40 hover:bg-primary-brand/5 transition-colors"
+                      className="flex items-center gap-3 rounded-xl border border-border bg-primary-bg/40 px-4 py-4 hover:border-button-bg/40 hover:bg-button-bg/5 transition-colors"
                     >
-                      <span className="flex size-9 items-center justify-center rounded-lg bg-primary-brand/10 text-primary-brand">
+                      <span className="flex size-9 items-center justify-center rounded-lg bg-button-bg/10 text-button-bg">
                         <Icon className="size-4" />
                       </span>
                       <span className="text-sm text-primary-text font-medium">
@@ -602,21 +715,74 @@ const FounderDashboard = () => {
                 })}
               </div>
             </Panel>
+            </EditableWidgetShell>
           </AnimatedContainer>
+          )}
 
-          <AnimatedContainer delay={0.26}>
+          {layoutEditing && (
+          <AnimatedContainer delay={0.2}>
             <button
               type="button"
-              className="w-full rounded-2xl border border-dashed border-primary-brand/40 bg-primary-brand/5 py-5 text-sm font-semibold tracking-wider text-primary-brand hover:bg-primary-brand/10 transition-colors"
+              onClick={() => setAddWidgetOpen(true)}
+              className="w-full rounded-2xl border border-dashed border-button-bg/40 bg-button-bg/5 py-5 text-sm font-semibold tracking-wider text-button-bg hover:bg-button-bg/10 transition-colors cursor-pointer"
             >
               + ADD NEW WIDGET
             </button>
           </AnimatedContainer>
+          )}
+
+          {/* Custom widgets added via library */}
+          {widgets
+            .filter((w) => w.id.startsWith("custom-") && w.enabled)
+            .map((w) => (
+              <EditableWidgetShell
+                key={w.id}
+                editing={layoutEditing}
+                title={w.title}
+                onEdit={() => setEditWidget(w)}
+                onRemove={() => removeWidget(w.id)}
+              >
+                <div
+                  className="rounded-2xl border border-border p-5 sm:p-6 backdrop-blur-sm"
+                  style={{ backgroundColor: w.colors.background }}
+                >
+                  <h3
+                    className="font-playfair text-xl"
+                    style={{ color: w.colors.title }}
+                  >
+                    {w.title}
+                  </h3>
+                  <p
+                    className="mt-2 text-sm"
+                    style={{ color: w.colors.description }}
+                  >
+                    {w.dataSource}
+                    {w.enableAi ? " · AI insights on" : ""}
+                  </p>
+                </div>
+              </EditableWidgetShell>
+            ))}
         </div>
 
         {/* Right rail */}
-        <div className="space-y-5 lg:space-y-6">
-          <AnimatedContainer delay={0.18} direction="left">
+        <div
+          className={cn(
+            "space-y-5 lg:space-y-6",
+            layoutPreset === "dashboard-4" && "xl:order-1"
+          )}
+        >
+          {isVisible("core-health") && (
+          <AnimatedContainer delay={0.12} direction="left">
+            <EditableWidgetShell
+              editing={layoutEditing}
+              title="Platform Health"
+              onEdit={() =>
+                setEditWidget(
+                  widgets.find((w) => w.id === "core-health") ?? null
+                )
+              }
+              onRemove={() => removeWidget("core-health")}
+            >
             <Panel className="p-4 sm:p-5">
               <h3 className="font-playfair text-lg text-primary-text mb-4">
                 Platform Health
@@ -636,7 +802,7 @@ const FounderDashboard = () => {
                     <span
                       className={cn(
                         "font-medium",
-                        row.ok ? "text-emerald-400" : "text-amber-400"
+                        row.ok ? "text-status-success" : "text-status-warning"
                       )}
                     >
                       {row.value}
@@ -646,21 +812,36 @@ const FounderDashboard = () => {
               </ul>
               <Link
                 to="/founder/ai-services"
-                className="mt-4 inline-flex items-center gap-1.5 text-sm text-primary-brand hover:opacity-80"
+                className="mt-4 inline-flex items-center gap-1.5 text-sm text-button-bg hover:opacity-80"
               >
                 View System Health
                 <ArrowRight className="size-3" />
               </Link>
             </Panel>
+            </EditableWidgetShell>
           </AnimatedContainer>
+          )}
 
-          <AnimatedContainer delay={0.2} direction="left">
+          {isVisible("core-activity") && (
+          <AnimatedContainer delay={0.14} direction="left">
+            <EditableWidgetShell
+              editing={layoutEditing}
+              title="Recent Activity"
+              onEdit={() =>
+                setEditWidget(
+                  widgets.find((w) => w.id === "core-activity") ?? null
+                )
+              }
+              onRemove={() => removeWidget("core-activity")}
+            >
             <Panel className="p-4 sm:p-5">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="font-playfair text-lg text-primary-text">Recent Activity</h3>
+                <h3 className="font-playfair text-lg text-primary-text">
+                  Recent Activity
+                </h3>
                 <button
                   type="button"
-                  className="text-xs text-primary-brand hover:opacity-80"
+                  className="text-xs text-button-bg hover:opacity-80 cursor-pointer border-0 bg-transparent"
                 >
                   View All
                 </button>
@@ -668,22 +849,39 @@ const FounderDashboard = () => {
               <ul className="space-y-4">
                 {ACTIVITIES.map((item) => (
                   <li key={item.text} className="flex gap-3">
-                    <span className="mt-1.5 size-2 rounded-full bg-primary-brand shrink-0" />
+                    <span className="mt-1.5 size-2 rounded-full bg-button-bg shrink-0" />
                     <div className="min-w-0">
-                      <p className="text-sm text-primary-text leading-snug">{item.text}</p>
+                      <p className="text-sm text-primary-text leading-snug">
+                        {item.text}
+                      </p>
                       <p className="mt-0.5 text-xs text-muted-blue">{item.time}</p>
                     </div>
                   </li>
                 ))}
               </ul>
             </Panel>
+            </EditableWidgetShell>
           </AnimatedContainer>
+          )}
 
-          <AnimatedContainer delay={0.22} direction="left">
+          {isVisible("core-alerts") && (
+          <AnimatedContainer delay={0.16} direction="left">
+            <EditableWidgetShell
+              editing={layoutEditing}
+              title="System Alerts™"
+              onEdit={() =>
+                setEditWidget(
+                  widgets.find((w) => w.id === "core-alerts") ?? null
+                )
+              }
+              onRemove={() => removeWidget("core-alerts")}
+            >
             <Panel className="p-4 sm:p-5">
               <div className="flex items-center gap-2 mb-4">
-                <h3 className="font-playfair text-lg text-primary-text">System Alerts™</h3>
-                <span className="flex size-5 items-center justify-center rounded-full bg-rose-500/20 text-[11px] font-semibold text-rose-400">
+                <h3 className="font-playfair text-lg text-primary-text">
+                  System Alerts™
+                </h3>
+                <span className="flex size-5 items-center justify-center rounded-full bg-status-danger/20 text-[11px] font-semibold text-status-danger">
                   6
                 </span>
               </div>
@@ -694,13 +892,13 @@ const FounderDashboard = () => {
                     className={cn(
                       "rounded-lg border px-3 py-2.5 text-xs leading-snug",
                       alert.tone === "warn" &&
-                        "border-amber-500/20 bg-amber-500/5 text-amber-200/90",
+                        "border-status-warning/20 bg-status-warning/5 text-status-warning",
                       alert.tone === "danger" &&
-                        "border-rose-500/20 bg-rose-500/5 text-rose-200/90",
+                        "border-status-danger/20 bg-status-danger/5 text-status-danger",
                       alert.tone === "ok" &&
-                        "border-emerald-500/20 bg-emerald-500/5 text-emerald-200/90",
+                        "border-status-success/20 bg-status-success/5 text-status-success",
                       alert.tone === "info" &&
-                        "border-sky-500/20 bg-sky-500/5 text-sky-200/90"
+                        "border-light-blue/20 bg-light-blue/5 text-light-blue"
                     )}
                   >
                     {alert.text}
@@ -709,32 +907,46 @@ const FounderDashboard = () => {
               </ul>
               <button
                 type="button"
-                className="mt-4 inline-flex items-center gap-1.5 text-sm text-primary-brand hover:opacity-80"
+                className="mt-4 inline-flex items-center gap-1.5 text-sm text-button-bg hover:opacity-80 cursor-pointer border-0 bg-transparent p-0"
               >
                 View All Alerts
                 <ArrowRight className="size-3" />
               </button>
             </Panel>
+            </EditableWidgetShell>
           </AnimatedContainer>
+          )}
 
-          <AnimatedContainer delay={0.24} direction="left">
-            <Panel className="p-4 sm:p-5 border-primary-brand/30 bg-gradient-to-b from-primary-brand/10 to-transparent">
-              <p className="text-[11px] font-semibold tracking-[0.14em] text-primary-brand">
+          {isVisible("core-ai") && (
+          <AnimatedContainer delay={0.18} direction="left">
+            <EditableWidgetShell
+              editing={layoutEditing}
+              title="AI Recommendation"
+              onEdit={() =>
+                setEditWidget(widgets.find((w) => w.id === "core-ai") ?? null)
+              }
+              onRemove={() => removeWidget("core-ai")}
+            >
+            <Panel className="p-4 sm:p-5 border-button-bg/30 bg-gradient-to-b from-button-bg/10 to-transparent">
+              <p className="text-[11px] font-semibold tracking-[0.14em] text-button-bg">
                 AI RECOMMENDATION
               </p>
               <p className="mt-3 text-sm text-primary-text leading-relaxed">
-                &ldquo;Storage is at 72% capacity. Consider archiving unused protocol
-                drafts or upgrading storage before peak reporting week.&rdquo;
+                &ldquo;Storage is at 72% capacity. Consider archiving unused
+                protocol drafts or upgrading storage before peak reporting
+                week.&rdquo;
               </p>
               <Link
                 to="/founder/ai-services"
-                className="mt-4 inline-flex items-center gap-1.5 text-sm text-primary-brand hover:opacity-80"
+                className="mt-4 inline-flex items-center gap-1.5 text-sm text-button-bg hover:opacity-80"
               >
                 Explore suggestion
                 <ArrowRight className="size-3" />
               </Link>
             </Panel>
+            </EditableWidgetShell>
           </AnimatedContainer>
+          )}
         </div>
       </div>
     </div>

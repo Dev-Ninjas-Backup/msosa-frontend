@@ -14,14 +14,14 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          "text-black font-semibold btn-gradient shadow-[0_0_20px_rgba(212,175,55,0.35)] hover:shadow-[0_0_30px_rgba(212,175,55,0.6)]",
+          "font-semibold bg-[var(--button-bg)] text-[var(--button-text)] hover:bg-[var(--button-hover)] shadow-[0_0_20px_color-mix(in_srgb,var(--button-bg)_35%,transparent)] hover:shadow-[0_0_30px_color-mix(in_srgb,var(--button-bg)_55%,transparent)]",
         outline:
-          "text-primary-brand bg-[linear-gradient(to_right,#77530a,#F0D448,#D4AF37,#77530a,#F0D448,#77530a)] bg-[length:250%_100%] bg-left hover:bg-right shadow-[0_4px_16px_rgba(0,0,0,0.5)] hover:shadow-[0_0_25px_rgba(212,175,55,0.4)]",
+          "text-primary-brand bg-[linear-gradient(to_right,var(--button-hover),var(--button-bg),var(--primary-brand),var(--button-hover),var(--button-bg),var(--button-hover))] bg-[length:250%_100%] bg-left hover:bg-right shadow-[0_4px_16px_rgba(0,0,0,0.5)] hover:shadow-[0_0_25px_color-mix(in_srgb,var(--button-bg)_40%,transparent)]",
         secondary:
-          "bg-white/5 border border-white/10 text-white hover:bg-white/10",
+          "bg-white/5 border border-border text-primary-text hover:bg-white/10",
         soft: "bg-light-bg border border-border text-primary-text font-normal hover:bg-light-bg/80 shadow-none active:scale-100",
         ghost:
-          "bg-transparent text-white font-semibold uppercase tracking-[0.08em] hover:bg-white/5 border border-[#FBBF244D]",
+          "bg-transparent text-primary-text font-semibold uppercase tracking-[0.08em] hover:bg-white/5 border border-border-active/30",
         danger:
           "bg-red-600 text-white border border-red-600 hover:bg-red-700 shadow-sm",
         success:
@@ -104,7 +104,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         )}
 
         {isOutline && (
-          <span className="absolute inset-[1.5px] rounded-[inherit] bg-[#000307]/90 backdrop-blur-md transition-all duration-800 ease-in-out pointer-events-none z-0" />
+          <span className="absolute inset-[1.5px] rounded-[inherit] bg-primary-bg/90 backdrop-blur-md transition-all duration-800 ease-in-out pointer-events-none z-0" />
         )}
 
         {isLoading && (

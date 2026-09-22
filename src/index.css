@@ -55,12 +55,13 @@ html.lenis body {
   --font-playfair: "Playfair Display", serif;
   --primary-bg: #000307;
   --light-bg: #0f172a;
+  --card-bg: #0f172a;
   --primary-brand: #D4AF37;
   --secondary-brand: #C5A059;
   --primary-text: #FFFFFF;
   --secondary-text: #9CA3AF;
 
-  --border-color: rgba(255, 255, 255, 0.1);
+  --border-color: #FFFFFF1A;
   --border-active-color: #FBBF24;
   --border-secondary-color: rgba(212, 175, 55, 0.3);
 
@@ -75,9 +76,14 @@ html.lenis body {
   --popover: 222.2 84% 4.9%;
   --popover-foreground: 210 40% 98%;
 
-  --button-gradient: linear-gradient(180deg, #F0D448 0%, #BB7C12 100%);
+  --button-bg: #D4AF37;
+  --button-hover: #A57D18;
+  --button-text: #000000;
+  --accent: #10b7ba;
+
+  --button-gradient: linear-gradient(180deg, var(--button-bg) 0%, var(--button-hover) 100%);
   --text-gradient: linear-gradient(180deg, #FFE669 0%, #9D680E 63.47%);
-  --brand-gradient: linear-gradient(180deg, #F0D448 0%, #BB7C12 100%);
+  --brand-gradient: linear-gradient(180deg, var(--button-bg) 0%, var(--button-hover) 100%);
   --muted-blue: #94A3B8;
 
   /* Status Colors */
@@ -102,11 +108,16 @@ html.lenis body {
   /* Colors */
   --color-primary-bg: var(--primary-bg);
   --color-light-bg: var(--light-bg);
+  --color-card: var(--card-bg);
   --color-primary-brand: var(--primary-brand);
   --color-secondary-brand: var(--secondary-brand);
   --color-primary-text: var(--primary-text);
   --color-secondary-text: var(--secondary-text);
   --color-border: var(--border-color);
+  --color-button-bg: var(--button-bg);
+  --color-button-hover: var(--button-hover);
+  --color-button-text: var(--button-text);
+  --color-accent: var(--accent);
 
   --color-primary-green: var(--primary-green);
   --color-primary-purple: var(--primary-purple);
@@ -328,11 +339,16 @@ html.lenis body {
 }
 
 .btn-gradient {
-  background: var(--button-gradient);
-  box-shadow: 0px 0px 20px var(--border-secondary-color);
+  background: var(--button-bg);
+  box-shadow: 0px 0px 20px color-mix(in srgb, var(--button-bg) 35%, transparent);
   border-radius: 8px;
-  color: #fff;
+  color: var(--button-text);
   border: none;
+}
+
+.btn-gradient:hover {
+  background: var(--button-hover);
+  box-shadow: 0px 0px 30px color-mix(in srgb, var(--button-bg) 55%, transparent);
 }
 
 

@@ -13,8 +13,8 @@ type CardProps = {
 const Card = ({
   children,
   className,
-  borderColor = "#FFFFFF14",
-  backgroundColor = "#0D1117",
+  borderColor = "var(--border-color)",
+  backgroundColor = "var(--card-bg)",
   shadow = "0 0 40px rgba(255, 255, 255, 0.05)",
   backdropBlur = "6px",
   id,

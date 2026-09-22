@@ -7,9 +7,21 @@ import {
   Check,
   CheckCheck,
   BellOff,
+  ChevronDown,
+  Clock,
+  Share2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Input from "@/ui/Input";
+import Button from "@/ui/Button";
+import LayoutCustomizerBar from "@/pages/Founder/Dashboard/LayoutCustomizerBar";
+import {
+  LAYOUT_CANCEL_EVENT,
+  LAYOUT_EDITING_CHANGED_EVENT,
+  LAYOUT_PENDING_KEY,
+  LAYOUT_RESUME_EVENT,
+  OPEN_LAYOUT_EDIT_EVENT,
+} from "@/pages/Founder/Dashboard/data";
 
 interface HeaderProps {
   title?: string;
@@ -77,9 +89,20 @@ const Header = ({ title, description, onMenuClick }: HeaderProps) => {
   const [isNotifOpen, setIsNotifOpen] = useState(false);
   const notifRef = useRef<HTMLDivElement>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [layoutEditing, setLayoutEditing] = useState(false);
 
   const enterpriseNotifs = location.pathname.startsWith("/enterprise");
+  const isFounder = location.pathname.startsWith("/founder");
+  const isFounderDashboard = location.pathname === "/founder/dashboard";
 
+  const openLayoutEdit = () => {
+    if (!isFounderDashboard) {
+      sessionStorage.setItem(LAYOUT_PENDING_KEY, "1");
+      navigate("/founder/dashboard");
+      return;
+    }
+    window.dispatchEvent(new CustomEvent(OPEN_LAYOUT_EDIT_EVENT));
+  };
   const openAllNotifications = () => {
     setIsNotifOpen(false);
     if (enterpriseNotifs) {
@@ -88,6 +111,28 @@ const Header = ({ title, description, onMenuClick }: HeaderProps) => {
     }
     setIsModalOpen(true);
   };
+
+  useEffect(() => {
+    const onEditing = (e: Event) => {
+      const detail = (e as CustomEvent<{ editing: boolean }>).detail;
+      setLayoutEditing(Boolean(detail?.editing));
+    };
+    const onOpen = () => {
+      if (location.pathname === "/founder/dashboard") {
+        setLayoutEditing(true);
+      }
+    };
+    window.addEventListener(LAYOUT_EDITING_CHANGED_EVENT, onEditing);
+    window.addEventListener(OPEN_LAYOUT_EDIT_EVENT, onOpen);
+    return () => {
+      window.removeEventListener(LAYOUT_EDITING_CHANGED_EVENT, onEditing);
+      window.removeEventListener(OPEN_LAYOUT_EDIT_EVENT, onOpen);
+    };
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (!isFounderDashboard && layoutEditing) setLayoutEditing(false);
+  }, [isFounderDashboard, layoutEditing]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -120,14 +165,32 @@ const Header = ({ title, description, onMenuClick }: HeaderProps) => {
     setNotifications(notifications.map((n) => ({ ...n, read: true })));
   };
 
+  if (isFounder && layoutEditing && isFounderDashboard) {
+    return (
+      <header className="sticky top-0 z-50 shrink-0 border-b border-border bg-card shadow-[0_4px_24px_rgba(0,0,0,0.45)]">
+        <div className="w-full px-4 sm:px-6 py-4 sm:py-5">
+          <LayoutCustomizerBar
+            embedded
+            onCancel={() =>
+              window.dispatchEvent(new CustomEvent(LAYOUT_CANCEL_EVENT))
+            }
+            onResume={() =>
+              window.dispatchEvent(new CustomEvent(LAYOUT_RESUME_EVENT))
+            }
+          />
+        </div>
+      </header>
+    );
+  }
+
   return (
-    <header className="sticky top-0 z-30 bg-primary-bg/90 backdrop-blur-md border-b border-white/5">
+    <header className="sticky top-0 z-30 bg-primary-bg/90 backdrop-blur-md border-b border-border">
       <div className="flex items-center justify-between gap-4 w-full px-4 sm:px-6 py-4 sm:py-5">
         <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
           <button
             type="button"
             onClick={onMenuClick}
-            className="p-2 -ml-2 rounded-lg hover:bg-white/5 text-secondary-text hover:text-primary-text sm:hidden cursor-pointer shrink-0 border-0 bg-transparent"
+            className="p-2 -ml-2 rounded-lg hover:bg-primary-text/5 text-secondary-text hover:text-primary-text sm:hidden cursor-pointer shrink-0 border-0 bg-transparent"
           >
             <Menu className="w-6 h-6" />
           </button>
@@ -156,27 +219,27 @@ const Header = ({ title, description, onMenuClick }: HeaderProps) => {
                 type="text"
                 value={searchVal}
                 onChange={(e) => setSearchVal(e.target.value)}
-                placeholder="Search..."
-                className="h-10 w-48 lg:w-56 pl-10 pr-4 rounded-xl border border-white/10 bg-white/5 text-sm text-primary-text placeholder:text-secondary-text outline-none focus:border-primary-brand/40 focus:bg-white/[0.07] transition-all"
+                placeholder="Search…"
+                className="h-12 w-48 lg:w-[323px] pl-10 pr-4 rounded-[10px] border border-border bg-primary-text/5 text-sm text-primary-text placeholder:text-secondary-text outline-none focus:border-button-bg/40 focus:bg-primary-text/[0.07] transition-all"
               />
             </div>
 
             <button
               type="button"
               onClick={() => setIsSearchOpen(!isSearchOpen)}
-              className="flex size-10 items-center justify-center text-secondary-text hover:text-primary-text hover:bg-white/5 rounded-xl border border-white/10 bg-white/5 transition-colors cursor-pointer sm:hidden"
+              className="flex size-12 items-center justify-center text-secondary-text hover:text-primary-text hover:bg-primary-text/5 rounded-xl border border-border bg-primary-text/5 transition-colors cursor-pointer sm:hidden"
             >
               <Search className="size-5" />
             </button>
 
             {isSearchOpen && (
-              <div className="absolute left-0 right-0 sm:left-auto sm:right-0 top-full mt-2 w-auto sm:w-72 bg-[#0d1117] border border-white/10 rounded-xl p-2 z-50 shadow-lg animate-in fade-in zoom-in-95 duration-100 sm:hidden">
+              <div className="absolute left-0 right-0 sm:left-auto sm:right-0 top-full mt-2 w-auto sm:w-72 bg-card border border-border rounded-xl p-2 z-50 shadow-lg animate-in fade-in zoom-in-95 duration-100 sm:hidden">
                 <Input
                   type="text"
                   variant="search"
                   value={searchVal}
                   onChange={(e) => setSearchVal(e.target.value)}
-                  placeholder="Search..."
+                  placeholder="Search…"
                   autoFocus
                   leftIcon={<Search className="w-5 h-5 text-secondary-text" />}
                 />
@@ -188,17 +251,17 @@ const Header = ({ title, description, onMenuClick }: HeaderProps) => {
             <button
               type="button"
               onClick={() => setIsNotifOpen(!isNotifOpen)}
-              className="relative flex size-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-secondary-text hover:text-primary-brand hover:border-primary-brand/40 transition-colors cursor-pointer"
+              className="relative flex size-12 items-center justify-center rounded-xl border border-border bg-primary-text/5 text-secondary-text hover:text-button-bg hover:border-button-bg/40 transition-colors cursor-pointer"
             >
               <Bell className="size-5" />
               {unreadCount > 0 && (
-                <span className="absolute top-1.5 right-1.5 size-2 rounded-full bg-primary-brand" />
+                <span className="absolute top-3.5 right-3.5 size-2 rounded-full bg-button-bg ring-2 ring-primary-bg" />
               )}
             </button>
 
             {isNotifOpen && (
-              <div className="absolute left-0 right-0 sm:left-auto sm:right-0 top-full mt-2 sm:mt-3 w-auto sm:w-80 bg-[#0d1117] border border-white/10 rounded-xl py-2 z-50 shadow-lg animate-in fade-in zoom-in-95 duration-100">
-                <div className="flex items-center justify-between px-4 py-2 border-b border-white/10 mb-1">
+              <div className="absolute left-0 right-0 sm:left-auto sm:right-0 top-full mt-2 sm:mt-3 w-auto sm:w-80 bg-card border border-border rounded-xl py-2 z-50 shadow-lg animate-in fade-in zoom-in-95 duration-100">
+                <div className="flex items-center justify-between px-4 py-2 border-b border-border mb-1">
                   <p className="text-xs text-primary-text font-bold uppercase tracking-wider">
                     Notifications
                   </p>
@@ -206,14 +269,14 @@ const Header = ({ title, description, onMenuClick }: HeaderProps) => {
                     <button
                       type="button"
                       onClick={markAllAsRead}
-                      className="text-[10px] text-primary-brand hover:underline flex items-center gap-1 font-semibold cursor-pointer border-0 bg-transparent"
+                      className="text-[10px] text-button-bg hover:underline flex items-center gap-1 font-semibold cursor-pointer border-0 bg-transparent"
                     >
                       <CheckCheck className="w-4 h-4" /> Mark all read
                     </button>
                   )}
                 </div>
 
-                <div className="max-h-64 overflow-y-auto divide-y divide-white/5">
+                <div className="max-h-64 overflow-y-auto divide-y divide-border">
                   {notifications.length === 0 ? (
                     <div className="p-4 text-center text-xs text-secondary-text flex flex-col items-center gap-1">
                       <BellOff className="w-8 h-8 opacity-40 mb-1" />
@@ -224,8 +287,8 @@ const Header = ({ title, description, onMenuClick }: HeaderProps) => {
                       <div
                         key={n.id}
                         className={cn(
-                          "px-4 py-3 hover:bg-white/5 transition-colors flex gap-3 items-start",
-                          !n.read && "bg-white/[0.03]"
+                          "px-4 py-3 hover:bg-primary-text/5 transition-colors flex gap-3 items-start",
+                          !n.read && "bg-primary-text/[0.03]"
                         )}
                       >
                         <div className="flex-1 min-w-0">
@@ -252,7 +315,7 @@ const Header = ({ title, description, onMenuClick }: HeaderProps) => {
                           <button
                             type="button"
                             onClick={() => markAsRead(n.id)}
-                            className="text-primary-brand p-1 hover:bg-white/5 rounded-full shrink-0 cursor-pointer border-0 bg-transparent"
+                            className="text-button-bg p-1 hover:bg-primary-text/5 rounded-full shrink-0 cursor-pointer border-0 bg-transparent"
                             title="Mark as read"
                           >
                             <Check className="w-3.5 h-3.5" />
@@ -263,11 +326,11 @@ const Header = ({ title, description, onMenuClick }: HeaderProps) => {
                   )}
                 </div>
 
-                <div className="border-t border-white/10 mt-1 pt-1.5 px-3">
+                <div className="border-t border-border mt-1 pt-1.5 px-3">
                   <button
                     type="button"
                     onClick={openAllNotifications}
-                    className="w-full text-center text-xs font-semibold text-secondary-text hover:text-primary-brand py-1.5 hover:bg-white/5 rounded-lg transition-colors cursor-pointer border-0 bg-transparent"
+                    className="w-full text-center text-xs font-semibold text-secondary-text hover:text-button-bg py-1.5 hover:bg-primary-text/5 rounded-lg transition-colors cursor-pointer border-0 bg-transparent"
                   >
                     View all notifications
                   </button>
@@ -275,6 +338,50 @@ const Header = ({ title, description, onMenuClick }: HeaderProps) => {
               </div>
             )}
           </div>
+
+          {isFounder && (
+            <>
+              <button
+                type="button"
+                className="hidden lg:flex size-12 items-center justify-center rounded-xl border border-border bg-primary-text/5 text-secondary-text hover:text-primary-text transition-colors cursor-pointer"
+                aria-label="History"
+              >
+                <Clock className="size-3.5" />
+              </button>
+              <button
+                type="button"
+                className="hidden lg:flex size-12 items-center justify-center rounded-xl border border-border bg-primary-text/5 text-secondary-text hover:text-primary-text transition-colors cursor-pointer"
+                aria-label="Share"
+              >
+                <Share2 className="size-3.5" />
+              </button>
+              <button
+                type="button"
+                className="hidden md:flex h-12 items-center gap-2 rounded-xl border border-border bg-primary-text/5 px-4 text-left cursor-pointer hover:border-button-bg/30 transition-colors"
+              >
+                <span className="flex flex-col gap-0.5">
+                  <span className="text-sm font-medium text-primary-text leading-none">
+                    Environment
+                  </span>
+                  <span className="flex items-center gap-1 text-[12px] text-secondary-text lowercase tracking-wide">
+                    <span className="size-2 rounded-full bg-button-bg shrink-0" />
+                    <span>
+                      <span className="uppercase">P</span>roduction
+                    </span>
+                  </span>
+                </span>
+                <ChevronDown className="size-2.5 text-secondary-text ml-2" />
+              </button>
+              <Button
+                variant="primary"
+                size="sm"
+                className="inline-flex h-12! rounded-xl! px-4! sm:px-[30px]! text-sm font-medium"
+                onClick={openLayoutEdit}
+              >
+                Edit Dashboard
+              </Button>
+            </>
+          )}
         </div>
       </div>
 

@@ -229,7 +229,7 @@ const Sidebar = ({ isMobileOpen, setIsMobileOpen, menu }: SidebarProps) => {
   return (
     <aside
       className={cn(
-        "bg-[#0a0c12] border-r border-white/8 text-primary-text h-screen flex flex-col transition-all duration-300 z-50 shrink-0",
+        "bg-primary-bg border-r border-border text-primary-text h-screen flex flex-col transition-all duration-300 z-50 shrink-0",
         "sm:sticky sm:top-0 sm:translate-x-0",
         showCollapsed ? "sm:w-20" : "sm:w-[280px]",
         "fixed left-0 top-0 h-screen w-[280px] sm:static",
@@ -238,7 +238,7 @@ const Sidebar = ({ isMobileOpen, setIsMobileOpen, menu }: SidebarProps) => {
     >
       <button
         onClick={toggleCollapse}
-        className="absolute right-[-12px] top-20 z-50 transform -translate-y-1/2 w-6 h-6 rounded-full bg-[#0a0c12] border border-white/15 hidden sm:flex items-center justify-center cursor-pointer hover:border-white/30 transition-colors text-secondary-text hover:text-primary-text focus:outline-none"
+        className="absolute right-[-12px] top-20 z-50 transform -translate-y-1/2 w-6 h-6 rounded-full bg-primary-bg border border-border hidden sm:flex items-center justify-center cursor-pointer hover:border-border-active/50 transition-colors text-secondary-text hover:text-primary-text focus:outline-none"
       >
         {showCollapsed ? (
           <ChevronRight className="w-3.5 h-3.5" />

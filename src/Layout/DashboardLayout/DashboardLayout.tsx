@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import { menuGenerator } from "@/utils/Generator/MenuGenerator";
 import { getBlueprint } from "@/pages/Enterprise/BlueprintManagement/data";
 import { getReport } from "@/pages/Enterprise/Reports/data";
+import {
+  bootDashboardTheme,
+  DASHBOARD_THEME_ROOT_ID,
+} from "@/lib/dashboardTheme";
 
 const routeDescriptions: Record<string, string> = {
   Overview: "Welcome back to your reseller dashboard.",
@@ -37,6 +41,10 @@ const routeDescriptions: Record<string, string> = {
 const DashboardLayout = ({ config }: { config: any[] }) => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const location = useLocation();
+
+  useEffect(() => {
+    bootDashboardTheme();
+  }, [location.pathname]);
 
   const menu = menuGenerator(config);
 
@@ -155,7 +163,10 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
           : "Welcome back to your dashboard.";
 
   return (
-    <div className="flex h-screen overflow-hidden bg-primary-bg">
+    <div
+      id={DASHBOARD_THEME_ROOT_ID}
+      className="flex h-screen overflow-hidden bg-primary-bg"
+    >
       <Sidebar
         isMobileOpen={isMobileOpen}
         setIsMobileOpen={setIsMobileOpen}

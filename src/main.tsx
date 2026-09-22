@@ -6,6 +6,10 @@ import { Provider } from "react-redux";
 import { store } from "./store/store.ts";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "./hooks/useTheme.tsx";
+import { clearGlobalThemeOverrides } from "./lib/dashboardTheme.ts";
+
+// Landing / public pages must keep index.css :root colors
+clearGlobalThemeOverrides();
 
 createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
