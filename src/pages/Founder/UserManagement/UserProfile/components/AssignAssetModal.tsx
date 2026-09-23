@@ -4,7 +4,7 @@ import Button from "@/ui/Button";
 import Input from "@/ui/Input";
 import Select from "@/ui/Select";
 import { Label } from "@/ui/Label";
-import ModalShell from "../../components/ModalShell";
+import ModalShell from "@/pages/Founder/_shared/ModalShell";
 import {
   ACCESS_LEVELS,
   ASSET_KINDS,

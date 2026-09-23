@@ -7,7 +7,9 @@ import {
   Check,
   CheckCheck,
   BellOff,
+  ArrowRight,
   ChevronRight,
+  LayoutTemplate,
   Mail,
   Palette,
   Plus,
@@ -21,6 +23,16 @@ import {
   USER_PROFILE_QUICK_ACTION_EVENT,
   USER_PROFILE_QUICK_ACTIONS,
 } from "@/pages/Founder/UserManagement/UserProfile/events";
+import {
+  REPORT_TEMPLATES_CREATE_EVENT,
+  REPORT_TEMPLATES_PATH,
+  REPORT_TEMPLATES_PUBLISH_ALL_EVENT,
+  REPORTS_EXPORT_EVENT,
+  REPORTS_PATH,
+} from "@/pages/Founder/Reports/events";
+
+const headerGhostButtonClass =
+  "h-10 rounded-lg border-white/10 bg-white/5 px-5 text-sm font-medium normal-case tracking-normal text-white hover:bg-white/10";
 import LayoutCustomizerBar from "@/pages/Founder/Dashboard/LayoutCustomizerBar";
 import {
   LAYOUT_CANCEL_EVENT,
@@ -120,6 +132,9 @@ const Header = ({
   const isFounderDashboard = location.pathname === "/founder/dashboard";
   const isCreateProduct = location.pathname === "/founder/create-product";
   const isUserProfile = /^\/founder\/user-management\/[^/]+$/.test(location.pathname);
+  const isReports = location.pathname === REPORTS_PATH;
+  const isReportTemplates = location.pathname === REPORT_TEMPLATES_PATH;
+  const hideUtilities = isUserProfile || isReports || isReportTemplates;
   const [quickActionsOpen, setQuickActionsOpen] = useState(false);
 
   const openLayoutEdit = () => {
@@ -276,7 +291,7 @@ const Header = ({
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-          {!isUserProfile && (
+          {!hideUtilities && (
           <>
           <div className="static sm:relative flex items-center" ref={searchRef}>
             <div className="relative hidden sm:block">
@@ -426,6 +441,50 @@ const Header = ({
           </div>
 
           </>
+          )}
+
+          {isReports && (
+            <>
+              <Button
+                variant="secondary"
+                size="sm"
+                className={headerGhostButtonClass}
+                leftIcon={<LayoutTemplate className="size-3.5" />}
+                title="Templates"
+                onClick={() => navigate(REPORT_TEMPLATES_PATH)}
+              />
+              <Button
+                variant="secondary"
+                size="sm"
+                className={headerGhostButtonClass}
+                leftIcon={<ArrowRight className="size-3.5" />}
+                title="Export Reports"
+                onClick={() => window.dispatchEvent(new CustomEvent(REPORTS_EXPORT_EVENT))}
+              />
+            </>
+          )}
+
+          {isReportTemplates && (
+            <>
+              <Button
+                variant="secondary"
+                size="sm"
+                className={headerGhostButtonClass}
+                leftIcon={<ArrowRight className="size-3.5" />}
+                title="Publish All"
+                onClick={() =>
+                  window.dispatchEvent(new CustomEvent(REPORT_TEMPLATES_PUBLISH_ALL_EVENT))
+                }
+              />
+              <Button
+                variant="primary"
+                size="sm"
+                className="h-10 rounded-lg bg-[#eab308] px-5 text-sm font-bold normal-case tracking-normal text-black shadow-[0_0_15px_rgba(234,179,8,0.2)]"
+                leftIcon={<Plus className="size-3.5" />}
+                title="Create Template"
+                onClick={() => window.dispatchEvent(new CustomEvent(REPORT_TEMPLATES_CREATE_EVENT))}
+              />
+            </>
           )}
 
           {isUserProfile && (

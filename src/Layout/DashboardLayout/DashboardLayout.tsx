@@ -174,10 +174,17 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
   const profileUser = userProfileMatch
     ? founderUsers.find((u) => u.id === userProfileMatch[1])
     : undefined;
+  const isFounderReports = location.pathname === "/founder/reports";
+  const isReportTemplates = location.pathname === "/founder/reports/templates";
   const breadcrumbs = isCreatePrompt
     ? [
         { label: "AI Services™", to: "/founder/ai-services" },
         { label: "Create New Prompt" },
+      ]
+    : isReportTemplates
+    ? [
+        { label: "Reports™", to: "/founder/reports" },
+        { label: "Templates & Configuration" },
       ]
     : userProfileMatch
       ? [
@@ -188,6 +195,10 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
   const titleBadge = profileUser ? userStatusBadge(profileUser) : undefined;
   const title = userProfileMatch
     ? "User Profile & Configuration"
+    : isReportTemplates
+    ? "Report Templates & Configuration™"
+    : isFounderReports
+    ? "Report Management™"
     : isCreatePrompt
     ? "Create New Prompt"
     : isEnterpriseDash
@@ -219,6 +230,8 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
                             : "Overview";
   const rawDescription = isCreatePrompt
     ? routeDescriptions["Founder Control Center™"]
+    : isReportTemplates
+    ? "Configure visual architecture, PDF branding, and approval protocols for Founder knowledge assets."
     : isReportDetail || userProfileMatch
     ? ""
     : isNotificationsPage || isProfilePage

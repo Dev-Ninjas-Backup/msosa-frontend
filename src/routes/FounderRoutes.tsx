@@ -46,6 +46,10 @@ const Reports = Loadable(
   lazy(() => import("@/pages/Founder/Reports/Reports")),
   AdminSkeleton
 );
+const ReportTemplates = Loadable(
+  lazy(() => import("@/pages/Founder/Reports/ReportTemplates")),
+  AdminSkeleton
+);
 const AIServices = Loadable(
   lazy(() => import("@/pages/Founder/AIServices/AIServices")),
   AdminSkeleton
@@ -129,6 +133,10 @@ export const founderRoutes = [
             name: "Reports™",
             path: "reports",
             element: <Reports />,
+          },
+          {
+            path: "reports/templates",
+            element: <ReportTemplates />,
           },
           {
             icon: <Sparkles />,

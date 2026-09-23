@@ -22,7 +22,7 @@ import Select from "@/ui/Select";
 import { cn } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 import { addUser, updateUser } from "@/store/features/FounderUsers/founderUsersSlice";
-import FilterChip from "./components/FilterChip";
+import FilterChip from "@/pages/Founder/_shared/FilterChip";
 import ManagedUserAvatar from "./components/ManagedUserAvatar";
 import UserFormModal from "./components/UserFormModal";
 import {
