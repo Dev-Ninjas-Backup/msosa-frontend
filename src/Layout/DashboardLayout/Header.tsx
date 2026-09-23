@@ -9,6 +9,7 @@ import {
   BellOff,
   ChevronDown,
   Clock,
+  Palette,
   Share2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -18,8 +19,8 @@ import LayoutCustomizerBar from "@/pages/Founder/Dashboard/LayoutCustomizerBar";
 import {
   LAYOUT_CANCEL_EVENT,
   LAYOUT_EDITING_CHANGED_EVENT,
-  LAYOUT_PENDING_KEY,
   LAYOUT_RESUME_EVENT,
+  OPEN_DASHBOARD_SETTINGS_EVENT,
   OPEN_LAYOUT_EDIT_EVENT,
 } from "@/pages/Founder/Dashboard/data";
 
@@ -96,12 +97,13 @@ const Header = ({ title, description, onMenuClick }: HeaderProps) => {
   const isFounderDashboard = location.pathname === "/founder/dashboard";
 
   const openLayoutEdit = () => {
-    if (!isFounderDashboard) {
-      sessionStorage.setItem(LAYOUT_PENDING_KEY, "1");
-      navigate("/founder/dashboard");
-      return;
-    }
+    if (!isFounderDashboard) return;
     window.dispatchEvent(new CustomEvent(OPEN_LAYOUT_EDIT_EVENT));
+  };
+
+  const openThemeSettings = () => {
+    if (!isFounderDashboard) return;
+    window.dispatchEvent(new CustomEvent(OPEN_DASHBOARD_SETTINGS_EVENT));
   };
   const openAllNotifications = () => {
     setIsNotifOpen(false);
@@ -372,14 +374,25 @@ const Header = ({ title, description, onMenuClick }: HeaderProps) => {
                 </span>
                 <ChevronDown className="size-2.5 text-secondary-text ml-2" />
               </button>
-              <Button
-                variant="primary"
-                size="sm"
-                className="inline-flex h-12! rounded-xl! px-4! sm:px-[30px]! text-sm font-medium"
-                onClick={openLayoutEdit}
-              >
-                Edit Dashboard
-              </Button>
+              {isFounderDashboard && (
+                <>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="inline-flex h-12! rounded-xl! px-3! sm:px-4! text-sm font-medium"
+                    leftIcon={<Palette className="size-4" />}
+                    onClick={openThemeSettings}
+                    title="Theme Settings"
+                  />
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    className="inline-flex h-12! rounded-xl! px-4! sm:px-[30px]! text-sm font-medium"
+                    onClick={openLayoutEdit}
+                    title="Edit Dashboard"
+                  />
+                </>
+              )}
             </>
           )}
         </div>

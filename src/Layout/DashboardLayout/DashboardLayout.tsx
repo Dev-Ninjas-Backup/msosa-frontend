@@ -13,6 +13,22 @@ import {
 const routeDescriptions: Record<string, string> = {
   "Create Product™":
     "Build and configure a new FAR Platform product by setting up its workflows, Reflections, protocols, AI behavior, dashboards, reports, user access, and operational settings.",
+  "Widget Library™":
+    "Manage, version, and deploy modular UI components across the FAR ecosystem.",
+  "Protocol Library™":
+    "Manage voice intelligence protocols and behavioral schemas across the FAR Platform Engine™.",
+  "User Management™":
+    "Founder Operating System for the FAR Platform Engine™",
+  "Reports™":
+    "Monitor analytics delivery, approval workflows, and report generation cycles.",
+  "AI Services™":
+    "Configure AI models, speech synthesis, and natural language endpoints.",
+  "Link Center™":
+    "Manage external integrations, invitation portals, and shareable FAR links.",
+  "Analytics & Insights™":
+    "Deep platform analytics, reflection data, and user trends.",
+  "Financial Center™":
+    "Revenue operations, transactions, and fiscal metrics.",
   Overview: "Welcome back to your reseller dashboard.",
   "Founder Control Center™":
     "Founder Operating System for the FAR Platform Engine™",
@@ -26,7 +42,6 @@ const routeDescriptions: Record<string, string> = {
   "Blueprint Management": "Assign and track organizational Reflections™.",
   "Invitation Management": "Send and monitor employee invitations.",
   "Participation Monitoring": "Track reflection and assessment participation.",
-  "Reports™": "Organizational reports and exportable insights.",
   "QCV™": "Quarterly Capability Value comparison analysis.",
   "Notifications™": "Enterprise notification center.",
   "Billing™": "Plan, seats, invoices, and subscription.",
