@@ -14,6 +14,8 @@ import {
   Palette,
   Pencil,
   Plus,
+  Download,
+  Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Input from "@/ui/Input";
@@ -41,6 +43,12 @@ import {
   type WidgetFormAction,
 } from "@/pages/Founder/WidgetLibrary/events";
 import { shortVersion } from "@/pages/Founder/WidgetLibrary/data";
+import { downloadLinkList } from "@/pages/Founder/LinkCenter/data";
+import {
+  LINK_CREATE_FORM_EVENT,
+  LINK_CREATE_PATH,
+  type LinkCreateAction,
+} from "@/pages/Founder/LinkCenter/events";
 import { useAppSelector } from "@/hooks/useRedux";
 
 const headerGhostButtonClass =
@@ -49,6 +57,8 @@ const headerGoldButtonClass =
   "h-10 rounded-lg bg-[#eab308] px-5 text-sm font-bold normal-case tracking-normal text-black shadow-[0_0_15px_rgba(234,179,8,0.2)]";
 const sendWidgetForm = (action: WidgetFormAction) =>
   window.dispatchEvent(new CustomEvent(WIDGET_FORM_EVENT, { detail: action }));
+const sendLinkForm = (action: LinkCreateAction) =>
+  window.dispatchEvent(new CustomEvent(LINK_CREATE_FORM_EVENT, { detail: action }));
 import LayoutCustomizerBar from "@/pages/Founder/Dashboard/LayoutCustomizerBar";
 import {
   LAYOUT_CANCEL_EVENT,
@@ -163,7 +173,9 @@ const Header = ({
     widgetDetailId ? s.founderWidgets.widgets.find((w) => w.id === widgetDetailId) : undefined
   );
   const isWidgetRoute = location.pathname.startsWith(WIDGETS_PATH);
-  const hideUtilities = isUserProfile || isReports || isReportTemplates || isWidgetRoute;
+  const isLinkCenter = location.pathname === "/founder/link-center";
+  const isCreateLink = location.pathname === "/founder/link-center/create";
+  const hideUtilities = isUserProfile || isReports || isReportTemplates || isWidgetRoute || isLinkCenter || isCreateLink;
   const capsCrumbs = breadcrumbVariant === "caps";
   const [quickActionsOpen, setQuickActionsOpen] = useState(false);
 
@@ -567,6 +579,54 @@ const Header = ({
                 className={cn(headerGoldButtonClass, "uppercase tracking-[0.5px]")}
                 title={`Deploy ${shortVersion(detailWidget.version)}`}
                 onClick={() => window.dispatchEvent(new CustomEvent(WIDGET_DEPLOY_EVENT))}
+              />
+            </>
+          )}
+
+          {isLinkCenter && (
+            <>
+              <Button
+                variant="secondary"
+                size="sm"
+                className={headerGhostButtonClass}
+                leftIcon={<Download className="size-3.5" />}
+                title="Export Link List"
+                onClick={() => downloadLinkList()}
+              />
+              <Button
+                variant="primary"
+                size="sm"
+                className={headerGoldButtonClass}
+                leftIcon={<Plus className="size-3.5" />}
+                title="Create New Link"
+                onClick={() => navigate(LINK_CREATE_PATH)}
+              />
+            </>
+          )}
+
+          {isCreateLink && (
+            <>
+              <Button
+                variant="link"
+                size="sm"
+                className="h-9 px-4 text-sm font-medium normal-case tracking-normal text-white/60 hover:text-white"
+                title="Cancel"
+                onClick={() => sendLinkForm("cancel")}
+              />
+              <Button
+                variant="secondary"
+                size="sm"
+                className="h-9 rounded border-white/20 bg-white/10 px-6 text-sm font-medium normal-case tracking-normal text-white hover:bg-white/15"
+                title="Save Draft"
+                onClick={() => sendLinkForm("draft")}
+              />
+              <Button
+                variant="secondary"
+                size="sm"
+                className="h-9 rounded border-transparent bg-[#3b82f6] px-4 text-sm font-bold normal-case tracking-normal text-white hover:bg-[#3b82f6]/90"
+                rightIcon={<Sparkles className="size-3.5" />}
+                title="Generate Link"
+                onClick={() => sendLinkForm("generate")}
               />
             </>
           )}

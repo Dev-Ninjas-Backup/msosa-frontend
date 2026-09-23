@@ -31,7 +31,7 @@ const routeDescriptions: Record<string, string> = {
   "AI Services™":
     "Founder Operating System for the FAR Platform Engine.",
   "Link Center™":
-    "Manage external integrations, invitation portals, and shareable FAR links.",
+    "Create, distribute, and monitor secure platform links across the FAR Platform Engine™.",
   "Analytics & Insights™":
     "Deep platform analytics, reflection data, and user trends.",
   "Financial Center™":
@@ -174,6 +174,7 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
     : undefined;
   const isCreatePrompt =
     location.pathname === "/founder/ai-services/create-new-prompt";
+  const isCreateLink = location.pathname === "/founder/link-center/create";
   const userProfileMatch = location.pathname.match(
     /^\/founder\/user-management\/([^/]+)$/
   );
@@ -218,6 +219,11 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
     : undefined;
   const breadcrumbs = widgetBreadcrumbs
     ? widgetBreadcrumbs
+    : isCreateLink
+    ? [
+        { label: "Founder Control Center™", to: "/founder/dashboard" },
+        { label: "Link Center™", to: "/founder/link-center" },
+      ]
     : isCreatePrompt
     ? [
         { label: "AI Services™", to: "/founder/ai-services" },
@@ -247,6 +253,8 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
     ? "Report Templates & Configuration™"
     : isFounderReports
     ? "Report Management™"
+    : isCreateLink
+    ? "Create New Link™"
     : isCreatePrompt
     ? "Create New Prompt"
     : isEnterpriseDash
@@ -282,6 +290,8 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
     ? "Update logic and visual layers. Published widgets need a redeploy to push changes live."
     : widgetDetailId
     ? "Preview live states, manage versions, and analyze deployment metrics."
+    : isCreateLink
+    ? ""
     : isCreatePrompt
     ? routeDescriptions["Founder Control Center™"]
     : isReportTemplates

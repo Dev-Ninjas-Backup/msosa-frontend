@@ -70,6 +70,10 @@ const LinkCenter = Loadable(
   lazy(() => import("@/pages/Founder/LinkCenter/LinkCenter")),
   AdminSkeleton
 );
+const CreateLink = Loadable(
+  lazy(() => import("@/pages/Founder/LinkCenter/CreateLink")),
+  AdminSkeleton
+);
 const AnalyticsInsights = Loadable(
   lazy(() => import("@/pages/Founder/AnalyticsInsights/AnalyticsInsights")),
   AdminSkeleton
@@ -173,6 +177,10 @@ export const founderRoutes = [
             name: "Link Center™",
             path: "link-center",
             element: <LinkCenter />,
+          },
+          {
+            path: "link-center/create",
+            element: <CreateLink />,
           },
           {
             icon: <PieChart />,
