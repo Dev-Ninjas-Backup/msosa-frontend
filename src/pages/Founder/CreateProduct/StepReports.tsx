@@ -1,11 +1,4 @@
-import {
-    FileText,
-    LayoutTemplate,
-    Sparkles,
-    Palette,
-    AlignLeft,
-    Lightbulb,
-} from "lucide-react";
+import { Palette, Lightbulb } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Input from "@/ui/Input";
 import Select from "@/ui/Select";

@@ -1,22 +1,11 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Activity,
-  MoreVertical,
-  Sparkles,
-  TrendingUp,
-  AlertTriangle,
-  CheckCircle2,
-  Clock,
-  Server,
-} from "lucide-react";
+import { MoreVertical, Sparkles } from "lucide-react";
 import AnimatedContainer from "@/common/AnimatedContainer";
 import {
   DataPanel,
-  DotStatus,
   FilterSelect,
   MiniStat,
-  PageToolbar,
   PrimaryAction,
   StatCard,
   StatusPill,
@@ -162,23 +151,19 @@ const CostDonut = () => {
 
 const AIServices = () => {
   const navigate = useNavigate();
-  const [query, setQuery] = useState("");
   const [productFilter, setProductFilter] = useState("All Products");
   const [categoryFilter, setCategoryFilter] = useState("All Categories");
   const [statusFilter, setStatusFilter] = useState("Any");
 
-  const promptRows = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    return PROMPTS.filter((p) => {
-      const matchQ =
-        !q ||
-        p.name.toLowerCase().includes(q) ||
-        p.product.toLowerCase().includes(q);
-      const matchS =
-        statusFilter === "Any" || p.status === statusFilter;
-      return matchQ && matchS;
-    });
-  }, [query, statusFilter]);
+  const promptRows = useMemo(
+    () =>
+      PROMPTS.filter(
+        (p) =>
+          (productFilter === "All Products" || p.product === productFilter) &&
+          (statusFilter === "Any" || p.status === statusFilter)
+      ),
+    [productFilter, statusFilter]
+  );
 
   return (
     <AnimatedContainer className="space-y-6 pb-8">

@@ -6,7 +6,6 @@ import Input from "@/ui/Input";
 import { Label } from "@/ui/Label";
 import Textarea from "@/ui/Textarea";
 import {
-  DEFAULT_DASHBOARD_THEME,
   pickDashboardThemeColors,
   THEME_COLOR_FIELDS,
   type DashboardTheme,

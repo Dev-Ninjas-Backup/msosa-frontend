@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import Input from "@/ui/Input";
 import Textarea from "@/ui/Textarea";
 import { Label } from "@/ui/Label";
-import { PUBLISH_CHECKS, type ProductDraft } from "./data";
+import { type ProductDraft } from "./data";
 
 type StepProps = {
   draft: ProductDraft;

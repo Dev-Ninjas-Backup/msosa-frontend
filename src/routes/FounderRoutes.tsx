@@ -38,6 +38,10 @@ const UserManagement = Loadable(
   lazy(() => import("@/pages/Founder/UserManagement/UserManagement")),
   AdminSkeleton
 );
+const UserProfile = Loadable(
+  lazy(() => import("@/pages/Founder/UserManagement/UserProfile/UserProfile")),
+  AdminSkeleton
+);
 const Reports = Loadable(
   lazy(() => import("@/pages/Founder/Reports/Reports")),
   AdminSkeleton
@@ -110,6 +114,10 @@ export const founderRoutes = [
             name: "User Management™",
             path: "user-management",
             element: <UserManagement />,
+          },
+          {
+            path: "user-management/:userId",
+            element: <UserProfile />,
           },
         ],
       },

@@ -100,7 +100,7 @@ const StepProtocol = ({
                   )}
                   title="Send"
                   rightIcon={<Send className="size-5" />}
-                  onClick={send}
+                  onClick={() => send()}
                 />
               </div>
             </div>

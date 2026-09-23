@@ -8,7 +8,7 @@ import {
     Shield,
     Check,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import type { FC } from "react";
 import { PUBLISH_CHECKS, type ProductDraft } from "./data";
 
 type StepPublishProps = {
@@ -25,9 +25,7 @@ const ICONS: Record<string, React.ReactNode> = {
     permissions: <Shield className="size-3.5" />,
 };
 
-export const StepPublish = ({ draft }: StepPublishProps) => {
-    // All checks are treated as complete for the review screen
-    // (you can later make this dynamic based on actual draft validation)
+export const StepPublish: FC<StepPublishProps> = () => {
     return (
         <div className="space-y-5">
             <section className="space-y-4 rounded-xl border border-white/10 bg-white/[0.05] p-5">

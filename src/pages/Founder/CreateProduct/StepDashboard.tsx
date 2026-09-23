@@ -12,7 +12,6 @@ import { cn } from "@/lib/utils";
 import {
     type ProductDraft,
     type DashboardWidgetId,
-    type DashboardWidget,
 } from "./data";
 
 type StepProps = {

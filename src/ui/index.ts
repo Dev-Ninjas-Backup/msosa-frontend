@@ -19,6 +19,9 @@ export type { SelectProps, SelectOption } from "./Select";
 export { default as Textarea, textareaVariants } from "./Textarea";
 export type { TextareaProps } from "./Textarea";
 
+export { default as Switch } from "./Switch";
+export type { SwitchProps } from "./Switch";
+
 export { Label } from "./Label";
 export {
   Popover,

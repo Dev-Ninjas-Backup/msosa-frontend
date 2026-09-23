@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, type ReactNode } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import { menuGenerator } from "@/utils/Generator/MenuGenerator";
 import { getBlueprint } from "@/pages/Enterprise/BlueprintManagement/data";
 import { getReport } from "@/pages/Enterprise/Reports/data";
+import type { ManagedUser } from "@/pages/Founder/UserManagement/data";
+import { useAppSelector } from "@/hooks/useRedux";
 import {
   bootDashboardTheme,
   DASHBOARD_THEME_ROOT_ID,
@@ -55,9 +57,41 @@ const routeDescriptions: Record<string, string> = {
   "Help & Support": "Access documentation and raise customer support tickets.",
 };
 
+const ENGINE_NAME_RE = /FAR Platform Engine™?\.?$/;
+
+const highlightEngineName = (text: string): ReactNode => {
+  const match = text.match(ENGINE_NAME_RE);
+  if (!match || match.index === undefined) return text;
+  return (
+    <>
+      {text.slice(0, match.index)}
+      <span className="italic text-[#fbbf24]">FAR Platform Engine™</span>
+    </>
+  );
+};
+
+const userStatusBadge = (user: ManagedUser): ReactNode => {
+  const [label, tone] =
+    user.status === "Suspended"
+      ? ["Suspended", "border-[#ef4444]/40 bg-[#ef4444]/10 text-[#ef4444]"]
+      : user.status === "Invited"
+        ? ["Invitation Pending", "border-[#eab308]/40 bg-[#eab308]/10 text-[#eab308]"]
+        : user.verification === "Verified"
+          ? ["Active & Verified", "border-[#10b981]/40 bg-[#10b981]/10 text-[#10b981]"]
+          : ["Active · Unverified", "border-[#f97316]/40 bg-[#f97316]/10 text-[#f97316]"];
+  return (
+    <span
+      className={`shrink-0 whitespace-nowrap rounded-full border px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.5px] ${tone}`}
+    >
+      {label}
+    </span>
+  );
+};
+
 const DashboardLayout = ({ config }: { config: any[] }) => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const location = useLocation();
+  const founderUsers = useAppSelector((s) => s.founderUsers.users);
 
   useEffect(() => {
     bootDashboardTheme();
@@ -134,13 +168,27 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
     : undefined;
   const isCreatePrompt =
     location.pathname === "/founder/ai-services/create-new-prompt";
+  const userProfileMatch = location.pathname.match(
+    /^\/founder\/user-management\/([^/]+)$/
+  );
+  const profileUser = userProfileMatch
+    ? founderUsers.find((u) => u.id === userProfileMatch[1])
+    : undefined;
   const breadcrumbs = isCreatePrompt
     ? [
         { label: "AI Services™", to: "/founder/ai-services" },
         { label: "Create New Prompt" },
       ]
-    : undefined;
-  const title = isCreatePrompt
+    : userProfileMatch
+      ? [
+          { label: "User Management™", to: "/founder/user-management" },
+          { label: profileUser?.name ?? "Unknown User" },
+        ]
+      : undefined;
+  const titleBadge = profileUser ? userStatusBadge(profileUser) : undefined;
+  const title = userProfileMatch
+    ? "User Profile & Configuration"
+    : isCreatePrompt
     ? "Create New Prompt"
     : isEnterpriseDash
     ? "Enterprise Dashboard"
@@ -169,12 +217,9 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
                           : activeItem
                             ? activeItem.label
                             : "Overview";
-  const description = isCreatePrompt ? (
-    <>
-      Founder Operating System for the{" "}
-      <span className="italic text-[#fbbf24]">FAR Platform Engine™</span>
-    </>
-  ) : isReportDetail
+  const rawDescription = isCreatePrompt
+    ? routeDescriptions["Founder Control Center™"]
+    : isReportDetail || userProfileMatch
     ? ""
     : isNotificationsPage || isProfilePage
       ? ""
@@ -193,6 +238,7 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
         : activeItem && routeDescriptions[activeItem.label]
           ? routeDescriptions[activeItem.label]
           : "Welcome back to your dashboard.";
+  const description = highlightEngineName(rawDescription);
 
   return (
     <div
@@ -217,6 +263,7 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
           title={isReportDetail ? "" : title}
           description={description}
           breadcrumbs={breadcrumbs}
+          titleBadge={titleBadge}
           onMenuClick={() => setIsMobileOpen(true)}
         />
 

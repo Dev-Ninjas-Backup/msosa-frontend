@@ -4,7 +4,6 @@ import Select from "@/ui/Select";
 import { Label } from "@/ui/Label";
 import {
     type ProductDraft,
-    type PricingType,
     PRICING_TYPES,
     RENEWAL_CYCLES,
 } from "./data";

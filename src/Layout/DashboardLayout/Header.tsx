@@ -7,15 +7,20 @@ import {
   Check,
   CheckCheck,
   BellOff,
-  ChevronDown,
   ChevronRight,
-  Clock,
+  Mail,
   Palette,
-  Share2,
+  Plus,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Input from "@/ui/Input";
 import Button from "@/ui/Button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/ui/Popover";
+import {
+  USER_PROFILE_MESSAGE_EVENT,
+  USER_PROFILE_QUICK_ACTION_EVENT,
+  USER_PROFILE_QUICK_ACTIONS,
+} from "@/pages/Founder/UserManagement/UserProfile/events";
 import LayoutCustomizerBar from "@/pages/Founder/Dashboard/LayoutCustomizerBar";
 import {
   LAYOUT_CANCEL_EVENT,
@@ -38,6 +43,7 @@ interface HeaderProps {
   title?: string;
   description?: ReactNode;
   breadcrumbs?: HeaderBreadcrumb[];
+  titleBadge?: ReactNode;
   onMenuClick?: () => void;
 }
 
@@ -93,6 +99,7 @@ const Header = ({
   title,
   description,
   breadcrumbs,
+  titleBadge,
   onMenuClick,
 }: HeaderProps) => {
   const location = useLocation();
@@ -112,6 +119,8 @@ const Header = ({
   const isFounder = location.pathname.startsWith("/founder");
   const isFounderDashboard = location.pathname === "/founder/dashboard";
   const isCreateProduct = location.pathname === "/founder/create-product";
+  const isUserProfile = /^\/founder\/user-management\/[^/]+$/.test(location.pathname);
+  const [quickActionsOpen, setQuickActionsOpen] = useState(false);
 
   const openLayoutEdit = () => {
     if (!isFounderDashboard) return;
@@ -250,9 +259,12 @@ const Header = ({
                 </nav>
               ) : null}
               {title ? (
-                <h1 className="font-playfair text-xl sm:text-2xl lg:text-[32px] text-primary-text leading-tight truncate">
-                  {title}
-                </h1>
+                <div className="flex min-w-0 items-center gap-3">
+                  <h1 className="font-playfair text-xl sm:text-2xl lg:text-[32px] text-primary-text leading-tight truncate">
+                    {title}
+                  </h1>
+                  {titleBadge}
+                </div>
               ) : null}
               {description ? (
                 <p className="mt-1 text-xs sm:text-[14px] text-secondary-text max-w-2xl hidden sm:block">
@@ -264,6 +276,8 @@ const Header = ({
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          {!isUserProfile && (
+          <>
           <div className="static sm:relative flex items-center" ref={searchRef}>
             <div className="relative hidden sm:block">
               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-secondary-text pointer-events-none" />
@@ -410,6 +424,61 @@ const Header = ({
               </div>
             )}
           </div>
+
+          </>
+          )}
+
+          {isUserProfile && (
+            <>
+              <Button
+                variant="secondary"
+                size="sm"
+                className="h-9 rounded-md border-white/10 bg-black px-3 text-xs font-semibold text-white"
+                leftIcon={<Mail className="size-3.5" />}
+                title="Message"
+                onClick={() =>
+                  window.dispatchEvent(new CustomEvent(USER_PROFILE_MESSAGE_EVENT))
+                }
+              />
+              <Popover open={quickActionsOpen} onOpenChange={setQuickActionsOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    className="h-9 rounded-md bg-[#eab308] px-4 text-xs font-semibold text-black"
+                    leftIcon={<Plus className="size-3.5" />}
+                    title="Quick Actions"
+                  />
+                </PopoverTrigger>
+                <PopoverContent
+                  align="end"
+                  sideOffset={6}
+                  className="w-60 rounded-lg border-white/10 bg-[#111] p-1"
+                >
+                  {USER_PROFILE_QUICK_ACTIONS.map((a) => (
+                    <button
+                      key={a.id}
+                      type="button"
+                      onClick={() => {
+                        setQuickActionsOpen(false);
+                        window.dispatchEvent(
+                          new CustomEvent(USER_PROFILE_QUICK_ACTION_EVENT, { detail: a.id })
+                        );
+                      }}
+                      className={cn(
+                        "flex w-full cursor-pointer rounded-md border-0 bg-transparent px-3 py-2 text-left text-sm transition-colors hover:bg-white/5",
+                        a.id === "toggle-suspend" || a.id === "force-password-reset"
+                          ? "text-[#f87171]"
+                          : "text-[#d1d5db] hover:text-white"
+                      )}
+                    >
+                      {a.label}
+                    </button>
+                  ))}
+                </PopoverContent>
+              </Popover>
+            </>
+          )}
 
           {isFounder && (
             <>
