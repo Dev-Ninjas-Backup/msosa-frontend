@@ -1,4 +1,4 @@
-import { Fragment, useState, useRef, useEffect, type ReactNode } from "react";
+import { Fragment, useState, useRef, useEffect, useSyncExternalStore, type ReactNode } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Search,
@@ -69,6 +69,14 @@ import {
   INVOICES_PATH,
 } from "@/pages/Founder/FinancialCenter/events";
 import { useAppSelector } from "@/hooks/useRedux";
+import {
+  NOTIFICATIONS_PATH,
+  getNotices,
+  markAllNoticesRead,
+  markNoticeRead,
+  subscribeNotices,
+  totalCount,
+} from "@/pages/Founder/Notifications/data";
 
 const headerGhostButtonClass =
   "h-10 rounded-lg border-white/10 bg-white/5 px-5 text-sm font-medium normal-case tracking-normal text-white hover:bg-white/10";
@@ -177,6 +185,8 @@ const Header = ({
 
   const enterpriseNotifs = location.pathname.startsWith("/enterprise");
   const isFounder = location.pathname.startsWith("/founder");
+  const isFounderNotifications = location.pathname === NOTIFICATIONS_PATH;
+  const founderNotices = useSyncExternalStore(subscribeNotices, getNotices);
   const isFounderDashboard = location.pathname === "/founder/dashboard";
   const isCreateProduct = location.pathname === "/founder/create-product";
   const isUserProfile = /^\/founder\/user-management\/[^/]+$/.test(location.pathname);
@@ -215,6 +225,10 @@ const Header = ({
   };
   const openAllNotifications = () => {
     setIsNotifOpen(false);
+    if (isFounder) {
+      navigate(NOTIFICATIONS_PATH);
+      return;
+    }
     if (enterpriseNotifs) {
       navigate("/enterprise/notifications");
       return;
@@ -263,7 +277,12 @@ const Header = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const unreadCount = notifications.filter((n) => !n.read).length;
+  const unreadCount = isFounder
+    ? founderNotices.filter((notice) => !notice.read).length
+    : notifications.filter((n) => !n.read).length;
+  const founderModal = ["reflection-due", "report-ready", "milestone", "platform"]
+    .map((id) => founderNotices.find((notice) => notice.id === id))
+    .filter((notice) => notice !== undefined);
 
   const markAsRead = (id: string) => {
     setNotifications(
@@ -369,6 +388,18 @@ const Header = ({
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           {!hideUtilities && (
           <>
+          {isFounderNotifications && (
+            <div className="mr-2 hidden items-center gap-5 md:flex">
+              <div className="text-right">
+                <p className="text-2xl font-bold leading-8 text-white">{totalCount()}</p>
+                <p className="text-[10px] font-bold uppercase tracking-[0.6px] text-white/40">Total Notifications</p>
+              </div>
+              <div className="text-right">
+                <p className="text-2xl font-bold leading-8 text-[#10b7ba]">{unreadCount}</p>
+                <p className="text-[10px] font-bold uppercase tracking-[0.6px] text-white/40">Unread</p>
+              </div>
+            </div>
+          )}
           <div className="static sm:relative flex items-center" ref={searchRef}>
             <div className="relative hidden sm:block">
               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-secondary-text pointer-events-none" />
@@ -436,7 +467,38 @@ const Header = ({
               )}
             </button>
 
-            {isNotifOpen && (
+            {isNotifOpen && isFounder && (
+              <div className="absolute right-0 top-full z-50 mt-3 w-[358px] overflow-hidden rounded-xl border border-[#27272a] bg-[#121214] shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.25)]">
+                <div className="flex items-center justify-between bg-white/10 px-5 py-5">
+                  <p className="text-xl font-semibold tracking-[-0.5px] text-[#f8fafc]">Notifications</p>
+                  <button type="button" className="cursor-pointer border-0 bg-transparent p-0 text-[13px] font-medium text-[#fbbf24]" onClick={markAllNoticesRead}>
+                    Mark all as read
+                  </button>
+                </div>
+                <div>
+                  {founderModal.map((notice) => (
+                    <button
+                      key={notice.id}
+                      type="button"
+                      onClick={() => markNoticeRead(notice.id)}
+                      className="relative block w-full cursor-pointer border border-white/10 bg-transparent px-5 py-4 text-left"
+                    >
+                      <p className="pr-6 text-[15px] font-semibold text-[#f8fafc]">{notice.shortTitle}</p>
+                      <p className="mt-2 text-[13px] leading-[18px] text-[#94a3b8]">{notice.preview}</p>
+                      <p className={cn("mt-2 text-[11px] font-medium", notice.priority === "Medium Priority" ? "text-[#3b82f6]" : "text-[#94a3b8]")}>
+                        {notice.priority === "Medium Priority" ? `Medium Priority • ${notice.ago}` : notice.ago}
+                      </p>
+                      {!notice.read && <span className="absolute right-5 top-6 size-2 rounded-full bg-[#10b7ba]" />}
+                    </button>
+                  ))}
+                </div>
+                <div className="flex justify-center border-t border-[#27272a] bg-[#0a0a0b] px-4 py-5">
+                  <Button variant="primary" size="sm" className="h-11 rounded-[10px] bg-[#fbbf24] px-6 text-sm font-medium text-black" rightIcon={<ChevronRight className="size-3.5" />} title="View all notifications" onClick={openAllNotifications} />
+                </div>
+              </div>
+            )}
+
+            {isNotifOpen && !isFounder && (
               <div className="absolute left-0 right-0 sm:left-auto sm:right-0 top-full mt-2 sm:mt-3 w-auto sm:w-80 bg-card border border-border rounded-xl py-2 z-50 shadow-lg animate-in fade-in zoom-in-95 duration-100">
                 <div className="flex items-center justify-between px-4 py-2 border-b border-border mb-1">
                   <p className="text-xs text-primary-text font-bold uppercase tracking-wider">

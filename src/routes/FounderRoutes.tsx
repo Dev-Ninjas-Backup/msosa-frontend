@@ -94,6 +94,10 @@ const FounderProfile = Loadable(
   lazy(() => import("@/pages/Founder/Profile/Profile")),
   AdminSkeleton
 );
+const FounderNotifications = Loadable(
+  lazy(() => import("@/pages/Founder/Notifications/Notifications")),
+  AdminSkeleton
+);
 
 const FounderDashboardLayout = () => <DashboardLayout config={founderRoutes} />;
 
@@ -217,6 +221,10 @@ export const founderRoutes = [
           {
             path: "profile",
             element: <FounderProfile />,
+          },
+          {
+            path: "notifications",
+            element: <FounderNotifications />,
           },
         ],
       },

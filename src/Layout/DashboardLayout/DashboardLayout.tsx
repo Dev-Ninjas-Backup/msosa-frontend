@@ -178,6 +178,7 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
   const isCreateLink = location.pathname === "/founder/link-center/create";
   const isAnalytics = location.pathname === "/founder/analytics-insights";
   const isFounderProfile = location.pathname === "/founder/profile";
+  const isFounderNotifications = location.pathname === "/founder/notifications";
   const isFinancial = location.pathname === "/founder/financial-center";
   const isInvoices = location.pathname === "/founder/financial-center/invoices";
   const invoiceDetailId = location.pathname.match(/^\/founder\/financial-center\/invoices\/([^/]+)$/)?.[1];
@@ -264,7 +265,9 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
         ]
       : undefined;
   const titleBadge = profileUser ? userStatusBadge(profileUser) : undefined;
-  const title = isFounderProfile
+  const title = isFounderNotifications
+    ? "Notifications"
+    : isFounderProfile
     ? "Account Settings"
     : isInvoices
     ? "Invoices™"
@@ -319,6 +322,8 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
     ? "Update logic and visual layers. Published widgets need a redeploy to push changes live."
     : widgetDetailId
     ? "Preview live states, manage versions, and analyze deployment metrics."
+    : isFounderNotifications
+    ? ""
     : isFounderProfile
     ? "Organization Administrator for Encounters Corporation"
     : isCreateLink
