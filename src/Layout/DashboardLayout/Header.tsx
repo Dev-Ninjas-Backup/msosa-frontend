@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Fragment, useState, useRef, useEffect, type ReactNode } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Search,
   Bell,
@@ -8,6 +8,7 @@ import {
   CheckCheck,
   BellOff,
   ChevronDown,
+  ChevronRight,
   Clock,
   Palette,
   Share2,
@@ -28,9 +29,15 @@ import {
   OPEN_CREATE_PRODUCT_EVENT,
 } from "@/pages/Founder/CreateProduct/data";
 
+export interface HeaderBreadcrumb {
+  label: string;
+  to?: string;
+}
+
 interface HeaderProps {
   title?: string;
-  description?: string;
+  description?: ReactNode;
+  breadcrumbs?: HeaderBreadcrumb[];
   onMenuClick?: () => void;
 }
 
@@ -82,7 +89,12 @@ const initialNotifications: NotificationItem[] = [
   },
 ];
 
-const Header = ({ title, description, onMenuClick }: HeaderProps) => {
+const Header = ({
+  title,
+  description,
+  breadcrumbs,
+  onMenuClick,
+}: HeaderProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -204,6 +216,39 @@ const Header = ({ title, description, onMenuClick }: HeaderProps) => {
 
           {(title || description) && (
             <div className="flex flex-col min-w-0">
+              {breadcrumbs?.length ? (
+                <nav
+                  aria-label="Breadcrumb"
+                  className="mb-1 flex items-center gap-1.5 text-xs leading-[18px]"
+                >
+                  {breadcrumbs.map((crumb, i) => {
+                    const isLast = i === breadcrumbs.length - 1;
+                    return (
+                      <Fragment key={crumb.label}>
+                        {crumb.to && !isLast ? (
+                          <Link
+                            to={crumb.to}
+                            className="text-primary-text/50 hover:text-primary-text transition-colors"
+                          >
+                            {crumb.label}
+                          </Link>
+                        ) : (
+                          <span
+                            className={
+                              isLast ? "text-primary-text" : "text-primary-text/50"
+                            }
+                          >
+                            {crumb.label}
+                          </span>
+                        )}
+                        {!isLast && (
+                          <ChevronRight className="size-3 text-primary-text/50" />
+                        )}
+                      </Fragment>
+                    );
+                  })}
+                </nav>
+              ) : null}
               {title ? (
                 <h1 className="font-playfair text-xl sm:text-2xl lg:text-[32px] text-primary-text leading-tight truncate">
                   {title}

@@ -46,6 +46,10 @@ const AIServices = Loadable(
   lazy(() => import("@/pages/Founder/AIServices/AIServices")),
   AdminSkeleton
 );
+const CreateNewPrompt = Loadable(
+  lazy(() => import("@/pages/Founder/AIServices/component/CreateNewPrompt")),
+  AdminSkeleton
+);
 const LinkCenter = Loadable(
   lazy(() => import("@/pages/Founder/LinkCenter/LinkCenter")),
   AdminSkeleton
@@ -123,6 +127,10 @@ export const founderRoutes = [
             name: "AI Services™",
             path: "ai-services",
             element: <AIServices />,
+          },
+          {
+            path: "ai-services/create-new-prompt",
+            element: <CreateNewPrompt />,
           },
           {
             icon: <LinkIcon />,

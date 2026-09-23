@@ -85,8 +85,8 @@ const Select = ({
 
   const filtered = searchable
     ? options.filter((opt) =>
-        getOptionLabel(opt).toLowerCase().includes(search.toLowerCase())
-      )
+      getOptionLabel(opt).toLowerCase().includes(search.toLowerCase())
+    )
     : options;
 
   const selected = options.find((opt) => getOptionValue(opt) === value);
@@ -109,9 +109,9 @@ const Select = ({
             )}
           >
             {Icon && <Icon className="size-4 sm:size-5 shrink-0" />}
-            <span className="truncate flex-1">{display}</span>
+            <span className="truncate flex-1 text-left">{display}</span>
             {rightIcon ?? (
-              <FaCaretDown className="size-4 sm:size-5 shrink-0 ml-1" />
+              <FaCaretDown className="size-4 sm:size-5 shrink-0 ml-auto" />
             )}
           </button>
         ) : (
@@ -123,13 +123,14 @@ const Select = ({
             aria-expanded={open}
             className={cn(
               triggerVariants({ variant, error }),
+              "justify-between w-full",
               !value && "text-secondary-text",
               className
             )}
           >
-            <span className="truncate flex-1 text-left">{display}</span>
+            <span className="truncate text-left min-w-0 flex-1">{display}</span>
             {rightIcon ?? (
-              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+              <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
             )}
           </Button>
         )}

@@ -22,7 +22,7 @@ const routeDescriptions: Record<string, string> = {
   "Reports™":
     "Monitor analytics delivery, approval workflows, and report generation cycles.",
   "AI Services™":
-    "Configure AI models, speech synthesis, and natural language endpoints.",
+    "Founder Operating System for the FAR Platform Engine.",
   "Link Center™":
     "Manage external integrations, invitation portals, and shareable FAR links.",
   "Analytics & Insights™":
@@ -132,7 +132,17 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
   const reportName = reportMatch
     ? getReport(reportMatch[1])?.name
     : undefined;
-  const title = isEnterpriseDash
+  const isCreatePrompt =
+    location.pathname === "/founder/ai-services/create-new-prompt";
+  const breadcrumbs = isCreatePrompt
+    ? [
+        { label: "AI Services™", to: "/founder/ai-services" },
+        { label: "Create New Prompt" },
+      ]
+    : undefined;
+  const title = isCreatePrompt
+    ? "Create New Prompt"
+    : isEnterpriseDash
     ? "Enterprise Dashboard"
     : isEmployeeDetail
       ? "Employee Profile"
@@ -159,21 +169,26 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
                           : activeItem
                             ? activeItem.label
                             : "Overview";
-  const description = isReportDetail
+  const description = isCreatePrompt ? (
+    <>
+      Founder Operating System for the{" "}
+      <span className="italic text-[#fbbf24]">FAR Platform Engine™</span>
+    </>
+  ) : isReportDetail
     ? ""
     : isNotificationsPage || isProfilePage
       ? ""
       : isEnterpriseDash ||
-          isEmployeeDetail ||
-          isBlueprintList ||
-          isBlueprintDetail ||
-          isInvitationDetail ||
-          isParticipationDetail ||
-          isReportsList ||
-          isReportDetailPage ||
-          isBillingPage ||
-          isBillingHistory ||
-          location.pathname.startsWith("/enterprise/")
+        isEmployeeDetail ||
+        isBlueprintList ||
+        isBlueprintDetail ||
+        isInvitationDetail ||
+        isParticipationDetail ||
+        isReportsList ||
+        isReportDetailPage ||
+        isBillingPage ||
+        isBillingHistory ||
+        location.pathname.startsWith("/enterprise/")
         ? "Organization Administrator for Encounters Corporation"
         : activeItem && routeDescriptions[activeItem.label]
           ? routeDescriptions[activeItem.label]
@@ -201,6 +216,7 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
         <Header
           title={isReportDetail ? "" : title}
           description={description}
+          breadcrumbs={breadcrumbs}
           onMenuClick={() => setIsMobileOpen(true)}
         />
 

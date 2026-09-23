@@ -18,14 +18,14 @@ export const StatCard = ({
   icon?: ReactNode;
 }) => (
   <div className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-4 min-w-0">
-    <div className="flex items-start justify-between gap-2">
-      <div className="min-w-0">
+    <div className="flex items-start justify-between gap-2 relative ">
+      <div className="min-w-0 ">
         <p className="text-[11px] uppercase tracking-wide text-white/45">{label}</p>
         <p className="mt-1 text-2xl font-semibold text-white tabular-nums">{value}</p>
         {hint && (
           <p
             className={cn(
-              "mt-1 text-xs",
+              "mt-1 text-xs absolute right-0 top-10 ",
               hintTone === "up" && "text-emerald-400",
               hintTone === "down" && "text-red-400",
               hintTone === "warn" && "text-red-400",
@@ -179,17 +179,22 @@ export const DataPanel = ({
   subtitle,
   children,
   footer,
+  action,
 }: {
   title?: string;
   subtitle?: string;
   children: ReactNode;
   footer?: ReactNode;
+  action?: ReactNode;
 }) => (
   <div className="rounded-xl border border-white/10 bg-white/[0.03] overflow-hidden">
-    {(title || subtitle) && (
-      <div className="border-b border-white/10 px-4 py-3">
-        {title && <h2 className="text-sm font-semibold text-white">{title}</h2>}
-        {subtitle && <p className="text-xs text-white/45 mt-0.5">{subtitle}</p>}
+    {(title || subtitle || action) && (
+      <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-3">
+        <div className="min-w-0">
+          {title && <h2 className="text-sm font-semibold text-white">{title}</h2>}
+          {subtitle && <p className="text-xs text-white/45 mt-0.5">{subtitle}</p>}
+        </div>
+        {action && <div className="shrink-0">{action}</div>}
       </div>
     )}
     {children}
