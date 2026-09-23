@@ -2,7 +2,7 @@ import { Archive, Check, Download, Pencil, RotateCcw, Send, X } from "lucide-rea
 import Button from "@/ui/Button";
 import { cn } from "@/lib/utils";
 import ModalShell from "@/pages/Founder/_shared/ModalShell";
-import { StatusText } from "./ReportsUi";
+import { StatusText } from "@/pages/Founder/_shared/DashboardUi";
 import {
   formatReportDate,
   reportStatusMeta,

@@ -30,6 +30,14 @@ const WidgetLibrary = Loadable(
   lazy(() => import("@/pages/Founder/WidgetLibrary/WidgetLibrary")),
   AdminSkeleton
 );
+const WidgetForm = Loadable(
+  lazy(() => import("@/pages/Founder/WidgetLibrary/WidgetForm")),
+  AdminSkeleton
+);
+const WidgetDetails = Loadable(
+  lazy(() => import("@/pages/Founder/WidgetLibrary/WidgetDetails")),
+  AdminSkeleton
+);
 const ProtocolLibrary = Loadable(
   lazy(() => import("@/pages/Founder/ProtocolLibrary/ProtocolLibrary")),
   AdminSkeleton
@@ -106,6 +114,18 @@ export const founderRoutes = [
             name: "Widget Library™",
             path: "widget-library",
             element: <WidgetLibrary />,
+          },
+          {
+            path: "widget-library/create",
+            element: <WidgetForm />,
+          },
+          {
+            path: "widget-library/:widgetId",
+            element: <WidgetDetails />,
+          },
+          {
+            path: "widget-library/:widgetId/edit",
+            element: <WidgetForm />,
           },
           {
             icon: <BookOpen />,

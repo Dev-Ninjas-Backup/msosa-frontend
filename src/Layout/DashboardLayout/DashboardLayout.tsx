@@ -8,6 +8,11 @@ import { getReport } from "@/pages/Enterprise/Reports/data";
 import type { ManagedUser } from "@/pages/Founder/UserManagement/data";
 import { useAppSelector } from "@/hooks/useRedux";
 import {
+  WIDGET_CREATE_PATH,
+  WIDGETS_PATH,
+  widgetPath,
+} from "@/pages/Founder/WidgetLibrary/events";
+import {
   bootDashboardTheme,
   DASHBOARD_THEME_ROOT_ID,
 } from "@/lib/dashboardTheme";
@@ -92,6 +97,7 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const location = useLocation();
   const founderUsers = useAppSelector((s) => s.founderUsers.users);
+  const founderWidgets = useAppSelector((s) => s.founderWidgets.widgets);
 
   useEffect(() => {
     bootDashboardTheme();
@@ -176,7 +182,43 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
     : undefined;
   const isFounderReports = location.pathname === "/founder/reports";
   const isReportTemplates = location.pathname === "/founder/reports/templates";
-  const breadcrumbs = isCreatePrompt
+  const isWidgetList = location.pathname === WIDGETS_PATH;
+  const isWidgetCreate = location.pathname === WIDGET_CREATE_PATH;
+  const widgetEditId = location.pathname.match(/^\/founder\/widget-library\/([^/]+)\/edit$/)?.[1];
+  const widgetDetailId = isWidgetCreate
+    ? undefined
+    : location.pathname.match(/^\/founder\/widget-library\/([^/]+)$/)?.[1];
+  const routeWidget = founderWidgets.find((w) => w.id === (widgetDetailId ?? widgetEditId));
+  const widgetCrumb = routeWidget
+    ? `${routeWidget.id}: ${routeWidget.name}™`
+    : widgetDetailId ?? widgetEditId ?? "";
+  const widgetBreadcrumbs = isWidgetList
+    ? [
+        { label: "Founder Control Center™", to: "/founder/dashboard" },
+        { label: "Dashboard Builder™" },
+        { label: "Widget Library™" },
+      ]
+    : isWidgetCreate
+    ? [
+        { label: "Dashboard Builder™" },
+        { label: "Widget Library™", to: WIDGETS_PATH },
+        { label: "Create New Widget™" },
+      ]
+    : widgetEditId
+    ? [
+        { label: "Widget Library™", to: WIDGETS_PATH },
+        { label: widgetCrumb, to: widgetPath(widgetEditId) },
+        { label: "Edit Configuration" },
+      ]
+    : widgetDetailId
+    ? [
+        { label: "Widget Library™", to: WIDGETS_PATH },
+        { label: widgetCrumb },
+      ]
+    : undefined;
+  const breadcrumbs = widgetBreadcrumbs
+    ? widgetBreadcrumbs
+    : isCreatePrompt
     ? [
         { label: "AI Services™", to: "/founder/ai-services" },
         { label: "Create New Prompt" },
@@ -193,7 +235,13 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
         ]
       : undefined;
   const titleBadge = profileUser ? userStatusBadge(profileUser) : undefined;
-  const title = userProfileMatch
+  const title = isWidgetCreate
+    ? "Create New Widget™"
+    : widgetEditId
+    ? "Edit Widget Configuration"
+    : widgetDetailId
+    ? "Widget Details & History"
+    : userProfileMatch
     ? "User Profile & Configuration"
     : isReportTemplates
     ? "Report Templates & Configuration™"
@@ -228,7 +276,13 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
                           : activeItem
                             ? activeItem.label
                             : "Overview";
-  const rawDescription = isCreatePrompt
+  const rawDescription = isWidgetCreate
+    ? "Configure a modular system component with distinct logic and visual layers."
+    : widgetEditId
+    ? "Update logic and visual layers. Published widgets need a redeploy to push changes live."
+    : widgetDetailId
+    ? "Preview live states, manage versions, and analyze deployment metrics."
+    : isCreatePrompt
     ? routeDescriptions["Founder Control Center™"]
     : isReportTemplates
     ? "Configure visual architecture, PDF branding, and approval protocols for Founder knowledge assets."
@@ -276,6 +330,7 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
           title={isReportDetail ? "" : title}
           description={description}
           breadcrumbs={breadcrumbs}
+          breadcrumbVariant={widgetBreadcrumbs ? "caps" : "default"}
           titleBadge={titleBadge}
           onMenuClick={() => setIsMobileOpen(true)}
         />

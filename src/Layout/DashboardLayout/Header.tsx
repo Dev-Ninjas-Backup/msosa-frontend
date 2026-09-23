@@ -12,6 +12,7 @@ import {
   LayoutTemplate,
   Mail,
   Palette,
+  Pencil,
   Plus,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -30,9 +31,24 @@ import {
   REPORTS_EXPORT_EVENT,
   REPORTS_PATH,
 } from "@/pages/Founder/Reports/events";
+import {
+  WIDGET_CREATE_PATH,
+  WIDGET_DEPLOY_EVENT,
+  WIDGET_FORM_EVENT,
+  WIDGETS_BULK_EVENT,
+  WIDGETS_PATH,
+  widgetEditPath,
+  type WidgetFormAction,
+} from "@/pages/Founder/WidgetLibrary/events";
+import { shortVersion } from "@/pages/Founder/WidgetLibrary/data";
+import { useAppSelector } from "@/hooks/useRedux";
 
 const headerGhostButtonClass =
   "h-10 rounded-lg border-white/10 bg-white/5 px-5 text-sm font-medium normal-case tracking-normal text-white hover:bg-white/10";
+const headerGoldButtonClass =
+  "h-10 rounded-lg bg-[#eab308] px-5 text-sm font-bold normal-case tracking-normal text-black shadow-[0_0_15px_rgba(234,179,8,0.2)]";
+const sendWidgetForm = (action: WidgetFormAction) =>
+  window.dispatchEvent(new CustomEvent(WIDGET_FORM_EVENT, { detail: action }));
 import LayoutCustomizerBar from "@/pages/Founder/Dashboard/LayoutCustomizerBar";
 import {
   LAYOUT_CANCEL_EVENT,
@@ -55,6 +71,8 @@ interface HeaderProps {
   title?: string;
   description?: ReactNode;
   breadcrumbs?: HeaderBreadcrumb[];
+  /** "caps" renders an uppercase trail with the current page in gold. */
+  breadcrumbVariant?: "default" | "caps";
   titleBadge?: ReactNode;
   onMenuClick?: () => void;
 }
@@ -111,6 +129,7 @@ const Header = ({
   title,
   description,
   breadcrumbs,
+  breadcrumbVariant = "default",
   titleBadge,
   onMenuClick,
 }: HeaderProps) => {
@@ -134,7 +153,18 @@ const Header = ({
   const isUserProfile = /^\/founder\/user-management\/[^/]+$/.test(location.pathname);
   const isReports = location.pathname === REPORTS_PATH;
   const isReportTemplates = location.pathname === REPORT_TEMPLATES_PATH;
-  const hideUtilities = isUserProfile || isReports || isReportTemplates;
+  const isWidgetList = location.pathname === WIDGETS_PATH;
+  const isWidgetCreate = location.pathname === WIDGET_CREATE_PATH;
+  const widgetEditId = location.pathname.match(/^\/founder\/widget-library\/([^/]+)\/edit$/)?.[1];
+  const widgetDetailId = isWidgetCreate
+    ? undefined
+    : location.pathname.match(/^\/founder\/widget-library\/([^/]+)$/)?.[1];
+  const detailWidget = useAppSelector((s) =>
+    widgetDetailId ? s.founderWidgets.widgets.find((w) => w.id === widgetDetailId) : undefined
+  );
+  const isWidgetRoute = location.pathname.startsWith(WIDGETS_PATH);
+  const hideUtilities = isUserProfile || isReports || isReportTemplates || isWidgetRoute;
+  const capsCrumbs = breadcrumbVariant === "caps";
   const [quickActionsOpen, setQuickActionsOpen] = useState(false);
 
   const openLayoutEdit = () => {
@@ -243,31 +273,40 @@ const Header = ({
               {breadcrumbs?.length ? (
                 <nav
                   aria-label="Breadcrumb"
-                  className="mb-1 flex items-center gap-1.5 text-xs leading-[18px]"
+                  className={cn(
+                    "mb-1 flex flex-wrap items-center gap-1.5",
+                    capsCrumbs
+                      ? "text-[11px] font-bold uppercase leading-[16.5px] tracking-[1.1px]"
+                      : "text-xs leading-[18px]"
+                  )}
                 >
                   {breadcrumbs.map((crumb, i) => {
                     const isLast = i === breadcrumbs.length - 1;
+                    const muted = capsCrumbs ? "text-[#6b7280]" : "text-primary-text/50";
                     return (
                       <Fragment key={crumb.label}>
                         {crumb.to && !isLast ? (
                           <Link
                             to={crumb.to}
-                            className="text-primary-text/50 hover:text-primary-text transition-colors"
+                            className={cn(muted, "hover:text-primary-text transition-colors")}
                           >
                             {crumb.label}
                           </Link>
                         ) : (
                           <span
+                            aria-current={isLast ? "page" : undefined}
                             className={
-                              isLast ? "text-primary-text" : "text-primary-text/50"
+                              isLast
+                                ? capsCrumbs
+                                  ? "text-[#eab308]"
+                                  : "text-primary-text"
+                                : muted
                             }
                           >
                             {crumb.label}
                           </span>
                         )}
-                        {!isLast && (
-                          <ChevronRight className="size-3 text-primary-text/50" />
-                        )}
+                        {!isLast && <ChevronRight className={cn("size-3", muted)} />}
                       </Fragment>
                     );
                   })}
@@ -460,6 +499,74 @@ const Header = ({
                 leftIcon={<ArrowRight className="size-3.5" />}
                 title="Export Reports"
                 onClick={() => window.dispatchEvent(new CustomEvent(REPORTS_EXPORT_EVENT))}
+              />
+            </>
+          )}
+
+          {isWidgetList && (
+            <>
+              <Button
+                variant="secondary"
+                size="sm"
+                className={headerGhostButtonClass}
+                rightIcon={<ArrowRight className="size-3.5" />}
+                title="Bulk Actions"
+                onClick={() => window.dispatchEvent(new CustomEvent(WIDGETS_BULK_EVENT))}
+              />
+              <Button
+                variant="primary"
+                size="sm"
+                className={headerGoldButtonClass}
+                leftIcon={<Plus className="size-3.5" />}
+                title="Create New Widget"
+                onClick={() => navigate(WIDGET_CREATE_PATH)}
+              />
+            </>
+          )}
+
+          {(isWidgetCreate || widgetEditId) && (
+            <>
+              <Button
+                variant="secondary"
+                size="sm"
+                className={headerGhostButtonClass}
+                title={widgetEditId ? "Cancel" : "Save Draft"}
+                onClick={() => sendWidgetForm(widgetEditId ? "cancel" : "draft")}
+              />
+              <Button
+                variant="secondary"
+                size="sm"
+                className="h-10 rounded-lg border-[rgba(34,211,238,0.3)] bg-[rgba(34,211,238,0.1)] px-5 text-xs font-bold uppercase tracking-[1px] text-[#22d3ee] hover:bg-[rgba(34,211,238,0.18)]"
+                title="Validate Schema"
+                onClick={() => sendWidgetForm("validate")}
+              />
+              <Button
+                variant="primary"
+                size="sm"
+                className={headerGoldButtonClass}
+                leftIcon={widgetEditId ? <Check className="size-3.5" /> : <Plus className="size-3.5" />}
+                title={widgetEditId ? "Save Changes" : "Publish Widget™"}
+                onClick={() => sendWidgetForm(widgetEditId ? "save" : "publish")}
+              />
+            </>
+          )}
+
+          {detailWidget && (
+            <>
+              <Button
+                variant="secondary"
+                size="sm"
+                className={headerGhostButtonClass}
+                leftIcon={<Pencil className="size-3.5" />}
+                title="Edit Config"
+                onClick={() => navigate(widgetEditPath(detailWidget.id))}
+              />
+              <Button
+                variant="primary"
+                size="sm"
+                className={cn(headerGoldButtonClass, "uppercase tracking-[0.5px]")}
+                title={`Deploy ${shortVersion(detailWidget.version)}`}
+                onClick={() => window.dispatchEvent(new CustomEvent(WIDGET_DEPLOY_EVENT))}
               />
             </>
           )}

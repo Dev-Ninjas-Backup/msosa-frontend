@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 import { ChevronLeft, ChevronRight, Lock, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { pageList } from "../data";
-import { panelClass } from "../styles";
+import { pageList } from "./utils";
+import { panelClass } from "./dashboardStyles";
 
 export const SummaryCard = ({
   label,
@@ -164,10 +164,12 @@ export const ProtocolBanner = ({
   title,
   lines,
   authority,
+  label = "Founder View",
 }: {
   title: string;
   lines: string;
   authority: string;
+  label?: string;
 }) => (
   <div
     className={cn(
@@ -192,7 +194,7 @@ export const ProtocolBanner = ({
       </span>
       <div>
         <p className="text-[10px] font-bold uppercase leading-[15px] tracking-[1px] text-[#eab308]">
-          Founder View
+          {label}
         </p>
         <p className="text-xs font-bold leading-[18px] text-white">{authority}</p>
       </div>

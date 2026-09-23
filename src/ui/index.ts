@@ -22,6 +22,9 @@ export type { TextareaProps } from "./Textarea";
 export { default as Switch } from "./Switch";
 export type { SwitchProps } from "./Switch";
 
+export { default as Checkbox } from "./Checkbox";
+export type { CheckboxProps } from "./Checkbox";
+
 export { Label } from "./Label";
 export {
   Popover,

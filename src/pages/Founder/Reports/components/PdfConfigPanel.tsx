@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { ChevronDown, FolderOpen, X } from "lucide-react";
 import { toast } from "sonner";
+import Input from "@/ui/Input";
 import Select from "@/ui/Select";
 import { Switch } from "@/ui";
 import { cn } from "@/lib/utils";
@@ -52,14 +53,16 @@ const ColorField = ({
             className="absolute inset-0 cursor-pointer opacity-0"
           />
         </label>
-        <input
+        <Input
+          variant="ghost"
           aria-label={`${label} hex`}
           value={draft}
           maxLength={7}
           onChange={(e) => setDraft(e.target.value.startsWith("#") ? e.target.value : `#${e.target.value}`)}
           onBlur={commit}
           onKeyDown={(e) => e.key === "Enter" && e.currentTarget.blur()}
-          className="w-full min-w-0 border-0 bg-transparent p-0 text-[11px] uppercase text-white outline-none"
+          containerClassName="min-w-0"
+          className="h-auto! border-0! bg-transparent! p-0! text-[11px] uppercase text-white shadow-none! ring-0!"
         />
       </div>
     </div>

@@ -37,7 +37,7 @@ import {
   updatePdfConfig,
   updateTemplate,
 } from "@/store/features/FounderReports/founderReportsSlice";
-import { IconAction, ProtocolBanner, StatusText } from "./components/ReportsUi";
+import { IconAction, ProtocolBanner, StatusText } from "@/pages/Founder/_shared/DashboardUi";
 import PdfConfigPanel from "./components/PdfConfigPanel";
 import PdfPreviewModal, { type PreviewDocument } from "./components/PdfPreviewModal";
 import TemplateFormModal, { type TemplateValues } from "./components/TemplateFormModal";

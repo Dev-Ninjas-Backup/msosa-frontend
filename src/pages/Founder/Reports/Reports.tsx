@@ -25,6 +25,7 @@ import { cn } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 import { updateReport } from "@/store/features/FounderReports/founderReportsSlice";
 import FilterChip from "@/pages/Founder/_shared/FilterChip";
+import { downloadCsv, toggleIn } from "@/pages/Founder/_shared/utils";
 import {
   IconAction,
   MiniMetric,
@@ -32,7 +33,7 @@ import {
   ProtocolBanner,
   StatusText,
   SummaryCard,
-} from "./components/ReportsUi";
+} from "@/pages/Founder/_shared/DashboardUi";
 import ReportDetailsDrawer, { type ReportAction } from "./components/ReportDetailsDrawer";
 import EditReportModal from "./components/EditReportModal";
 import { REPORT_TEMPLATES_PATH, REPORTS_EXPORT_EVENT } from "./events";
@@ -44,7 +45,6 @@ import {
   REPORT_STATUSES,
   REPORT_TOTALS,
   REPORT_TYPES,
-  downloadCsv,
   formatReportDate,
   reportStatusMeta,
   reportStatusNote,
@@ -126,9 +126,6 @@ const Reports = () => {
       setter(v);
       setPage(1);
     };
-
-  const toggleIn = <T,>(list: T[], value: T) =>
-    list.includes(value) ? list.filter((v) => v !== value) : [...list, value];
 
   useEffect(() => {
     const onExport = () => {
