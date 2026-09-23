@@ -175,6 +175,7 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
   const isCreatePrompt =
     location.pathname === "/founder/ai-services/create-new-prompt";
   const isCreateLink = location.pathname === "/founder/link-center/create";
+  const isAnalytics = location.pathname === "/founder/analytics-insights";
   const userProfileMatch = location.pathname.match(
     /^\/founder\/user-management\/([^/]+)$/
   );
@@ -315,7 +316,14 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
         : activeItem && routeDescriptions[activeItem.label]
           ? routeDescriptions[activeItem.label]
           : "Welcome back to your dashboard.";
-  const description = highlightEngineName(rawDescription);
+  const description = isAnalytics ? (
+    <>
+      <span className="text-[10px] font-bold uppercase tracking-[1px] text-white/40">Last Updated:</span>{" "}
+      <span className="text-xs font-semibold normal-case tracking-normal text-[#fbbf24]">Today • 9:45 AM</span>
+    </>
+  ) : (
+    highlightEngineName(rawDescription)
+  );
 
   return (
     <div

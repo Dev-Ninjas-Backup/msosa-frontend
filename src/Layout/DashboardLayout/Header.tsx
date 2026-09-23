@@ -16,6 +16,7 @@ import {
   Plus,
   Download,
   Sparkles,
+  ChevronDown,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Input from "@/ui/Input";
@@ -49,6 +50,12 @@ import {
   LINK_CREATE_PATH,
   type LinkCreateAction,
 } from "@/pages/Founder/LinkCenter/events";
+import {
+  ANALYTICS_EXPORT_EVENT,
+  ANALYTICS_RANGE_EVENT,
+  ANALYTICS_WINDOWS,
+  type AnalyticsWindow,
+} from "@/pages/Founder/AnalyticsInsights/events";
 import { useAppSelector } from "@/hooks/useRedux";
 
 const headerGhostButtonClass =
@@ -175,9 +182,12 @@ const Header = ({
   const isWidgetRoute = location.pathname.startsWith(WIDGETS_PATH);
   const isLinkCenter = location.pathname === "/founder/link-center";
   const isCreateLink = location.pathname === "/founder/link-center/create";
-  const hideUtilities = isUserProfile || isReports || isReportTemplates || isWidgetRoute || isLinkCenter || isCreateLink;
+  const isAnalytics = location.pathname === "/founder/analytics-insights";
+  const hideUtilities = isUserProfile || isReports || isReportTemplates || isWidgetRoute || isLinkCenter || isCreateLink || isAnalytics;
   const capsCrumbs = breadcrumbVariant === "caps";
   const [quickActionsOpen, setQuickActionsOpen] = useState(false);
+  const [analyticsWindow, setAnalyticsWindow] = useState<AnalyticsWindow>("Last 30 Days");
+  const [analyticsMenuOpen, setAnalyticsMenuOpen] = useState(false);
 
   const openLayoutEdit = () => {
     if (!isFounderDashboard) return;
@@ -579,6 +589,46 @@ const Header = ({
                 className={cn(headerGoldButtonClass, "uppercase tracking-[0.5px]")}
                 title={`Deploy ${shortVersion(detailWidget.version)}`}
                 onClick={() => window.dispatchEvent(new CustomEvent(WIDGET_DEPLOY_EVENT))}
+              />
+            </>
+          )}
+
+          {isAnalytics && (
+            <>
+              <Popover open={analyticsMenuOpen} onOpenChange={setAnalyticsMenuOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    className="h-10 rounded-xl border-white/20 bg-white/5 px-5 text-xs font-bold normal-case tracking-[0.6px] text-white hover:bg-white/10"
+                    rightIcon={<ChevronDown className="size-3" />}
+                    title={analyticsWindow}
+                  />
+                </PopoverTrigger>
+                <PopoverContent align="end" className="w-44 rounded-xl border-white/10 bg-[#111] p-1">
+                  {ANALYTICS_WINDOWS.map((option) => (
+                    <button
+                      key={option}
+                      type="button"
+                      className="block w-full cursor-pointer rounded-lg border-0 bg-transparent px-3 py-2 text-left text-sm text-white hover:bg-white/5"
+                      onClick={() => {
+                        setAnalyticsWindow(option);
+                        setAnalyticsMenuOpen(false);
+                        window.dispatchEvent(new CustomEvent(ANALYTICS_RANGE_EVENT, { detail: option }));
+                      }}
+                    >
+                      {option}
+                    </button>
+                  ))}
+                </PopoverContent>
+              </Popover>
+              <Button
+                variant="primary"
+                size="sm"
+                className="h-10 rounded-lg bg-[#fbbf24] px-6 text-xs font-black uppercase tracking-[0.6px] text-black"
+                leftIcon={<Download className="size-3.5" />}
+                title="Export Analytics"
+                onClick={() => window.dispatchEvent(new CustomEvent(ANALYTICS_EXPORT_EVENT))}
               />
             </>
           )}
