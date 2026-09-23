@@ -18,16 +18,16 @@ import {
 } from "./data";
 import {
   StepBasic,
-  StepDashboard,
-  StepPermissions,
-  StepPricing,
-  StepPublish,
   StepReflection,
-  StepReports,
 } from "./steps";
 import StepProtocol from "./StepProtocol";
 import StepWorkflow from "./StepWorkflow";
 import StepAi from "./StepAi";
+import StepReports from "./StepReports";
+import StepDashboard from "./StepDashboard";
+import StepPermissions from "./StepPermissions";
+import StepPricing from "./StepPricing";
+import StepPublish from "./StepPublish";
 
 type View = "list" | "reflect" | "processing" | "wizard" | "success";
 

@@ -3,11 +3,10 @@ import layersIcon from "./assets/layout-layers.svg";
 type LayoutCustomizerBarProps = {
   onCancel: () => void;
   onResume: () => void;
-  /** When true, bar fills the sticky header row (Figma Edit Dashboard). */
   embedded?: boolean;
 };
 
-/** Figma 1336:64646 — Layout Customizer top bar */
+
 const LayoutCustomizerBar = ({
   onCancel,
   onResume,

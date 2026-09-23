@@ -38,16 +38,44 @@ export const WIZARD_STEPS = [
     description:
       "Configure the AI engine that powers this product — model, prompts, performance and safety settings",
   },
-  { id: 6, key: "reports", label: "Reports", title: "Step 6 — Reports" },
-  { id: 7, key: "dashboard", label: "Dashboard", title: "Step 7 — Dashboard" },
+  {
+    id: 6,
+    key: "reports",
+    label: "Reports",
+    title: "Step 6 — Report Configuration",
+    description:
+      "Configure your product's report templates, branding, and output settings",
+  },
+  {
+    id: 7,
+    key: "dashboard",
+    label: "Dashboard",
+    title: "Step 7 — Dashboard Configuration",
+    description:
+      "Select and configure reusable dashboard widgets for your product",
+  },
   {
     id: 8,
     key: "permissions",
     label: "Permissions",
     title: "Step 8 — Permissions",
+    description:
+      "Control who can access, interact with and manage this product across all user roles",
   },
-  { id: 9, key: "pricing", label: "Pricing", title: "Step 9 — Pricing" },
-  { id: 10, key: "publish", label: "Publish", title: "Step 10 — Publish" },
+  {
+    id: 9,
+    key: "pricing",
+    label: "Pricing",
+    title: "Step 9 — Pricing",
+    description: "Configure your product's pricing model and billing settings",
+  },
+  {
+    id: 10,
+    key: "publish",
+    label: "Publish",
+    title: "Step 10 — Publish",
+    description: "Review your product and publish it to the platform.",
+  },
 ] as const;
 
 export type WizardStepId = (typeof WIZARD_STEPS)[number]["id"];
@@ -284,7 +312,220 @@ export const AI_STYLES = [
   "Analytical",
 ];
 
+// ── Report Configuration constants ──────────────────────────────────────────
+export const REPORT_TEMPLATE_STYLES = [
+  "Standard",
+  "Executive",
+  "Detailed",
+  "Minimal",
+] as const;
+
+export const REPORT_FORMATS = ["PDF", "DOCX", "HTML"] as const;
+
+export const PDF_LAYOUTS = ["Portrait", "Landscape"] as const;
+
+export const PAGE_SIZES = ["A4", "Letter", "Legal", "A3"] as const;
+
+export const MARGIN_SIZES = ["Normal", "Narrow", "Wide", "None"] as const;
+
+export const FONT_FAMILIES = [
+  "Inter",
+  "Roboto",
+  "Open Sans",
+  "Georgia",
+  "Helvetica",
+] as const;
+
+export const LOGO_POSITIONS = ["Top Left", "Top Right", "Top Center"] as const;
+
+export const RECOMMENDATION_STYLES = [
+  "Bullet Points",
+  "Numbered",
+  "Priority Matrix",
+] as const;
+
+// ── Dashboard widgets (Step 7) ──────────────────────────────────────────────
+export type DashboardWidgetId =
+  | "progress"
+  | "kpi"
+  | "charts"
+  | "notifications"
+  | "reports"
+  | "timeline"
+  | "recommendations"
+  | "recent";
+
+export type DashboardWidget = {
+  id: DashboardWidgetId;
+  name: string;
+  description: string;
+  enabled: boolean;
+};
+
+export const DEFAULT_DASHBOARD_WIDGETS: DashboardWidget[] = [
+  {
+    id: "progress",
+    name: "Progress Widget",
+    description: "Track goal completion and milestones",
+    enabled: true,
+  },
+  {
+    id: "kpi",
+    name: "KPI Cards",
+    description: "Key performance indicators at a glance",
+    enabled: true,
+  },
+  {
+    id: "charts",
+    name: "Charts",
+    description: "Visual data representations and analytics",
+    enabled: true,
+  },
+  {
+    id: "notifications",
+    name: "Notifications",
+    description: "Recent alerts and system messages",
+    enabled: true,
+  },
+  {
+    id: "reports",
+    name: "Reports",
+    description: "Quick access to generated reports",
+    enabled: false,
+  },
+  {
+    id: "timeline",
+    name: "Timeline",
+    description: "Activity and event chronological view",
+    enabled: true,
+  },
+  {
+    id: "recommendations",
+    name: "Recommendations",
+    description: "AI-powered suggestions and insights",
+    enabled: false,
+  },
+  {
+    id: "recent",
+    name: "Recent Activities",
+    description: "Latest actions and interactions log",
+    enabled: true,
+  },
+];
+
+// ── Permissions (Step 8) ────────────────────────────────────────────────────
+export type PermissionKey = "editing" | "dashboard" | "reports" | "analytics";
+
+export type RolePermission = {
+  id: string;
+  name: string;
+  description: string;
+  avatarLetter: string;
+  avatarColor: string;
+  permissions: Record<PermissionKey, boolean>;
+  highlighted?: boolean;
+};
+
+export const DEFAULT_ROLE_PERMISSIONS: RolePermission[] = [
+  {
+    id: "consumer",
+    name: "Consumer",
+    description: "View-only access",
+    avatarLetter: "C",
+    avatarColor: "bg-sky-500",
+    permissions: {
+      editing: false,
+      dashboard: true,
+      reports: true,
+      analytics: false,
+    },
+  },
+  {
+    id: "employee",
+    name: "Employee",
+    description: "Standard team member",
+    avatarLetter: "E",
+    avatarColor: "bg-emerald-500",
+    permissions: {
+      editing: true,
+      dashboard: true,
+      reports: true,
+      analytics: true,
+    },
+  },
+  {
+    id: "org-admin",
+    name: "Organization Admin",
+    description: "Org-level management",
+    avatarLetter: "O",
+    avatarColor: "bg-amber-600",
+    permissions: {
+      editing: true,
+      dashboard: true,
+      reports: true,
+      analytics: true,
+    },
+  },
+  {
+    id: "refiner",
+    name: "Refiner",
+    description: "Edit & refine access",
+    avatarLetter: "R",
+    avatarColor: "bg-rose-500",
+    permissions: {
+      editing: true,
+      dashboard: true,
+      reports: true,
+      analytics: true,
+    },
+  },
+  {
+    id: "founder",
+    name: "Founder",
+    description: "Full platform control",
+    avatarLetter: "F",
+    avatarColor: "bg-[#fbbf24]",
+    permissions: {
+      editing: true,
+      dashboard: true,
+      reports: true,
+      analytics: true,
+    },
+    highlighted: true,
+  },
+];
+
+// ── Pricing (Step 9) ────────────────────────────────────────────────────────
+export type PricingType =
+  | "consumer"
+  | "subscription"
+  | "enterprise"
+  | "seat-based";
+
+export const PRICING_TYPES: {
+  id: PricingType;
+  label: string;
+  description: string;
+}[] = [
+    { id: "consumer", label: "Consumer", description: "Single payment" },
+    {
+      id: "subscription",
+      label: "Subscription",
+      description: "Recurring billing",
+    },
+    { id: "enterprise", label: "Enterprise", description: "License deal" },
+    { id: "seat-based", label: "Seat-Based", description: "Per user pricing" },
+  ];
+
+export const RENEWAL_CYCLES = [
+  "Monthly",
+  "Quarterly",
+  "Annual",
+  "One-time",
+] as const;
+
 export type ProductDraft = {
+  // Step 1 — Basic
   name: string;
   code: string;
   description: string;
@@ -294,19 +535,27 @@ export type ProductDraft = {
   textColor: string;
   buttonBg: string;
   buttonText: string;
+
+  // Step 2 — Reflection
   reflectionName: string;
   reflectionDescription: string;
   reflectionVersion: string;
   estimatedDuration: string;
   voiceSupport: boolean;
   textSupport: boolean;
+
+  // Step 3 — Protocol
   protocolName: string;
   protocolSummary: string;
+
+  // Step 4 — Workflow
   workflowName: string;
   workflowSteps: string;
   workflowJourney: JourneyStep[];
   completionLogic: "all" | "conditional";
   completionTrigger: string;
+
+  // Step 5 — AI
   aiProvider: "openai" | "gemini" | "claude";
   aiModel: string;
   aiFarRefiner: boolean;
@@ -320,16 +569,53 @@ export type ProductDraft = {
   aiContentFilter: boolean;
   aiPiiProtection: boolean;
   aiAuditLog: boolean;
+
+  // Step 6 — Reports
+  reportTemplateStyle: string;
+  reportFormat: string;
+  reportTitle: string;
+  reportSubtitle: string;
+  pdfLayout: "Portrait" | "Landscape";
+  pageSize: string;
+  marginSize: string;
+  fontFamily: string;
+  includeExecSummary: boolean;
+  execSummaryTemplate: string;
+  includeRecommendations: boolean;
+  recommendationStyle: "Bullet Points" | "Numbered" | "Priority Matrix";
+  reportPrimaryColor: string;
+  reportSecondaryColor: string;
+  logoPosition: "Top Left" | "Top Right" | "Top Center";
+  reportHeader: string;
+  showFarWatermark: boolean;
+  includeFooter: boolean;
+  footerLeftText: string;
+  footerRightText: string;
+  showPageNumbers: boolean;
+
+  // Legacy
   reportTemplate: string;
+
+  // Step 7 — Dashboard
+  dashboardWidgets: DashboardWidget[];
   dashboardLayout: string;
+
+  // Step 8 — Permissions
+  rolePermissions: RolePermission[];
   roles: string;
   accessLevel: string;
+
+  // Step 9 — Pricing
+  pricingType: PricingType;
   price: string;
+  trialPeriod: string;
   billingCycle: string;
   tier: string;
+  currency: string;
 };
 
 export const emptyDraft = (): ProductDraft => ({
+  // Step 1
   name: "",
   code: "",
   description: "",
@@ -339,19 +625,27 @@ export const emptyDraft = (): ProductDraft => ({
   textColor: "#FFFFFF",
   buttonBg: "#fbbf24",
   buttonText: "#000000",
+
+  // Step 2
   reflectionName: "",
   reflectionDescription: "",
   reflectionVersion: "1.0.0",
   estimatedDuration: "30 Days",
   voiceSupport: false,
   textSupport: true,
+
+  // Step 3
   protocolName: "",
   protocolSummary: "",
+
+  // Step 4
   workflowName: "",
   workflowSteps: "",
   workflowJourney: DEFAULT_JOURNEY.map((s) => ({ ...s })),
   completionLogic: "all",
   completionTrigger: "",
+
+  // Step 5
   aiProvider: "openai",
   aiModel: "GPT-4",
   aiFarRefiner: true,
@@ -365,13 +659,52 @@ export const emptyDraft = (): ProductDraft => ({
   aiContentFilter: true,
   aiPiiProtection: true,
   aiAuditLog: false,
+
+  // Step 6 — Reports
+  reportTemplateStyle: "Standard",
+  reportFormat: "PDF",
+  reportTitle: "",
+  reportSubtitle: "",
+  pdfLayout: "Portrait",
+  pageSize: "A4",
+  marginSize: "Normal",
+  fontFamily: "Inter",
+  includeExecSummary: true,
+  execSummaryTemplate: "",
+  includeRecommendations: true,
+  recommendationStyle: "Bullet Points",
+  reportPrimaryColor: "#D4A554",
+  reportSecondaryColor: "#2D4A3E",
+  logoPosition: "Top Left",
+  reportHeader: "FAR Platform™",
+  showFarWatermark: true,
+  includeFooter: true,
+  footerLeftText: "",
+  footerRightText: "",
+  showPageNumbers: true,
+
+  // Legacy
   reportTemplate: "Standard Narrative",
+
+  // Step 7 — Dashboard
+  dashboardWidgets: DEFAULT_DASHBOARD_WIDGETS.map((w) => ({ ...w })),
   dashboardLayout: "Consumer Default",
+
+  // Step 8 — Permissions
+  rolePermissions: DEFAULT_ROLE_PERMISSIONS.map((r) => ({
+    ...r,
+    permissions: { ...r.permissions },
+  })),
   roles: "Consumer, Founder",
   accessLevel: "Assigned Users",
-  price: "129",
+
+  // Step 9 — Pricing
+  pricingType: "consumer",
+  price: "",
+  trialPeriod: "",
   billingCycle: "One-time",
   tier: "Standard",
+  currency: "USD",
 });
 
 export const draftFromVoice = (): ProductDraft => ({
@@ -384,7 +717,8 @@ export const draftFromVoice = (): ProductDraft => ({
   reflectionDescription:
     "Voice and text reflections that surface relational patterns and actionable clarity.",
   protocolName: "Relational Insight Protocol™",
-  protocolSummary: "Founder-authored protocol guiding reflection cadence and review.",
+  protocolSummary:
+    "Founder-authored protocol guiding reflection cadence and review.",
   workflowName: "Clarity Pathway",
   workflowSteps: "Intake → Reflect → Review → Report → Continuum",
   aiPrompt: "Guide users toward clarity without prescribing outcomes.",
@@ -408,29 +742,36 @@ export const PUBLISH_CHECKS = [
   {
     title: "Product Information",
     body: "Product name, code, description, category and type all configured",
+    icon: "info",
   },
   {
     title: "Workflow",
     body: "Workflows configured and active with all steps defined",
+    icon: "workflow",
   },
   {
     title: "AI Configuration",
     body: "AI model, prompts and behavior parameters fully configured",
+    icon: "ai",
   },
   {
     title: "Reports",
     body: "Report templates configured and ready for data collection",
+    icon: "reports",
   },
   {
     title: "Dashboard",
     body: "Dashboard widgets and layout configured for this product",
+    icon: "dashboard",
   },
   {
     title: "Pricing",
     body: "Pricing model, tiers and billing fields configured",
+    icon: "pricing",
   },
   {
     title: "Permissions",
     body: "User roles, access levels and permission sets defined",
+    icon: "permissions",
   },
 ] as const;

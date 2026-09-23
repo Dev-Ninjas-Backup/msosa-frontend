@@ -192,7 +192,7 @@ const DashboardSettingsModal = ({
             </div>
           </section>
 
-          <section className="rounded-xl border border-border bg-primary-bg/40 p-4 space-y-3">
+          {/* <section className="rounded-xl border border-border bg-primary-bg/40 p-4 space-y-3">
             <div className="flex items-center justify-between gap-2">
               <p className="text-xs font-semibold uppercase tracking-wide text-secondary-text">
                 Live Preview
@@ -248,7 +248,7 @@ const DashboardSettingsModal = ({
                 />
               </div>
             </div>
-          </section>
+          </section> */}
 
           <div
             className={cn(
