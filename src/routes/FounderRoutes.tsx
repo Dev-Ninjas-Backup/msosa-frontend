@@ -16,6 +16,7 @@ import {
 import Loadable from "@/utils/Loadable";
 import { AdminSkeleton } from "@/common/Skeleton/Admin/AdminSkeleton";
 import DashboardLayout from "@/Layout/DashboardLayout/DashboardLayout";
+import NotFound from "@/pages/NotFound";
 
 // Lazy-loaded Founder pages
 const Dashboard = Loadable(
@@ -118,7 +119,8 @@ export const founderRoutes = [
         name: "Founder Control Center™",
         path: "dashboard",
         icon: <LayoutDashboard />,
-        element: <Dashboard />,
+        // element: <Dashboard />,
+        element: <NotFound />
       },
       {
         group: "Manage",
@@ -127,41 +129,49 @@ export const founderRoutes = [
             icon: <Columns />,
             name: "Create Product™",
             path: "create-product",
-            element: <CreateProduct />,
+            // element: <CreateProduct />,
+            element: <NotFound />
           },
           {
             icon: <LayoutGrid />,
             name: "Widget Library™",
             path: "widget-library",
-            element: <WidgetLibrary />,
+            // element: <WidgetLibrary />,
+            element: <NotFound />
           },
           {
             path: "widget-library/create",
-            element: <WidgetForm />,
+            // element: <WidgetForm />,
+            element: <NotFound />
           },
           {
             path: "widget-library/:widgetId",
-            element: <WidgetDetails />,
+            // element: <WidgetDetails />,
+            element: <NotFound />
           },
           {
             path: "widget-library/:widgetId/edit",
-            element: <WidgetForm />,
+            // element: <WidgetForm />,
+            element: <NotFound />
           },
           {
             icon: <BookOpen />,
             name: "Protocol Library™",
             path: "protocol-library",
-            element: <ProtocolLibrary />,
+            // element: <ProtocolLibrary />,
+            element: <NotFound />
           },
           {
             icon: <Users2 />,
             name: "User Management™",
             path: "user-management",
-            element: <UserManagement />,
+            // element: <UserManagement />,
+            element: <NotFound />
           },
           {
             path: "user-management/:userId",
-            element: <UserProfile />,
+            // element: <UserProfile />,
+            element: <NotFound />
           },
         ],
       },
@@ -172,59 +182,71 @@ export const founderRoutes = [
             icon: <FileBarChart />,
             name: "Reports™",
             path: "reports",
-            element: <Reports />,
+            // element: <Reports />,
+            element: <NotFound />
           },
           {
             path: "reports/templates",
-            element: <ReportTemplates />,
+            // element: <ReportTemplates />,
+            element: <NotFound />
           },
           {
             icon: <Sparkles />,
             name: "AI Services™",
             path: "ai-services",
-            element: <AIServices />,
+            // element: <AIServices />,
+            element: <NotFound />
           },
           {
             path: "ai-services/create-new-prompt",
-            element: <CreateNewPrompt />,
+            // element: <CreateNewPrompt />,
+            element: <NotFound />
           },
           {
             icon: <LinkIcon />,
             name: "Link Center™",
             path: "link-center",
-            element: <LinkCenter />,
+            // element: <LinkCenter />,
+            element: <NotFound />
           },
           {
             path: "link-center/create",
-            element: <CreateLink />,
+            // element: <CreateLink />,
+            element: <NotFound />
           },
           {
             icon: <PieChart />,
             name: "Analytics & Insights™",
             path: "analytics-insights",
-            element: <AnalyticsInsights />,
+            // element: <AnalyticsInsights />,
+            element: <NotFound />
           },
           {
             icon: <CircleDollarSign />,
             name: "Financial Center™",
             path: "financial-center",
-            element: <FinancialCenter />,
+            // element: <FinancialCenter />,
+            element: <NotFound />
           },
           {
             path: "financial-center/invoices",
-            element: <Invoices />,
+            // element: <Invoices />,
+            element: <NotFound />
           },
           {
             path: "financial-center/invoices/:invoiceId",
-            element: <InvoiceDetail />,
+            // element: <InvoiceDetail />,
+            element: <NotFound />
           },
           {
             path: "profile",
-            element: <FounderProfile />,
+            // element: <FounderProfile />,
+            element: <NotFound />
           },
           {
             path: "notifications",
-            element: <FounderNotifications />,
+            // element: <FounderNotifications />,
+            element: <NotFound />
           },
         ],
       },

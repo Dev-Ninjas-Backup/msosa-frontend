@@ -119,9 +119,9 @@ const CustomerProducts = () => {
       </AnimatedContainer>
 
       {/* Journey */}
-      <AnimatedContainer delay={0.2}>
+      {/* <AnimatedContainer delay={0.2}>
         <ReflectionJourney />
-      </AnimatedContainer>
+      </AnimatedContainer> */}
 
       {/* FAQ */}
       <AnimatedContainer delay={0.25}>
