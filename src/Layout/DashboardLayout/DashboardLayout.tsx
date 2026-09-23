@@ -16,6 +16,7 @@ import {
   bootDashboardTheme,
   DASHBOARD_THEME_ROOT_ID,
 } from "@/lib/dashboardTheme";
+import { getInvoice } from "@/pages/Founder/FinancialCenter/data";
 
 const routeDescriptions: Record<string, string> = {
   "Create Product™":
@@ -176,6 +177,10 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
     location.pathname === "/founder/ai-services/create-new-prompt";
   const isCreateLink = location.pathname === "/founder/link-center/create";
   const isAnalytics = location.pathname === "/founder/analytics-insights";
+  const isFinancial = location.pathname === "/founder/financial-center";
+  const isInvoices = location.pathname === "/founder/financial-center/invoices";
+  const invoiceDetailId = location.pathname.match(/^\/founder\/financial-center\/invoices\/([^/]+)$/)?.[1];
+  const invoiceRecord = invoiceDetailId ? getInvoice(decodeURIComponent(invoiceDetailId)) : undefined;
   const userProfileMatch = location.pathname.match(
     /^\/founder\/user-management\/([^/]+)$/
   );
@@ -220,6 +225,17 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
     : undefined;
   const breadcrumbs = widgetBreadcrumbs
     ? widgetBreadcrumbs
+    : isInvoices
+    ? [
+        { label: "Financial Center™", to: "/founder/financial-center" },
+        { label: "Invoices™" },
+      ]
+    : invoiceDetailId
+    ? [
+        { label: "Financial Center™", to: "/founder/financial-center" },
+        { label: "Invoices™", to: "/founder/financial-center/invoices" },
+        { label: decodeURIComponent(invoiceDetailId) },
+      ]
     : isCreateLink
     ? [
         { label: "Founder Control Center™", to: "/founder/dashboard" },
@@ -242,7 +258,11 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
         ]
       : undefined;
   const titleBadge = profileUser ? userStatusBadge(profileUser) : undefined;
-  const title = isWidgetCreate
+  const title = isInvoices
+    ? "Invoices™"
+    : invoiceDetailId
+    ? ` `
+    : isWidgetCreate
     ? "Create New Widget™"
     : widgetEditId
     ? "Edit Widget Configuration"
@@ -316,7 +336,16 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
         : activeItem && routeDescriptions[activeItem.label]
           ? routeDescriptions[activeItem.label]
           : "Welcome back to your dashboard.";
-  const description = isAnalytics ? (
+  const description = isFinancial ? (
+    <>
+      <span className="text-[10px] font-bold uppercase tracking-[1px] text-white/40">Last Updated:</span>{" "}
+      <span className="text-xs font-semibold normal-case tracking-normal text-[#fbbf24]">Today • 9:30 AM</span>
+    </>
+  ) : isInvoices ? (
+    "Manage, track and process billing for all platform-generated services."
+  ) : invoiceDetailId ? (
+    ``
+  ) : isAnalytics ? (
     <>
       <span className="text-[10px] font-bold uppercase tracking-[1px] text-white/40">Last Updated:</span>{" "}
       <span className="text-xs font-semibold normal-case tracking-normal text-[#fbbf24]">Today • 9:45 AM</span>

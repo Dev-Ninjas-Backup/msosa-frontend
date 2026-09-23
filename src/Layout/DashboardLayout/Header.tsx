@@ -15,6 +15,8 @@ import {
   Pencil,
   Plus,
   Download,
+  FileText,
+  Printer,
   Sparkles,
   ChevronDown,
 } from "lucide-react";
@@ -56,6 +58,16 @@ import {
   ANALYTICS_WINDOWS,
   type AnalyticsWindow,
 } from "@/pages/Founder/AnalyticsInsights/events";
+import {
+  FINANCIAL_EXPORT_EVENT,
+  FINANCIAL_PATH,
+  FINANCIAL_TRANSACTIONS_EVENT,
+  INVOICE_DOWNLOAD_EVENT,
+  INVOICE_PRINT_EVENT,
+  INVOICES_CREATE_EVENT,
+  INVOICES_EXPORT_EVENT,
+  INVOICES_PATH,
+} from "@/pages/Founder/FinancialCenter/events";
 import { useAppSelector } from "@/hooks/useRedux";
 
 const headerGhostButtonClass =
@@ -183,7 +195,10 @@ const Header = ({
   const isLinkCenter = location.pathname === "/founder/link-center";
   const isCreateLink = location.pathname === "/founder/link-center/create";
   const isAnalytics = location.pathname === "/founder/analytics-insights";
-  const hideUtilities = isUserProfile || isReports || isReportTemplates || isWidgetRoute || isLinkCenter || isCreateLink || isAnalytics;
+  const isFinancial = location.pathname === FINANCIAL_PATH;
+  const isInvoices = location.pathname === INVOICES_PATH;
+  const isInvoiceDetail = /^\/founder\/financial-center\/invoices\/[^/]+$/.test(location.pathname);
+  const hideUtilities = isUserProfile || isReports || isReportTemplates || isWidgetRoute || isLinkCenter || isCreateLink || isAnalytics || isFinancial || isInvoices || isInvoiceDetail;
   const capsCrumbs = breadcrumbVariant === "caps";
   const [quickActionsOpen, setQuickActionsOpen] = useState(false);
   const [analyticsWindow, setAnalyticsWindow] = useState<AnalyticsWindow>("Last 30 Days");
@@ -589,6 +604,77 @@ const Header = ({
                 className={cn(headerGoldButtonClass, "uppercase tracking-[0.5px]")}
                 title={`Deploy ${shortVersion(detailWidget.version)}`}
                 onClick={() => window.dispatchEvent(new CustomEvent(WIDGET_DEPLOY_EVENT))}
+              />
+            </>
+          )}
+
+          {isFinancial && (
+            <>
+              <Button
+                variant="secondary"
+                size="sm"
+                className={headerGhostButtonClass}
+                leftIcon={<FileText className="size-3.5" />}
+                title="View Transactions"
+                onClick={() => window.dispatchEvent(new CustomEvent(FINANCIAL_TRANSACTIONS_EVENT))}
+              />
+              <Button
+                variant="secondary"
+                size="sm"
+                className={headerGhostButtonClass}
+                leftIcon={<FileText className="size-3.5" />}
+                title="View Invoices"
+                onClick={() => navigate(INVOICES_PATH)}
+              />
+              <Button
+                variant="primary"
+                size="sm"
+                className={headerGoldButtonClass}
+                leftIcon={<Download className="size-3.5" />}
+                title="Export Report"
+                onClick={() => window.dispatchEvent(new CustomEvent(FINANCIAL_EXPORT_EVENT))}
+              />
+            </>
+          )}
+
+          {isInvoices && (
+            <>
+              <Button
+                variant="secondary"
+                size="sm"
+                className={headerGhostButtonClass}
+                leftIcon={<Download className="size-3.5" />}
+                title="Export CSV"
+                onClick={() => window.dispatchEvent(new CustomEvent(INVOICES_EXPORT_EVENT))}
+              />
+              <Button
+                variant="primary"
+                size="sm"
+                className={headerGoldButtonClass}
+                leftIcon={<Plus className="size-3.5" />}
+                title="New Invoice"
+                onClick={() => window.dispatchEvent(new CustomEvent(INVOICES_CREATE_EVENT))}
+              />
+            </>
+          )}
+
+          {isInvoiceDetail && (
+            <>
+              <Button
+                variant="link"
+                size="sm"
+                className="h-9 px-4 text-sm font-medium normal-case tracking-normal text-white/80 hover:text-white"
+                leftIcon={<Printer className="size-3.5" />}
+                title="Print Invoice"
+                onClick={() => window.dispatchEvent(new CustomEvent(INVOICE_PRINT_EVENT))}
+              />
+              <Button
+                variant="primary"
+                size="sm"
+                className={headerGoldButtonClass}
+                leftIcon={<Download className="size-3.5" />}
+                title="Download PDF"
+                onClick={() => window.dispatchEvent(new CustomEvent(INVOICE_DOWNLOAD_EVENT))}
               />
             </>
           )}
