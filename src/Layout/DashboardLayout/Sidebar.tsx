@@ -1,12 +1,16 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { ChevronLeft, ChevronRight, LogOut } from "lucide-react";
+import { ChevronLeft, ChevronRight, Ellipsis, IdCard, LogOut } from "lucide-react";
 import { toast } from "sonner";
 import { MenuItem } from "@/utils/Generator/MenuGenerator";
 import { Location } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import Logo from "@/common/Logo";
 import { REFINER_PROFILE } from "@/pages/Refiner/ReviewQueue/data";
+import { Popover, PopoverContent, PopoverTrigger } from "@/ui/Popover";
+import ConfirmModal from "@/components/reuseable/ConfirmModal";
+import { useAppDispatch } from "@/hooks/useRedux";
+import { logOut } from "@/store/features/AuthSlice/authSlice";
 
 const exactMatchPaths = [
   "/founder",
@@ -127,13 +131,19 @@ interface SidebarProps {
 const Sidebar = ({ isMobileOpen, setIsMobileOpen, menu }: SidebarProps) => {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const isRefiner = location.pathname.startsWith("/refiner");
   const isEnterprise = location.pathname.startsWith("/enterprise");
-  const profilePath = isRefiner
-    ? "/refiner/profile-settings"
-    : isEnterprise
-      ? "/enterprise/profile"
-      : undefined;
+  const isFounder = location.pathname.startsWith("/founder");
+  const profilePath = isFounder
+    ? "/founder/profile"
+    : isRefiner
+      ? "/refiner/profile-settings"
+      : isEnterprise
+        ? "/enterprise/profile"
+        : "/consumer/profile";
+  const [accountOpen, setAccountOpen] = useState(false);
+  const [logoutOpen, setLogoutOpen] = useState(false);
 
   const [isCollapsed, setIsCollapsed] = useState<boolean>(() => {
     if (typeof window === "undefined") return false;
@@ -176,6 +186,7 @@ const Sidebar = ({ isMobileOpen, setIsMobileOpen, menu }: SidebarProps) => {
   // Close mobile sidebar on route change
   useEffect(() => {
     setIsMobileOpen(false);
+    setAccountOpen(false);
   }, [location.pathname, setIsMobileOpen]);
 
   const toggleCollapse = () => {
@@ -186,7 +197,10 @@ const Sidebar = ({ isMobileOpen, setIsMobileOpen, menu }: SidebarProps) => {
     }
   };
 
-  const handleLogout = () => {
+  const confirmLogout = () => {
+    dispatch(logOut());
+    setLogoutOpen(false);
+    setAccountOpen(false);
     toast.success("Logged out.");
     navigate("/login");
   };
@@ -194,11 +208,11 @@ const Sidebar = ({ isMobileOpen, setIsMobileOpen, menu }: SidebarProps) => {
   const avatarSrc = isRefiner
     ? REFINER_PROFILE.avatar
     : location.pathname.startsWith("/founder")
-      ? "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&h=120&q=80"
+      ? "https://res.cloudinary.com/dc6zbxbvm/image/upload/v1772355382/nest-practice/zickqqto0zmov8aespmn.png"
       : "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&h=100&q=80";
 
   const displayName = location.pathname.startsWith("/founder")
-    ? "Michel Sossa"
+    ? "Sourav Debnath"
     : location.pathname.startsWith("/enterprise")
       ? "Enterprise Admin"
       : location.pathname.startsWith("/employee")
@@ -297,79 +311,86 @@ const Sidebar = ({ isMobileOpen, setIsMobileOpen, menu }: SidebarProps) => {
       </nav>
 
       <div className="p-4 pb-5 border-t border-white/8 mt-auto shrink-0">
-        {showCollapsed ? (
-          <div className="flex flex-col items-center gap-4">
-            {profilePath ? (
-              <Link to={profilePath} title="Profile & Settings">
-                <img
-                  src={avatarSrc}
-                  alt="User Avatar"
-                  className="w-10 h-10 rounded-full border border-white/10 object-cover"
-                />
-              </Link>
-            ) : (
-              <img
-                src={avatarSrc}
-                alt="User Avatar"
-                className="w-10 h-10 rounded-full border border-white/10 object-cover"
-              />
-            )}
+        <Popover open={accountOpen} onOpenChange={setAccountOpen}>
+          <PopoverTrigger asChild>
             <button
               type="button"
-              onClick={handleLogout}
-              className="text-secondary-text hover:text-rose-400 transition-colors cursor-pointer border-0 bg-transparent"
+              aria-label="Account menu"
+              className={cn(
+                "w-full cursor-pointer border border-white/10 bg-white/5 text-left transition-colors hover:bg-white/10",
+                showCollapsed
+                  ? "flex items-center justify-center rounded-full border-0 bg-transparent p-0"
+                  : "flex items-center justify-between gap-2 rounded-xl px-3 py-2.5",
+              )}
             >
-              <LogOut className="w-4 h-4" />
+              <span className={cn("flex min-w-0 items-center", showCollapsed ? "" : "gap-3")}>
+                <img
+                  src={avatarSrc}
+                  alt=""
+                  className="size-9 shrink-0 rounded-full border border-white/30 object-cover"
+                />
+                {!showCollapsed && (
+                  <span className="flex min-w-0 flex-col">
+                    <span className="truncate text-sm font-medium leading-tight text-primary-text">{displayName}</span>
+                    <span className="mt-0.5 truncate text-xs leading-tight text-secondary-text">{displayRole}</span>
+                  </span>
+                )}
+              </span>
+              {!showCollapsed && <Ellipsis className="size-4 shrink-0 text-secondary-text" />}
             </button>
-          </div>
-        ) : (
-          <div className="flex items-center justify-between gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2.5">
-            {profilePath ? (
+          </PopoverTrigger>
+          <PopoverContent
+            side="top"
+            align={showCollapsed ? "center" : "start"}
+            sideOffset={10}
+            className="w-[220px] overflow-hidden rounded-xl border-white/20 bg-[#252525] p-0 text-white shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.25)]"
+          >
+            <div className="flex flex-col items-center gap-3 border-b border-white/5 bg-white/5 p-4">
+              <img src={avatarSrc} alt="" className="size-10 rounded-full border border-white/30 object-cover" />
+              <div className="text-center">
+                <p className="text-sm font-semibold leading-5 text-white">{displayName}</p>
+                <p className="text-xs leading-4 text-white/40">{displayRole}</p>
+              </div>
+              <span className="rounded-full bg-[#10b7ba]/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.4px] text-[#10b7ba]">
+                Active Session
+              </span>
+            </div>
+            <div className="px-2 pt-2">
               <Link
                 to={profilePath}
-                className="flex items-center gap-3 min-w-0 flex-1 no-underline hover:opacity-90"
+                onClick={() => setAccountOpen(false)}
+                className="flex items-center gap-3 rounded-lg px-3 py-3 text-xs font-medium text-white no-underline hover:bg-white/5"
               >
-                <img
-                  src={avatarSrc}
-                  alt="User Avatar"
-                  className="size-9 rounded-full border border-white/10 object-cover shrink-0"
-                />
-                <div className="flex flex-col min-w-0">
-                  <span className="text-sm font-medium text-primary-text leading-tight truncate">
-                    {displayName}
-                  </span>
-                  <span className="text-xs text-secondary-text leading-tight mt-0.5 truncate">
-                    {displayRole}
-                  </span>
-                </div>
+                <IdCard className="size-4 shrink-0" />
+                View Profile
               </Link>
-            ) : (
-              <div className="flex items-center gap-3 min-w-0">
-                <img
-                  src={avatarSrc}
-                  alt="User Avatar"
-                  className="size-9 rounded-full border border-white/10 object-cover shrink-0"
-                />
-                <div className="flex flex-col min-w-0">
-                  <span className="text-sm font-medium text-primary-text leading-tight truncate">
-                    {displayName}
-                  </span>
-                  <span className="text-xs text-secondary-text leading-tight mt-0.5 truncate">
-                    {displayRole}
-                  </span>
-                </div>
-              </div>
-            )}
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="text-secondary-text hover:text-rose-400 transition-colors cursor-pointer border-0 bg-transparent p-1.5 shrink-0 rounded-lg hover:bg-white/5"
-              title="Logout"
-            >
-              <LogOut className="w-4 h-4" />
-            </button>
-          </div>
-        )}
+            </div>
+            <div className="px-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setAccountOpen(false);
+                  setLogoutOpen(true);
+                }}
+                className="flex w-full cursor-pointer items-center gap-3 rounded-lg border-0 bg-transparent p-3 text-xs font-bold uppercase tracking-[0.3px] text-[#ef4444] hover:bg-white/5"
+              >
+                <LogOut className="size-4 shrink-0" />
+                Log Out
+              </button>
+            </div>
+            <p className="px-4 py-2 text-[9px] leading-[13.5px] text-white/20">FAR System™ v1.0</p>
+          </PopoverContent>
+        </Popover>
+        <ConfirmModal
+          isOpen={logoutOpen}
+          onClose={() => setLogoutOpen(false)}
+          onConfirm={confirmLogout}
+          variant="danger"
+          title="Log out?"
+          description="This ends your active session on FAR System™."
+          confirmText="Log Out"
+          cancelText="Cancel"
+        />
       </div>
     </aside>
   );

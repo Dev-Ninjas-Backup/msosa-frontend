@@ -177,6 +177,7 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
     location.pathname === "/founder/ai-services/create-new-prompt";
   const isCreateLink = location.pathname === "/founder/link-center/create";
   const isAnalytics = location.pathname === "/founder/analytics-insights";
+  const isFounderProfile = location.pathname === "/founder/profile";
   const isFinancial = location.pathname === "/founder/financial-center";
   const isInvoices = location.pathname === "/founder/financial-center/invoices";
   const invoiceDetailId = location.pathname.match(/^\/founder\/financial-center\/invoices\/([^/]+)$/)?.[1];
@@ -236,6 +237,11 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
         { label: "Invoices™", to: "/founder/financial-center/invoices" },
         { label: decodeURIComponent(invoiceDetailId) },
       ]
+    : isFounderProfile
+    ? [
+        { label: "Founder Control Center™", to: "/founder/dashboard" },
+        { label: "Account Settings" },
+      ]
     : isCreateLink
     ? [
         { label: "Founder Control Center™", to: "/founder/dashboard" },
@@ -258,10 +264,12 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
         ]
       : undefined;
   const titleBadge = profileUser ? userStatusBadge(profileUser) : undefined;
-  const title = isInvoices
+  const title = isFounderProfile
+    ? "Account Settings"
+    : isInvoices
     ? "Invoices™"
     : invoiceDetailId
-    ? ` `
+    ? `Invoice #${decodeURIComponent(invoiceDetailId)}`
     : isWidgetCreate
     ? "Create New Widget™"
     : widgetEditId
@@ -311,6 +319,8 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
     ? "Update logic and visual layers. Published widgets need a redeploy to push changes live."
     : widgetDetailId
     ? "Preview live states, manage versions, and analyze deployment metrics."
+    : isFounderProfile
+    ? "Organization Administrator for Encounters Corporation"
     : isCreateLink
     ? ""
     : isCreatePrompt

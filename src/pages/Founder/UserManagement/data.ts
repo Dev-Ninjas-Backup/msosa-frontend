@@ -54,7 +54,7 @@ export const DEPARTMENTS = [
   "—",
 ];
 
-export const REPORTING_MANAGERS = ["Michel Sossa", "Marcus Thorne", "Sophia Loren", "—"];
+export const REPORTING_MANAGERS = ["Sourav Debnath", "Marcus Thorne", "Sophia Loren", "—"];
 
 export const REGISTRATION_PERIODS = [
   "Any Time",
@@ -420,13 +420,13 @@ const seed = (
   profile: buildProfile(base, {
     ...(withDemoData
       ? {
-          subscriptions: withIds(DEMO_SUBSCRIPTIONS, base.id),
-          assets: withIds(DEMO_ASSETS, base.id),
-          audit: withIds(DEMO_AUDIT, base.id),
-          session: DEMO_SESSION,
-          mfaEnabled: true,
-          passwordChangedAt: isoDaysAgo(14),
-        }
+        subscriptions: withIds(DEMO_SUBSCRIPTIONS, base.id),
+        assets: withIds(DEMO_ASSETS, base.id),
+        audit: withIds(DEMO_AUDIT, base.id),
+        session: DEMO_SESSION,
+        mfaEnabled: true,
+        passwordChangedAt: isoDaysAgo(14),
+      }
       : {}),
     ...overrides,
   }),
@@ -451,7 +451,7 @@ export const INITIAL_USERS: ManagedUser[] = [
       phone: "+1 (555) 214-7781",
       department: "Operations",
       team: "Enterprise Enablement",
-      reportingManager: "Michel Sossa",
+      reportingManager: "Sourav Debnath",
       jobTitle: "Enterprise Administrator",
       timeZone: "PST (GMT-8)",
     }
@@ -475,7 +475,7 @@ export const INITIAL_USERS: ManagedUser[] = [
       username: "mthor_xt_99",
       department: "Corporate Strategy",
       team: "Core Architecture Group",
-      reportingManager: "Michel Sossa",
+      reportingManager: "Sourav Debnath",
       jobTitle: "Principal Architect",
       employeeId: "#TH-0042",
     }
@@ -566,11 +566,11 @@ export const roleBadgeClass: Record<UserRole, string> = {
 };
 
 export const statusColorClass: Record<UserStatus, { dot: string; text: string }> =
-  {
-    Active: { dot: "bg-[#10b981]", text: "text-[#10b981]" },
-    Invited: { dot: "bg-[#22d3ee]", text: "text-[#22d3ee]" },
-    Suspended: { dot: "bg-[#ef4444]", text: "text-[#ef4444]" },
-  };
+{
+  Active: { dot: "bg-[#10b981]", text: "text-[#10b981]" },
+  Invited: { dot: "bg-[#22d3ee]", text: "text-[#22d3ee]" },
+  Suspended: { dot: "bg-[#ef4444]", text: "text-[#ef4444]" },
+};
 
 export const formatRegDate = (iso: string) =>
   new Date(iso.length === 10 ? `${iso}T00:00:00` : iso).toLocaleDateString("en-US", {

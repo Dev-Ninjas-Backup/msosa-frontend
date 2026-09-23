@@ -22,7 +22,7 @@ const PROTOCOLS = [
     status: "Published" as const,
     products: 18,
     updated: "Oct 10, 2023",
-    owner: "Michel Sossa",
+    owner: "Sourav Debnath",
   },
   {
     id: "PRT-208",
@@ -32,7 +32,7 @@ const PROTOCOLS = [
     status: "Active" as const,
     products: 7,
     updated: "Sep 22, 2023",
-    owner: "Michel Sossa",
+    owner: "Sourav Debnath",
   },
   {
     id: "PRT-301",
@@ -52,7 +52,7 @@ const PROTOCOLS = [
     status: "Draft" as const,
     products: 0,
     updated: "Jul 18, 2023",
-    owner: "Michel Sossa",
+    owner: "Sourav Debnath",
   },
   {
     id: "PRT-520",
@@ -122,7 +122,7 @@ const ProtocolLibrary = () => {
         filters={
           <>
             <FilterSelect label="Status" value={status} options={["All", "Published", "Active", "Draft"]} onChange={setStatus} />
-            <FilterSelect label="Category" value="All" options={["All", "Founder", "Growth", "Reflection", "Ops", "Security"]} onChange={() => {}} />
+            <FilterSelect label="Category" value="All" options={["All", "Founder", "Growth", "Reflection", "Ops", "Security"]} onChange={() => { }} />
           </>
         }
       />

@@ -90,6 +90,10 @@ const InvoiceDetail = Loadable(
   lazy(() => import("@/pages/Founder/FinancialCenter/InvoiceDetail")),
   AdminSkeleton
 );
+const FounderProfile = Loadable(
+  lazy(() => import("@/pages/Founder/Profile/Profile")),
+  AdminSkeleton
+);
 
 const FounderDashboardLayout = () => <DashboardLayout config={founderRoutes} />;
 
@@ -209,6 +213,10 @@ export const founderRoutes = [
           {
             path: "financial-center/invoices/:invoiceId",
             element: <InvoiceDetail />,
+          },
+          {
+            path: "profile",
+            element: <FounderProfile />,
           },
         ],
       },
