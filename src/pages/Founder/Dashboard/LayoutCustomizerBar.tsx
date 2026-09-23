@@ -50,7 +50,7 @@ const LayoutCustomizerBar = ({
         <button
           type="button"
           onClick={onResume}
-          className="h-11 sm:h-[54px] min-w-[140px] sm:min-w-[244px] px-6 sm:px-10 rounded-xl bg-button-bg text-base sm:text-lg font-medium tracking-[0.35px] text-black hover:opacity-95 cursor-pointer border-0"
+          className="h-11 sm:h-[48px] min-w-[100px] sm:min-w-[120px] px-6 sm:px-8 rounded-xl bg-button-bg text-base sm:text-lg font-medium tracking-[0.35px] text-black hover:opacity-95 cursor-pointer border-0"
         >
           RESUME NOW
         </button>

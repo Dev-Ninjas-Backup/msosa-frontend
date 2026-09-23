@@ -23,6 +23,10 @@ import {
   OPEN_DASHBOARD_SETTINGS_EVENT,
   OPEN_LAYOUT_EDIT_EVENT,
 } from "@/pages/Founder/Dashboard/data";
+import {
+  CREATE_PRODUCT_SEARCH_EVENT,
+  OPEN_CREATE_PRODUCT_EVENT,
+} from "@/pages/Founder/CreateProduct/data";
 
 interface HeaderProps {
   title?: string;
@@ -95,6 +99,7 @@ const Header = ({ title, description, onMenuClick }: HeaderProps) => {
   const enterpriseNotifs = location.pathname.startsWith("/enterprise");
   const isFounder = location.pathname.startsWith("/founder");
   const isFounderDashboard = location.pathname === "/founder/dashboard";
+  const isCreateProduct = location.pathname === "/founder/create-product";
 
   const openLayoutEdit = () => {
     if (!isFounderDashboard) return;
@@ -186,7 +191,7 @@ const Header = ({ title, description, onMenuClick }: HeaderProps) => {
   }
 
   return (
-    <header className="sticky top-0 z-30 bg-primary-bg/90 backdrop-blur-md border-b border-border">
+    <header className="sticky top-0 z-30 bg-primary-bg/90 backdrop-blur-md">
       <div className="flex items-center justify-between gap-4 w-full px-4 sm:px-6 py-4 sm:py-5">
         <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
           <button
@@ -200,12 +205,12 @@ const Header = ({ title, description, onMenuClick }: HeaderProps) => {
           {(title || description) && (
             <div className="flex flex-col min-w-0">
               {title ? (
-                <h1 className="font-playfair text-xl sm:text-2xl lg:text-[28px] text-primary-text leading-tight truncate">
+                <h1 className="font-playfair text-xl sm:text-2xl lg:text-[32px] text-primary-text leading-tight truncate">
                   {title}
                 </h1>
               ) : null}
               {description ? (
-                <p className="mt-1 text-xs sm:text-sm text-secondary-text max-w-xl hidden sm:block">
+                <p className="mt-1 text-xs sm:text-[14px] text-secondary-text max-w-2xl hidden sm:block">
                   {description}
                 </p>
               ) : null}
@@ -220,7 +225,17 @@ const Header = ({ title, description, onMenuClick }: HeaderProps) => {
               <input
                 type="text"
                 value={searchVal}
-                onChange={(e) => setSearchVal(e.target.value)}
+                onChange={(e) => {
+                  const next = e.target.value;
+                  setSearchVal(next);
+                  if (isCreateProduct) {
+                    window.dispatchEvent(
+                      new CustomEvent(CREATE_PRODUCT_SEARCH_EVENT, {
+                        detail: next,
+                      })
+                    );
+                  }
+                }}
                 placeholder="Search…"
                 className="h-12 w-48 lg:w-[323px] pl-10 pr-4 rounded-[10px] border border-border bg-primary-text/5 text-sm text-primary-text placeholder:text-secondary-text outline-none focus:border-button-bg/40 focus:bg-primary-text/[0.07] transition-all"
               />
@@ -240,7 +255,17 @@ const Header = ({ title, description, onMenuClick }: HeaderProps) => {
                   type="text"
                   variant="search"
                   value={searchVal}
-                  onChange={(e) => setSearchVal(e.target.value)}
+                  onChange={(e) => {
+                    const next = e.target.value;
+                    setSearchVal(next);
+                    if (isCreateProduct) {
+                      window.dispatchEvent(
+                        new CustomEvent(CREATE_PRODUCT_SEARCH_EVENT, {
+                          detail: next,
+                        })
+                      );
+                    }
+                  }}
                   placeholder="Search…"
                   autoFocus
                   leftIcon={<Search className="w-5 h-5 text-secondary-text" />}
@@ -343,21 +368,21 @@ const Header = ({ title, description, onMenuClick }: HeaderProps) => {
 
           {isFounder && (
             <>
-              <button
+              {/* <button
                 type="button"
                 className="hidden lg:flex size-12 items-center justify-center rounded-xl border border-border bg-primary-text/5 text-secondary-text hover:text-primary-text transition-colors cursor-pointer"
                 aria-label="History"
               >
                 <Clock className="size-3.5" />
-              </button>
-              <button
+              </button> */}
+              {/* <button
                 type="button"
                 className="hidden lg:flex size-12 items-center justify-center rounded-xl border border-border bg-primary-text/5 text-secondary-text hover:text-primary-text transition-colors cursor-pointer"
                 aria-label="Share"
               >
                 <Share2 className="size-3.5" />
-              </button>
-              <button
+              </button> */}
+              {/* <button
                 type="button"
                 className="hidden md:flex h-12 items-center gap-2 rounded-xl border border-border bg-primary-text/5 px-4 text-left cursor-pointer hover:border-button-bg/30 transition-colors"
               >
@@ -373,7 +398,7 @@ const Header = ({ title, description, onMenuClick }: HeaderProps) => {
                   </span>
                 </span>
                 <ChevronDown className="size-2.5 text-secondary-text ml-2" />
-              </button>
+              </button> */}
               {isFounderDashboard && (
                 <>
                   <Button
@@ -392,6 +417,19 @@ const Header = ({ title, description, onMenuClick }: HeaderProps) => {
                     title="Edit Dashboard"
                   />
                 </>
+              )}
+              {isCreateProduct && (
+                <Button
+                  variant="primary"
+                  size="sm"
+                  className="inline-flex h-12! rounded-xl! px-4! sm:px-6! text-sm font-semibold uppercase tracking-wide"
+                  onClick={() =>
+                    window.dispatchEvent(
+                      new CustomEvent(OPEN_CREATE_PRODUCT_EVENT)
+                    )
+                  }
+                  title="Create New Product"
+                />
               )}
             </>
           )}

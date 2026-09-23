@@ -10,8 +10,20 @@ import {
   Smile,
   Mic,
   Feather,
+  X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Button from "@/ui/Button";
+import Input from "@/ui/Input";
+import { Label } from "@/ui/Label";
+
+const EMOJIS = [
+  "✨", "💛", "🙏", "🌱", "🔥", "💫", "🌙", "☀️",
+  "🌊", "🍃", "🤍", "💜", "💙", "💚", "❤️", "⭐",
+  "🌈", "🕊️", "🌸", "🍀", "⚡", "💎", "🎯", "🪞",
+  "😊", "😌", "🤔", "😮", "😢", "💪", "🙌", "🤝",
+  "✅", "📌", "📝", "💡", "🔗", "⏳", "🎵", "🌿",
+];
 
 type TypeEditorProps = {
   value: string;
@@ -31,6 +43,10 @@ const TypeEditor = ({
   const editorRef = useRef<HTMLDivElement>(null);
   const [focused, setFocused] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [emojiOpen, setEmojiOpen] = useState(false);
+  const [linkOpen, setLinkOpen] = useState(false);
+  const [linkUrl, setLinkUrl] = useState("https://");
+  const [linkLabel, setLinkLabel] = useState("");
 
   const wordCount = value.trim()
     ? value.trim().split(/\s+/).filter(Boolean).length
@@ -99,7 +115,10 @@ const TypeEditor = ({
             type="button"
             title="Emoji"
             onMouseDown={(e) => e.preventDefault()}
-            onClick={() => exec("insertText", "✨")}
+            onClick={() => {
+              setLinkOpen(false);
+              setEmojiOpen(true);
+            }}
             className="flex size-8 items-center justify-center rounded-lg text-white/70 hover:text-white hover:bg-white/10 border-0 bg-transparent cursor-pointer shrink-0"
           >
             <Smile className="size-3.5" />
@@ -109,8 +128,11 @@ const TypeEditor = ({
             title="Insert link"
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => {
-              const url = window.prompt("Enter URL");
-              if (url) exec("createLink", url);
+              const selected = window.getSelection()?.toString() ?? "";
+              setLinkLabel(selected);
+              setLinkUrl("https://");
+              setEmojiOpen(false);
+              setLinkOpen(true);
             }}
             className="flex size-8 items-center justify-center rounded-lg text-white/70 hover:text-white hover:bg-white/10 border-0 bg-transparent cursor-pointer shrink-0"
           >
@@ -195,6 +217,138 @@ const TypeEditor = ({
           )}
         </div>
       </div>
+
+      {emojiOpen && (
+        <div className="fixed inset-0 z-[120] flex items-center justify-center p-4">
+          <button
+            type="button"
+            aria-label="Close emoji picker"
+            className="absolute inset-0 bg-black/70 border-0 cursor-pointer"
+            onClick={() => setEmojiOpen(false)}
+          />
+          <div
+            role="dialog"
+            aria-label="Choose emoji"
+            className="relative z-10 w-full max-w-sm rounded-2xl border border-white/15 bg-[#121212] p-4 shadow-2xl"
+          >
+            <div className="mb-3 flex items-center justify-between">
+              <p className="text-sm font-medium text-white">Choose emoji</p>
+              <button
+                type="button"
+                aria-label="Close"
+                onClick={() => setEmojiOpen(false)}
+                className="flex size-8 items-center justify-center rounded-lg border-0 bg-white/5 text-white/60 hover:text-white cursor-pointer"
+              >
+                <X className="size-4" />
+              </button>
+            </div>
+            <div className="grid grid-cols-8 gap-1">
+              {EMOJIS.map((emoji, i) => (
+                <button
+                  key={`${emoji}-${i}`}
+                  type="button"
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => {
+                    exec("insertText", emoji);
+                    setEmojiOpen(false);
+                  }}
+                  className="flex size-9 items-center justify-center rounded-lg text-lg hover:bg-white/10 border-0 bg-transparent cursor-pointer"
+                >
+                  {emoji}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {linkOpen && (
+        <div className="fixed inset-0 z-[120] flex items-center justify-center p-4">
+          <button
+            type="button"
+            aria-label="Close link dialog"
+            className="absolute inset-0 bg-black/70 border-0 cursor-pointer"
+            onClick={() => setLinkOpen(false)}
+          />
+          <div
+            role="dialog"
+            aria-labelledby="insert-link-title"
+            className="relative z-10 w-full max-w-sm rounded-2xl border border-white/15 bg-[#121212] p-5 shadow-2xl"
+          >
+            <div className="mb-4 flex items-center justify-between">
+              <h3 id="insert-link-title" className="text-sm font-medium text-white">
+                Insert link
+              </h3>
+              <button
+                type="button"
+                aria-label="Close"
+                onClick={() => setLinkOpen(false)}
+                className="flex size-8 items-center justify-center rounded-lg border-0 bg-white/5 text-white/60 hover:text-white cursor-pointer"
+              >
+                <X className="size-4" />
+              </button>
+            </div>
+            <div className="space-y-3">
+              <div className="space-y-1.5">
+                <Label className="text-xs text-white/60">URL</Label>
+                <Input
+                  variant="soft"
+                  type="url"
+                  placeholder="https://"
+                  value={linkUrl}
+                  onChange={(e) => setLinkUrl(e.target.value)}
+                  autoFocus
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-xs text-white/60">Text (optional)</Label>
+                <Input
+                  variant="soft"
+                  placeholder="Link label"
+                  value={linkLabel}
+                  onChange={(e) => setLinkLabel(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="mt-5 flex justify-end gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                title="Cancel"
+                onClick={() => setLinkOpen(false)}
+              />
+              <Button
+                variant="primary"
+                size="sm"
+                title="Insert"
+                onClick={() => {
+                  const raw = linkUrl.trim();
+                  if (!raw || raw === "https://") return;
+                  const url = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
+                  const label = linkLabel.trim();
+                  editorRef.current?.focus();
+                  if (label) {
+                    const safeLabel = label
+                      .replace(/&/g, "&amp;")
+                      .replace(/</g, "&lt;")
+                      .replace(/"/g, "&quot;");
+                    const safeUrl = url.replace(/"/g, "");
+                    document.execCommand(
+                      "insertHTML",
+                      false,
+                      `<a href="${safeUrl}">${safeLabel}</a>`
+                    );
+                    syncFromEditor();
+                  } else {
+                    exec("createLink", url);
+                  }
+                  setLinkOpen(false);
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="flex items-center justify-between gap-3 px-4 sm:px-5 py-3 border-t border-white/10">
         <p className="text-xs text-white/45">Words: {wordCount}</p>

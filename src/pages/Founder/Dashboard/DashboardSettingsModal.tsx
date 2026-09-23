@@ -267,7 +267,7 @@ const DashboardSettingsModal = ({
           <Button type="button" variant="secondary" size="sm" onClick={handlePreview}>
             Preview
           </Button>
-          <Button type="button" variant="primary" size="sm" onClick={handleSave}>
+          <Button type="button" variant="primary" size="sm" onClick={handleSave} >
             Save Changes
           </Button>
         </div>

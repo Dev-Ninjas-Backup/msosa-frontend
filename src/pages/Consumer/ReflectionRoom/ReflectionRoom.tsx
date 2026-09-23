@@ -32,12 +32,14 @@ import { ToolbarAction } from "./ToolbarAction";
 export type ReflectionRoomProps = {
   /** Product-creation mode reuses the same room UI without member portal. */
   variant?: "member" | "product-creation";
+  initialMode?: InputMode;
   onComplete?: () => void;
   onExit?: () => void;
 };
 
 const ReflectionRoom = ({
   variant = "member",
+  initialMode = "voice",
   onComplete,
   onExit,
 }: ReflectionRoomProps = {}) => {
@@ -68,7 +70,7 @@ const ReflectionRoom = ({
   const [language, setLanguage] = useState<Language>("en");
   const [langOpen, setLangOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [inputMode, setInputMode] = useState<InputMode>("voice");
+  const [inputMode, setInputMode] = useState<InputMode>(initialMode);
   const [phase, setPhase] = useState<SessionPhase>("idle");
   const [seconds, setSeconds] = useState(0);
   const [notes, setNotes] = useState("");
@@ -113,13 +115,36 @@ const ReflectionRoom = ({
     setPhase((p) => (p === "recording" ? "paused" : "recording"));
   };
 
+  const noRecordMsg =
+    language === "en" ? "There is no record" : "No hay grabación";
+
+  const hasAudio =
+    phase === "recorded" ||
+    phase === "paused" ||
+    (phase === "recording" && seconds > 0);
+
+  const requireAudio = (action: () => void) => {
+    if (!hasAudio) {
+      showToast(noRecordMsg);
+      return;
+    }
+    action();
+  };
+
   const stopRecording = () => {
-    if (phase !== "recording" && phase !== "paused") return;
+    if (phase !== "recording" && phase !== "paused") {
+      showToast(noRecordMsg);
+      return;
+    }
     setPhase("recorded");
     showToast(language === "en" ? "Recording saved" : "Grabación guardada");
   };
 
   const rerecord = () => {
+    if (!hasAudio) {
+      showToast(noRecordMsg);
+      return;
+    }
     setSeconds(0);
     setNotes("");
     setPhase("recording");
@@ -127,7 +152,16 @@ const ReflectionRoom = ({
   };
 
   const submitReflection = () => {
-    if (phase === "idle" && !notes.trim()) return;
+    if (inputMode === "voice" && !hasAudio) {
+      showToast(noRecordMsg);
+      return;
+    }
+    if (inputMode === "type" && !notes.trim()) {
+      showToast(
+        language === "en" ? "Write a reflection first" : "Escribe una reflexión"
+      );
+      return;
+    }
     setPhase("submitted");
     showToast(
       language === "en"
@@ -266,16 +300,18 @@ const ReflectionRoom = ({
           subtitle={t.recording}
           tone="danger"
           onClick={stopRecording}
-          disabled={phase !== "recording" && phase !== "paused"}
         />
         <ToolbarAction
           icon={<Play className="size-4 fill-current" />}
           title={t.replay}
           subtitle={t.answer}
           onClick={() =>
-            showToast(language === "en" ? "Replaying answer…" : "Reproduciendo…")
+            requireAudio(() =>
+              showToast(
+                language === "en" ? "Replaying answer…" : "Reproduciendo…"
+              )
+            )
           }
-          disabled={phase === "idle"}
         />
         <ToolbarAction
           icon={<RotateCcw className="size-4" />}
@@ -288,6 +324,18 @@ const ReflectionRoom = ({
           title={t.saveContinue}
           subtitle={t.continue}
           onClick={() => {
+            if (inputMode === "voice" && !hasAudio) {
+              showToast(noRecordMsg);
+              return;
+            }
+            if (inputMode === "type" && !notes.trim()) {
+              showToast(
+                language === "en"
+                  ? "Write a reflection first"
+                  : "Escribe una reflexión"
+              );
+              return;
+            }
             showToast(language === "en" ? "Progress saved" : "Progreso guardado");
             completeTo();
           }}

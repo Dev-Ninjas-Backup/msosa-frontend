@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
  * import Button from "@/ui/Button";
  */
 const buttonVariants = cva(
-  "group relative inline-flex items-center justify-center gap-3 whitespace-nowrap rounded-lg text-base font-medium transition-all duration-300 ease-out focus:outline-none disabled:pointer-events-none disabled:opacity-50 active:scale-95 transform cursor-pointer! overflow-hidden select-none",
+  "group relative inline-flex cursor-pointer items-center justify-center gap-3 whitespace-nowrap rounded-lg text-base font-medium transition-all duration-300 ease-out focus:outline-none disabled:pointer-events-none disabled:opacity-50 active:scale-95 transform cursor-pointer! overflow-hidden select-none",
   {
     variants: {
       variant: {

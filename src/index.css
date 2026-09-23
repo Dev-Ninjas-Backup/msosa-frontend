@@ -1,7 +1,7 @@
 /* =======================
    📦 Font Imports
 ========================== */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
 @font-face {
   font-family: "Inter";
@@ -53,6 +53,7 @@ html.lenis body {
 :root {
   --font-inter: "Inter", sans-serif;
   --font-playfair: "Playfair Display", serif;
+  --font-display: "Cormorant Garamond", "Playfair Display", serif;
   --primary-bg: #000307;
   --light-bg: #0f172a;
   --card-bg: #0f172a;
@@ -533,4 +534,12 @@ form select:focus {
   background: var(--brand-gradient) !important;
   color: white !important;
   border-radius: 6px;
+}
+
+/* Full-screen create-product room / processing — hide dashboard chrome */
+body.far-immersive #far-dashboard-theme {
+  background: #000 !important;
+}
+body.far-immersive #far-dashboard-theme > * {
+  visibility: hidden !important;
 }
