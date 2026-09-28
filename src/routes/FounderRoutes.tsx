@@ -119,8 +119,8 @@ export const founderRoutes = [
         name: "Founder Control Center™",
         path: "dashboard",
         icon: <LayoutDashboard />,
-        // element: <Dashboard />,
-        element: <NotFound />
+        element: <Dashboard />,
+        // element: <NotFound />
       },
       {
         group: "Manage",

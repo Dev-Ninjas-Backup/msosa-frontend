@@ -480,7 +480,7 @@ const ReflectionRoom = ({
     >
       <div className={opts.toolbarPadClass}>{toolbar}</div>
       {opts.submit}
-      <div className="pt-1 xl:pt-2">{tagline}</div>
+      {/* <div className="pt-1 xl:pt-2">{tagline}</div> */}
     </div>
   );
 
