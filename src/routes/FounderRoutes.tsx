@@ -206,37 +206,37 @@ export const founderRoutes = [
             icon: <LinkIcon />,
             name: "Link Center™",
             path: "link-center",
-            // element: <LinkCenter />,
-            element: <NotFound />
+            element: <LinkCenter />,
+            // element: <NotFound />
           },
           {
             path: "link-center/create",
-            // element: <CreateLink />,
-            element: <NotFound />
+            element: <CreateLink />,
+            // element: <NotFound />
           },
           {
             icon: <PieChart />,
             name: "Analytics & Insights™",
             path: "analytics-insights",
-            // element: <AnalyticsInsights />,
-            element: <NotFound />
+            element: <AnalyticsInsights />,
+            // element: <NotFound />
           },
           {
             icon: <CircleDollarSign />,
             name: "Financial Center™",
             path: "financial-center",
-            // element: <FinancialCenter />,
-            element: <NotFound />
+            element: <FinancialCenter />,
+            // element: <NotFound />
           },
           {
             path: "financial-center/invoices",
-            // element: <Invoices />,
-            element: <NotFound />
+            element: <Invoices />,
+            // element: <NotFound />
           },
           {
             path: "financial-center/invoices/:invoiceId",
-            // element: <InvoiceDetail />,
-            element: <NotFound />
+            element: <InvoiceDetail />,
+            // element: <NotFound />
           },
           {
             path: "profile",

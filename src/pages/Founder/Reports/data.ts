@@ -53,6 +53,16 @@ export interface Report {
   status: ReportStatus;
   sizeMb: number | null;
   note?: string;
+  /** What the reader is told this report concludes. */
+  summary: string;
+  /** One finding per line. */
+  findings: string;
+  recommendation: string;
+  /** Cycle the report covers, e.g. Q4 2024. */
+  period: string;
+  owner: string;
+  /** Internal note. It is not printed on the delivered file. */
+  founderNote: string;
 }
 
 const isoDaysAgo = (days: number) => {
@@ -61,7 +71,12 @@ const isoDaysAgo = (days: number) => {
   return d.toISOString().slice(0, 10);
 };
 
-export const INITIAL_REPORTS: Report[] = [
+type ReportSeed = Omit<
+  Report,
+  "summary" | "findings" | "recommendation" | "period" | "owner" | "founderNote"
+>;
+
+const REPORT_SEEDS: ReportSeed[] = [
   { id: "REP-2901-X", title: "Q4 Market Growth Analysis", product: "FAR Platform Engine™", organization: "Global Tech Solutions", type: "Financial", division: "Enterprise", createdAt: isoDaysAgo(1), status: "Delivered", sizeMb: 2.8 },
   { id: "REP-2905-K", title: "Security Compliance Audit", product: "FAR Core Protocol™", organization: "Quantum Systems", type: "Compliance", division: "Organization", createdAt: isoDaysAgo(0), status: "Pending Approval", sizeMb: null },
   { id: "REP-2882-M", title: "User Activity Incident Report", product: "User Control Matrix", organization: "Internal Operations", type: "Incident", division: "Founder", createdAt: isoDaysAgo(3), status: "Failed", sizeMb: null, note: "Data generation error" },
@@ -77,6 +92,184 @@ export const INITIAL_REPORTS: Report[] = [
   { id: "REP-2790-C", title: "Q3 Compliance Snapshot", product: "FAR Core Protocol™", organization: "Global Tech Solutions", type: "Compliance", division: "Enterprise", createdAt: isoDaysAgo(63), status: "Archived", sizeMb: 2.1 },
   { id: "REP-2754-F", title: "Founder Review Pack", product: "FAR Platform Engine™", organization: "Boutique Consulting", type: "Strategic", division: "Founder", createdAt: isoDaysAgo(120), status: "Archived", sizeMb: 4.8 },
 ];
+
+type ReportBrief = Pick<
+  Report,
+  "summary" | "findings" | "recommendation" | "period" | "owner"
+>;
+
+const REPORT_BRIEFS: Record<string, ReportBrief> = {
+  "REP-2901-X": {
+    period: "Q4 2024",
+    owner: "Enterprise Finance",
+    summary:
+      "Global Tech Solutions closed the quarter ahead of the platform plan. Enterprise seats and reflection completions both rose, while token cost stayed inside the forecast band.",
+    findings:
+      "Net revenue finished 6.2% above the Q4 plan.\nEnterprise reflection completions rose 11% against Q3.\nToken cost per delivered report held at $0.42.",
+    recommendation:
+      "Keep the current enterprise price and brief the account team on the three organizations driving the gain before the January renewal cycle.",
+  },
+  "REP-2905-K": {
+    period: "January 2025",
+    owner: "Protocol Office",
+    summary:
+      "Quantum Systems meets the current FAR Core control set, with one open item: session logs older than 18 months are still stored in the primary region.",
+    findings:
+      "Access reviews for privileged roles are complete and current.\nEncryption at rest and in transit matches the protocol.\nRetention for session logs exceeds the 18-month rule in one region.",
+    recommendation:
+      "Approve after Quantum confirms a purge date for the oversized log store. Do not deliver until that date is on the record.",
+  },
+  "REP-2882-M": {
+    period: "Last 14 days",
+    owner: "Founder Operations",
+    summary:
+      "The incident file did not finish. Source activity for three internal accounts stopped mid-export, so the report has no reliable timeline yet.",
+    findings:
+      "Generation stopped while reading User Control Matrix events.\nThree accounts are missing the second half of the window.\nNo file was produced, so nothing has been delivered.",
+    recommendation:
+      "Retry once the activity export is whole. Leave the report failed until that export is confirmed.",
+  },
+  "REP-2876-A": {
+    period: "H2 2024",
+    owner: "People & Culture",
+    summary:
+      "Stellar Tech’s leadership cohort shows a clear strength in decision clarity and a gap in follow-through after reflection sessions.",
+    findings:
+      "Decision clarity scored in the top quartile of organization assessments.\nFollow-through 30 days after a session is 18 points below the cohort median.\nManagers asked for a shorter action plan in the delivered report.",
+    recommendation:
+      "Deliver the approved file with the shorter action plan, and schedule a 30-day continuum check for the same cohort.",
+  },
+  "REP-2870-Q": {
+    period: "FY 2025 outlook",
+    owner: "Founder Office",
+    summary:
+      "The platform can carry another enterprise tier without a new product, provided protocol review capacity grows with the sales pipeline.",
+    findings:
+      "Pipeline coverage is 3.1× the current quarter target.\nRefiner queue time is the constraint, not product availability.\nTwo regions account for most of the waiting reviews.",
+    recommendation:
+      "Hold new product work. Add review capacity in those two regions before the next enterprise launch.",
+  },
+  "REP-2864-D": {
+    period: "Single session",
+    owner: "Member Success",
+    summary:
+      "The member’s reflection points to one decision that has been deferred for three sessions. The report names that decision and the cost of leaving it open.",
+    findings:
+      "The same decision appears in three consecutive sessions.\nThe member can state the options clearly and has not chosen one.\nNo risk flag was raised by the protocol.",
+    recommendation:
+      "Deliver as written. The next session should start from the named decision rather than a new prompt.",
+  },
+  "REP-2851-R": {
+    period: "FY 2024",
+    owner: "Enterprise Finance",
+    summary:
+      "The forecast puts Global Tech 4% under the annual plan if January renewals slip, and 2% over the plan if the two pending expansions close on time.",
+    findings:
+      "Base case assumes both expansions close in January.\nA 30-day slip moves the account under plan.\nServices revenue is steady and does not close the gap alone.",
+    recommendation:
+      "Hold approval until finance confirms the expansion dates. The brief should not ship with an unconfirmed close.",
+  },
+  "REP-2847-T": {
+    period: "Q4 2024",
+    owner: "People & Culture",
+    summary:
+      "Stellar Tech’s product and delivery teams are aligned on priorities and split on how quickly a reflection should become an action.",
+    findings:
+      "Priority ranking matches across both teams.\nDelivery wants actions inside 14 days. Product plans on 45.\nThe gap shows up as reopened reflections, not as conflict in the sessions.",
+    recommendation:
+      "Publish the summary and ask the organization admin to set one action window for the next cycle.",
+  },
+  "REP-2839-P": {
+    period: "Policy year 2024",
+    owner: "Protocol Office",
+    summary:
+      "Quantum Systems now deletes reflection media on the schedule in the data retention policy. The earlier exception has been closed.",
+    findings:
+      "Media older than the policy window has been removed.\nDeletion events are present in the audit log.\nNo consumer record was retained past the stated period.",
+    recommendation:
+      "Mark delivered. No further founder action is required for this cycle.",
+  },
+  "REP-2830-L": {
+    period: "12–22 January",
+    owner: "Founder Operations",
+    summary:
+      "An internal account opened report files outside its usual hours. The access was traced to a scheduled export, not to a compromised session.",
+    findings:
+      "The account belongs to the reporting job, not a person.\nThe export window matches the new nightly schedule.\nNo data left the platform.",
+    recommendation:
+      "Close the incident. Name the job account in the control matrix so the next export does not read as an anomaly.",
+  },
+  "REP-2822-B": {
+    period: "Last 30 days",
+    owner: "Member Success",
+    summary:
+      "The member’s month shows steadier language around one relationship and a new concern about workload. The digest is ready for a founder read before it is released.",
+    findings:
+      "Relational language is more specific than in the prior month.\nWorkload appears as a new theme in the last four sessions.\nThe member has not asked for the digest to be shared.",
+    recommendation:
+      "Approve for the member only. Do not copy an organization admin on a consumer digest.",
+  },
+  "REP-2815-H": {
+    period: "2025 plan",
+    owner: "Organization Success",
+    summary:
+      "Boutique Consulting can grow on the current reflection set. The constraint is invitation follow-through, not the product itself.",
+    findings:
+      "Invited employees finish at half the rate of the founder’s own sessions.\nCompleted sessions produce reports the leadership team actually uses.\nA second product would split a team that has not finished the first.",
+    recommendation:
+      "Stay on one product for the next two quarters and review invitation completion before any expansion.",
+  },
+  "REP-2790-C": {
+    period: "Q3 2024",
+    owner: "Protocol Office",
+    summary:
+      "Global Tech’s third-quarter controls were met. This snapshot is kept for comparison and is no longer part of the active approval queue.",
+    findings:
+      "All required controls were evidenced at the time of issue.\nTwo items were later superseded by the Q4 audit.\nThe file remains available to the enterprise admin.",
+    recommendation:
+      "Leave archived. Use the Q4 audit for any current decision.",
+  },
+  "REP-2754-F": {
+    period: "Annual review",
+    owner: "Founder Office",
+    summary:
+      "The annual pack for Boutique Consulting records the decisions already taken. It is archived so later briefs can be read against it.",
+    findings:
+      "Three strategic bets from the pack were funded.\nOne bet was declined and is marked as such in the file.\nNo open action from this pack remains.",
+    recommendation:
+      "Keep archived. Do not reissue. The current plan lives in the growth playbook.",
+  },
+};
+
+const fallbackBrief = (seed: ReportSeed): ReportBrief => ({
+  period: "Current cycle",
+  owner: "Founder Office",
+  summary: `${seed.title} was prepared for ${seed.organization} from ${seed.product}.`,
+  findings: "Findings will appear here when generation completes.",
+  recommendation: "Read the brief before changing status.",
+});
+
+export const INITIAL_REPORTS: Report[] = REPORT_SEEDS.map((seed) => ({
+  ...seed,
+  founderNote: "",
+  ...(REPORT_BRIEFS[seed.id] ?? fallbackBrief(seed)),
+}));
+
+export const reportFindings = (findings: string) =>
+  findings
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+export const reportStatusMeaning: Record<ReportStatus, string> = {
+  Delivered:
+    "Released to the organization. A later edit updates the record the next file is built from. It does not rewrite the file already sent.",
+  Approved: "Accepted by the founder. It can be delivered, or archived if it should not go out.",
+  "Pending Approval":
+    "Waiting on a founder decision. People outside this office cannot see it yet.",
+  Failed: "No file was produced. Retry uses this same brief once the source data is whole.",
+  Archived: "Kept for the record and removed from the active delivery cycle.",
+};
 
 /** Platform-wide figures shown in the summary cards (the table holds a sample). */
 export const REPORT_TOTALS = {
@@ -184,14 +377,73 @@ export interface ReportTemplate {
   audience: TemplateAudience;
   version: string;
   status: TemplateStatus;
+  /** What this template is for, in the language a reader will recognize. */
+  purpose: string;
+  /** Sections this template includes when a report is generated from it. */
+  sections: TemplateSectionId[];
 }
 
 export const INITIAL_TEMPLATES: ReportTemplate[] = [
-  { id: "TMPL-2023-MG", name: "Market Growth Protocol™", category: "Financial Analysis", division: "Global Operations", audience: "Founder", version: "v2.4.0", status: "Published" },
-  { id: "TMPL-2023-SEC", name: "Security Integrity Audit", category: "Compliance", division: "Internal Labs", audience: "Enterprise", version: "v1.0.8", status: "Drafting" },
-  { id: "TMPL-2023-LC", name: "Leadership Continuum", category: "Leadership", division: "Enterprise Delivery", audience: "Org", version: "v3.1.2", status: "Published" },
-  { id: "TMPL-2024-RF", name: "Personal Reflection Digest", category: "Reflection", division: "Consumer Success", audience: "Consumer", version: "v1.2.0", status: "Published" },
-  { id: "TMPL-2024-OPS", name: "Operational Readiness Brief", category: "Operations", division: "Global Operations", audience: "Enterprise", version: "v0.9.4", status: "Drafting" },
+  {
+    id: "TMPL-2023-MG",
+    name: "Market Growth Protocol™",
+    category: "Financial Analysis",
+    division: "Global Operations",
+    audience: "Founder",
+    version: "v2.4.0",
+    status: "Published",
+    purpose:
+      "Explains whether an organization is ahead of, on, or behind its growth plan, and what the founder should do before the next renewal cycle.",
+    sections: ["cover", "summary", "results", "charts", "action-plan"],
+  },
+  {
+    id: "TMPL-2023-SEC",
+    name: "Security Integrity Audit",
+    category: "Compliance",
+    division: "Internal Labs",
+    audience: "Enterprise",
+    version: "v1.0.8",
+    status: "Drafting",
+    purpose:
+      "States which controls an organization meets, which exception is still open, and whether the file is safe to deliver.",
+    sections: ["cover", "summary", "results", "action-plan"],
+  },
+  {
+    id: "TMPL-2023-LC",
+    name: "Leadership Continuum",
+    category: "Leadership",
+    division: "Enterprise Delivery",
+    audience: "Org",
+    version: "v3.1.2",
+    status: "Published",
+    purpose:
+      "Shows a leadership cohort where it is strong, where follow-through drops after a session, and the one action window to set next.",
+    sections: ["cover", "summary", "results", "action-plan", "history"],
+  },
+  {
+    id: "TMPL-2024-RF",
+    name: "Personal Reflection Digest",
+    category: "Reflection",
+    division: "Consumer Success",
+    audience: "Consumer",
+    version: "v1.2.0",
+    status: "Published",
+    purpose:
+      "Gives a member a clear reading of the month: what stayed the same, what appeared, and where the next session should begin.",
+    sections: ["cover", "summary", "results", "history"],
+  },
+  {
+    id: "TMPL-2024-OPS",
+    name: "Operational Readiness Brief",
+    category: "Operations",
+    division: "Global Operations",
+    audience: "Enterprise",
+    version: "v0.9.4",
+    status: "Drafting",
+    purpose:
+      "Tells an enterprise admin whether the organization can run the next cycle on the current product, invitations, and review capacity.",
+    sections: ["cover", "summary", "results", "charts", "action-plan"],
+  },
 ];
 
 export const templateAudienceMeta: Record<

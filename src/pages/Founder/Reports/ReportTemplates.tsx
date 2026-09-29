@@ -155,10 +155,28 @@ const ReportTemplates = () => {
   };
 
   const printPreview = (doc: PreviewDocument) => {
+    const shown = doc.sections?.length ? doc.sections : enabledSections;
     const opened = openPrintableReport(
-      { ...doc, meta: [["Typography", pdfConfig.typography], ["Workflow", workflow]] },
+      {
+        id: doc.id,
+        title: doc.title,
+        subtitle: doc.subtitle,
+        meta: [
+          ["Audience", doc.audience ?? "Platform"],
+          ["Version", doc.version ?? "Preview"],
+          ["Typography", pdfConfig.typography],
+          ["Workflow", workflow],
+        ],
+        narrative: [
+          ...(doc.purpose ? [{ heading: "Purpose", body: doc.purpose }] : []),
+          ...TEMPLATE_SECTIONS.filter((s) => s.id !== "cover" && shown.includes(s.id)).map((s) => ({
+            heading: s.title,
+            body: s.description,
+          })),
+        ],
+      },
       pdfConfig,
-      enabledSections
+      shown
     );
     if (!opened) toast.error("Allow pop-ups for this site to print the preview");
   };
@@ -238,7 +256,15 @@ const ReportTemplates = () => {
             if (message) toast.success(message);
           }}
           onPreview={() =>
-            setPreview({ id: "TMPL-PREVIEW", title: "Sample Founder Report", subtitle: `${workflow} workflow` })
+            setPreview({
+              id: "TMPL-PREVIEW",
+              title: "Sample Founder Report",
+              subtitle: `${workflow} workflow`,
+              purpose:
+                "A sample of how a founder report reads with the current branding, type, and sections.",
+              audience: "Founder",
+              sections: enabledSections,
+            })
           }
         />
 
@@ -402,7 +428,15 @@ const ReportTemplates = () => {
                           label={`Preview ${t.name}`}
                           className="border border-white/5 bg-black/40"
                           onClick={() =>
-                            setPreview({ id: t.id, title: t.name, subtitle: `${t.category} · ${t.division}` })
+                            setPreview({
+                              id: t.id,
+                              title: t.name,
+                              subtitle: `${t.category} · ${t.division}`,
+                              purpose: t.purpose,
+                              audience: t.audience,
+                              version: t.version,
+                              sections: t.sections,
+                            })
                           }
                         >
                           <Eye className="size-3" />

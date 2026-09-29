@@ -5,6 +5,8 @@ import ModalShell from "@/pages/Founder/_shared/ModalShell";
 import { StatusText } from "@/pages/Founder/_shared/DashboardUi";
 import {
   formatReportDate,
+  reportFindings,
+  reportStatusMeaning,
   reportStatusMeta,
   reportStatusNote,
   reportTypeBadge,
@@ -47,13 +49,16 @@ const ReportDetailsDrawer = ({
 }) => {
   if (!report) return null;
   const status = reportStatusMeta[report.status];
-  const rows: [string, string][] = [
+  const findings = reportFindings(report.findings);
+  const facts: [string, string][] = [
     ["Report ID", report.id],
+    ["Period", report.period],
+    ["Prepared by", report.owner],
     ["Product", report.product],
     ["Organization", report.organization],
     ["Division", report.division],
     ["Generated", formatReportDate(report.createdAt)],
-    ["File Size", report.sizeMb ? `${report.sizeMb} MB` : "—"],
+    ["File", report.sizeMb ? `${report.sizeMb} MB PDF` : "Not produced yet"],
   ];
 
   return (
@@ -61,8 +66,9 @@ const ReportDetailsDrawer = ({
       open
       onClose={onClose}
       placement="right"
+      panelClassName="max-w-xl"
       title={report.title}
-      description={report.product}
+      description={`${report.organization} · ${report.period}`}
       footer={
         <>
           <Button
@@ -70,7 +76,7 @@ const ReportDetailsDrawer = ({
             size="md"
             className="mr-auto border-0 font-medium normal-case tracking-normal"
             leftIcon={<Pencil className="size-3.5" />}
-            title="Edit"
+            title="Edit brief"
             onClick={() => onEdit(report)}
           />
           {ACTIONS_BY_STATUS[report.status].map((a) => {
@@ -95,7 +101,7 @@ const ReportDetailsDrawer = ({
       }
     >
       <div className="flex flex-col gap-6">
-        <div className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-black/40 p-4">
+        <div className="flex items-start justify-between gap-3 rounded-xl border border-white/10 bg-black/40 p-4">
           <StatusText
             label={report.status}
             dot={status.dot}
@@ -104,18 +110,62 @@ const ReportDetailsDrawer = ({
           />
           <span
             className={cn(
-              "rounded border px-2 py-0.5 text-[10px] font-bold uppercase leading-[15px]",
+              "shrink-0 rounded border px-2 py-0.5 text-[10px] font-bold uppercase leading-[15px]",
               reportTypeBadge[report.type]
             )}
           >
             {report.type}
           </span>
         </div>
-        <dl className="grid grid-cols-[120px_1fr] gap-x-4 gap-y-3 text-sm">
-          {rows.map(([k, v]) => (
-            <div key={k} className="contents">
-              <dt className="text-[11px] uppercase tracking-[0.5px] text-[#6b7280]">{k}</dt>
-              <dd className="text-white">{v}</dd>
+        <p className="text-sm leading-6 text-white/70">{reportStatusMeaning[report.status]}</p>
+
+        <section className="space-y-2">
+          <h3 className="text-[11px] font-semibold uppercase tracking-[0.5px] text-[#eab308]">
+            Executive summary
+          </h3>
+          <p className="text-sm leading-6 text-white">{report.summary}</p>
+        </section>
+
+        <section className="space-y-2">
+          <h3 className="text-[11px] font-semibold uppercase tracking-[0.5px] text-[#6b7280]">
+            Findings
+          </h3>
+          {findings.length ? (
+            <ul className="space-y-2">
+              {findings.map((line) => (
+                <li key={line} className="flex gap-2 text-sm leading-6 text-white/85">
+                  <span className="mt-2 size-1 shrink-0 rounded-full bg-[#eab308]" />
+                  <span>{line}</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-sm text-white/45">No findings recorded yet.</p>
+          )}
+        </section>
+
+        <section className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+          <h3 className="text-[11px] font-semibold uppercase tracking-[0.5px] text-[#6b7280]">
+            Recommended action
+          </h3>
+          <p className="mt-2 text-sm leading-6 text-white">{report.recommendation}</p>
+        </section>
+
+        {report.founderNote ? (
+          <section className="rounded-xl border border-[#eab308]/20 bg-[#eab308]/5 p-4">
+            <h3 className="text-[11px] font-semibold uppercase tracking-[0.5px] text-[#eab308]">
+              Founder note
+            </h3>
+            <p className="mt-2 text-sm leading-6 text-white/80">{report.founderNote}</p>
+            <p className="mt-2 text-[11px] text-white/40">Internal. This note is not printed on the file.</p>
+          </section>
+        ) : null}
+
+        <dl className="grid grid-cols-[120px_1fr] gap-x-4 gap-y-3 border-t border-white/10 pt-5 text-sm">
+          {facts.map(([label, value]) => (
+            <div key={label} className="contents">
+              <dt className="text-[11px] uppercase tracking-[0.5px] text-[#6b7280]">{label}</dt>
+              <dd className="text-white">{value}</dd>
             </div>
           ))}
         </dl>

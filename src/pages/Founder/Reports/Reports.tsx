@@ -164,8 +164,15 @@ const Reports = () => {
             ["Organization", report.organization],
             ["Division", report.division],
             ["Report Type", report.type],
+            ["Period", report.period],
+            ["Prepared by", report.owner],
             ["Generated", formatReportDate(report.createdAt)],
             ["Status", report.status],
+          ],
+          narrative: [
+            { heading: "Executive summary", body: report.summary },
+            { heading: "Findings", body: report.findings },
+            { heading: "Recommended action", body: report.recommendation },
           ],
         },
         pdfConfig,
@@ -511,7 +518,8 @@ const Reports = () => {
           onClose={() => setEditingId(null)}
           onSave={(patch) => {
             dispatch(updateReport({ id: editing.id, patch }));
-            toast.success("Report updated");
+            toast.success("Report brief saved");
+            setViewingId(editing.id);
             setEditingId(null);
           }}
         />

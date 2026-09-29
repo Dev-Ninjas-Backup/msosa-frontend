@@ -11,6 +11,8 @@ type ModalShellProps = {
   footer?: ReactNode;
   /** "center" renders a dialog, "right" renders a side drawer. */
   placement?: "center" | "right";
+  /** Extra classes for the panel, such as a wider max width. */
+  panelClassName?: string;
 };
 
 const ModalShell = ({
@@ -21,6 +23,7 @@ const ModalShell = ({
   children,
   footer,
   placement = "center",
+  panelClassName,
 }: ModalShellProps) => {
   useEffect(() => {
     if (!open) return;
@@ -58,7 +61,8 @@ const ModalShell = ({
           "relative flex w-full flex-col border border-white/10 bg-[#111] shadow-2xl",
           isDrawer
             ? "h-full max-w-md animate-in slide-in-from-right duration-200"
-            : "max-h-[90vh] max-w-lg rounded-2xl animate-in fade-in zoom-in-95 duration-150"
+            : "max-h-[90vh] max-w-lg rounded-2xl animate-in fade-in zoom-in-95 duration-150",
+          panelClassName
         )}
       >
         <div className="flex items-start justify-between gap-4 border-b border-white/10 p-6">
@@ -81,7 +85,7 @@ const ModalShell = ({
         {footer && (
           <div
             className={cn(
-              "flex items-center justify-end gap-3 border-t border-white/10 bg-[#0d0d0d] px-6 py-4",
+              "flex flex-wrap items-center justify-end gap-3 border-t border-white/10 bg-[#0d0d0d] px-6 py-4",
               !isDrawer && "rounded-b-2xl"
             )}
           >

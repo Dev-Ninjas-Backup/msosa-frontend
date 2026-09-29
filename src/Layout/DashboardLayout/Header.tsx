@@ -387,198 +387,198 @@ const Header = ({
 
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           {!hideUtilities && (
-          <>
-          {isFounderNotifications && (
-            <div className="mr-2 hidden items-center gap-5 md:flex">
-              <div className="text-right">
-                <p className="text-2xl font-bold leading-8 text-white">{totalCount()}</p>
-                <p className="text-[10px] font-bold uppercase tracking-[0.6px] text-white/40">Total Notifications</p>
-              </div>
-              <div className="text-right">
-                <p className="text-2xl font-bold leading-8 text-[#10b7ba]">{unreadCount}</p>
-                <p className="text-[10px] font-bold uppercase tracking-[0.6px] text-white/40">Unread</p>
-              </div>
-            </div>
-          )}
-          <div className="static sm:relative flex items-center" ref={searchRef}>
-            <div className="relative hidden sm:block">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-secondary-text pointer-events-none" />
-              <input
-                type="text"
-                value={searchVal}
-                onChange={(e) => {
-                  const next = e.target.value;
-                  setSearchVal(next);
-                  if (isCreateProduct) {
-                    window.dispatchEvent(
-                      new CustomEvent(CREATE_PRODUCT_SEARCH_EVENT, {
-                        detail: next,
-                      })
-                    );
-                  }
-                }}
-                placeholder="Search…"
-                className="h-12 w-48 lg:w-[323px] pl-10 pr-4 rounded-[10px] border border-border bg-primary-text/5 text-sm text-primary-text placeholder:text-secondary-text outline-none focus:border-button-bg/40 focus:bg-primary-text/[0.07] transition-all"
-              />
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setIsSearchOpen(!isSearchOpen)}
-              className="flex size-12 items-center justify-center text-secondary-text hover:text-primary-text hover:bg-primary-text/5 rounded-xl border border-border bg-primary-text/5 transition-colors cursor-pointer sm:hidden"
-            >
-              <Search className="size-5" />
-            </button>
-
-            {isSearchOpen && (
-              <div className="absolute left-0 right-0 sm:left-auto sm:right-0 top-full mt-2 w-auto sm:w-72 bg-card border border-border rounded-xl p-2 z-50 shadow-lg animate-in fade-in zoom-in-95 duration-100 sm:hidden">
-                <Input
-                  type="text"
-                  variant="search"
-                  value={searchVal}
-                  onChange={(e) => {
-                    const next = e.target.value;
-                    setSearchVal(next);
-                    if (isCreateProduct) {
-                      window.dispatchEvent(
-                        new CustomEvent(CREATE_PRODUCT_SEARCH_EVENT, {
-                          detail: next,
-                        })
-                      );
-                    }
-                  }}
-                  placeholder="Search…"
-                  autoFocus
-                  leftIcon={<Search className="w-5 h-5 text-secondary-text" />}
-                />
-              </div>
-            )}
-          </div>
-
-          <div className="static sm:relative flex items-center" ref={notifRef}>
-            <button
-              type="button"
-              onClick={() => setIsNotifOpen(!isNotifOpen)}
-              className="relative flex size-12 items-center justify-center rounded-xl border border-border bg-primary-text/5 text-secondary-text hover:text-button-bg hover:border-button-bg/40 transition-colors cursor-pointer"
-            >
-              <Bell className="size-5" />
-              {unreadCount > 0 && (
-                <span className="absolute top-3.5 right-3.5 size-2 rounded-full bg-button-bg ring-2 ring-primary-bg" />
+            <>
+              {isFounderNotifications && (
+                <div className="mr-2 hidden items-center gap-5 md:flex">
+                  <div className="text-right">
+                    <p className="text-2xl font-bold leading-8 text-white">{totalCount()}</p>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.6px] text-white/40">Total Notifications</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-2xl font-bold leading-8 text-[#10b7ba]">{unreadCount}</p>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.6px] text-white/40">Unread</p>
+                  </div>
+                </div>
               )}
-            </button>
+              <div className="static sm:relative flex items-center" ref={searchRef}>
+                <div className="relative hidden sm:block">
+                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-secondary-text pointer-events-none" />
+                  <input
+                    type="text"
+                    value={searchVal}
+                    onChange={(e) => {
+                      const next = e.target.value;
+                      setSearchVal(next);
+                      if (isCreateProduct) {
+                        window.dispatchEvent(
+                          new CustomEvent(CREATE_PRODUCT_SEARCH_EVENT, {
+                            detail: next,
+                          })
+                        );
+                      }
+                    }}
+                    placeholder="Search…"
+                    className="h-12 w-48 lg:w-[323px] pl-10 pr-4 rounded-[10px] border border-border bg-primary-text/5 text-sm text-primary-text placeholder:text-secondary-text outline-none focus:border-button-bg/40 focus:bg-primary-text/[0.07] transition-all"
+                  />
+                </div>
 
-            {isNotifOpen && isFounder && (
-              <div className="absolute right-0 top-full z-50 mt-3 w-[358px] overflow-hidden rounded-xl border border-[#27272a] bg-[#121214] shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.25)]">
-                <div className="flex items-center justify-between bg-white/10 px-5 py-5">
-                  <p className="text-xl font-semibold tracking-[-0.5px] text-[#f8fafc]">Notifications</p>
-                  <button type="button" className="cursor-pointer border-0 bg-transparent p-0 text-[13px] font-medium text-[#fbbf24]" onClick={markAllNoticesRead}>
-                    Mark all as read
-                  </button>
-                </div>
-                <div>
-                  {founderModal.map((notice) => (
-                    <button
-                      key={notice.id}
-                      type="button"
-                      onClick={() => markNoticeRead(notice.id)}
-                      className="relative block w-full cursor-pointer border border-white/10 bg-transparent px-5 py-4 text-left"
-                    >
-                      <p className="pr-6 text-[15px] font-semibold text-[#f8fafc]">{notice.shortTitle}</p>
-                      <p className="mt-2 text-[13px] leading-[18px] text-[#94a3b8]">{notice.preview}</p>
-                      <p className={cn("mt-2 text-[11px] font-medium", notice.priority === "Medium Priority" ? "text-[#3b82f6]" : "text-[#94a3b8]")}>
-                        {notice.priority === "Medium Priority" ? `Medium Priority • ${notice.ago}` : notice.ago}
-                      </p>
-                      {!notice.read && <span className="absolute right-5 top-6 size-2 rounded-full bg-[#10b7ba]" />}
-                    </button>
-                  ))}
-                </div>
-                <div className="flex justify-center border-t border-[#27272a] bg-[#0a0a0b] px-4 py-5">
-                  <Button variant="primary" size="sm" className="h-11 rounded-[10px] bg-[#fbbf24] px-6 text-sm font-medium text-black" rightIcon={<ChevronRight className="size-3.5" />} title="View all notifications" onClick={openAllNotifications} />
-                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsSearchOpen(!isSearchOpen)}
+                  className="flex size-12 items-center justify-center text-secondary-text hover:text-primary-text hover:bg-primary-text/5 rounded-xl border border-border bg-primary-text/5 transition-colors cursor-pointer sm:hidden"
+                >
+                  <Search className="size-5" />
+                </button>
+
+                {isSearchOpen && (
+                  <div className="absolute left-0 right-0 sm:left-auto sm:right-0 top-full mt-2 w-auto sm:w-72 bg-card border border-border rounded-xl p-2 z-50 shadow-lg animate-in fade-in zoom-in-95 duration-100 sm:hidden">
+                    <Input
+                      type="text"
+                      variant="search"
+                      value={searchVal}
+                      onChange={(e) => {
+                        const next = e.target.value;
+                        setSearchVal(next);
+                        if (isCreateProduct) {
+                          window.dispatchEvent(
+                            new CustomEvent(CREATE_PRODUCT_SEARCH_EVENT, {
+                              detail: next,
+                            })
+                          );
+                        }
+                      }}
+                      placeholder="Search…"
+                      autoFocus
+                      leftIcon={<Search className="w-5 h-5 text-secondary-text" />}
+                    />
+                  </div>
+                )}
               </div>
-            )}
 
-            {isNotifOpen && !isFounder && (
-              <div className="absolute left-0 right-0 sm:left-auto sm:right-0 top-full mt-2 sm:mt-3 w-auto sm:w-80 bg-card border border-border rounded-xl py-2 z-50 shadow-lg animate-in fade-in zoom-in-95 duration-100">
-                <div className="flex items-center justify-between px-4 py-2 border-b border-border mb-1">
-                  <p className="text-xs text-primary-text font-bold uppercase tracking-wider">
-                    Notifications
-                  </p>
+              <div className="static sm:relative flex items-center" ref={notifRef}>
+                <button
+                  type="button"
+                  onClick={() => setIsNotifOpen(!isNotifOpen)}
+                  className="relative flex size-12 items-center justify-center rounded-xl border border-border bg-primary-text/5 text-secondary-text hover:text-button-bg hover:border-button-bg/40 transition-colors cursor-pointer"
+                >
+                  <Bell className="size-5" />
                   {unreadCount > 0 && (
-                    <button
-                      type="button"
-                      onClick={markAllAsRead}
-                      className="text-[10px] text-button-bg hover:underline flex items-center gap-1 font-semibold cursor-pointer border-0 bg-transparent"
-                    >
-                      <CheckCheck className="w-4 h-4" /> Mark all read
-                    </button>
+                    <span className="absolute top-3.5 right-3.5 size-2 rounded-full bg-button-bg ring-2 ring-primary-bg" />
                   )}
-                </div>
+                </button>
 
-                <div className="max-h-64 overflow-y-auto divide-y divide-border">
-                  {notifications.length === 0 ? (
-                    <div className="p-4 text-center text-xs text-secondary-text flex flex-col items-center gap-1">
-                      <BellOff className="w-8 h-8 opacity-40 mb-1" />
-                      No notifications
+                {isNotifOpen && isFounder && (
+                  <div className="absolute right-0 top-full z-50 mt-3 w-[358px] overflow-hidden rounded-xl border border-[#27272a] bg-[#121214] shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.25)]">
+                    <div className="flex items-center justify-between bg-white/10 px-5 py-5">
+                      <p className="text-xl font-semibold tracking-[-0.5px] text-[#f8fafc]">Notifications</p>
+                      <button type="button" className="cursor-pointer border-0 bg-transparent p-0 text-[13px] font-medium text-[#fbbf24]" onClick={markAllNoticesRead}>
+                        Mark all as read
+                      </button>
                     </div>
-                  ) : (
-                    notifications.map((n) => (
-                      <div
-                        key={n.id}
-                        className={cn(
-                          "px-4 py-3 hover:bg-primary-text/5 transition-colors flex gap-3 items-start",
-                          !n.read && "bg-primary-text/[0.03]"
-                        )}
-                      >
-                        <div className="flex-1 min-w-0">
-                          <div className="flex justify-between items-baseline gap-2">
-                            <p
-                              className={cn(
-                                "text-xs truncate font-semibold",
-                                n.read
-                                  ? "text-secondary-text"
-                                  : "text-primary-text"
-                              )}
-                            >
-                              {n.title}
-                            </p>
-                            <span className="text-[9px] text-muted-blue shrink-0">
-                              {n.time}
-                            </span>
-                          </div>
-                          <p className="text-[11px] text-secondary-text mt-0.5 line-clamp-2">
-                            {n.description}
+                    <div>
+                      {founderModal.map((notice) => (
+                        <button
+                          key={notice.id}
+                          type="button"
+                          onClick={() => markNoticeRead(notice.id)}
+                          className="relative block w-full cursor-pointer border border-white/10 bg-transparent px-5 py-4 text-left"
+                        >
+                          <p className="pr-6 text-[15px] font-semibold text-[#f8fafc]">{notice.shortTitle}</p>
+                          <p className="mt-2 text-[13px] leading-[18px] text-[#94a3b8]">{notice.preview}</p>
+                          <p className={cn("mt-2 text-[11px] font-medium", notice.priority === "Medium Priority" ? "text-[#3b82f6]" : "text-[#94a3b8]")}>
+                            {notice.priority === "Medium Priority" ? `Medium Priority • ${notice.ago}` : notice.ago}
                           </p>
+                          {!notice.read && <span className="absolute right-5 top-6 size-2 rounded-full bg-[#10b7ba]" />}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="flex justify-center border-t border-[#27272a] bg-[#0a0a0b] px-4 py-5">
+                      <Button variant="primary" size="sm" className="h-11 rounded-[10px] bg-[#fbbf24] px-6 text-sm font-medium text-black" rightIcon={<ChevronRight className="size-3.5" />} title="View all notifications" onClick={openAllNotifications} />
+                    </div>
+                  </div>
+                )}
+
+                {isNotifOpen && !isFounder && (
+                  <div className="absolute left-0 right-0 sm:left-auto sm:right-0 top-full mt-2 sm:mt-3 w-auto sm:w-80 bg-card border border-border rounded-xl py-2 z-50 shadow-lg animate-in fade-in zoom-in-95 duration-100">
+                    <div className="flex items-center justify-between px-4 py-2 border-b border-border mb-1">
+                      <p className="text-xs text-primary-text font-bold uppercase tracking-wider">
+                        Notifications
+                      </p>
+                      {unreadCount > 0 && (
+                        <button
+                          type="button"
+                          onClick={markAllAsRead}
+                          className="text-[10px] text-button-bg hover:underline flex items-center gap-1 font-semibold cursor-pointer border-0 bg-transparent"
+                        >
+                          <CheckCheck className="w-4 h-4" /> Mark all read
+                        </button>
+                      )}
+                    </div>
+
+                    <div className="max-h-64 overflow-y-auto divide-y divide-border">
+                      {notifications.length === 0 ? (
+                        <div className="p-4 text-center text-xs text-secondary-text flex flex-col items-center gap-1">
+                          <BellOff className="w-8 h-8 opacity-40 mb-1" />
+                          No notifications
                         </div>
-                        {!n.read && (
-                          <button
-                            type="button"
-                            onClick={() => markAsRead(n.id)}
-                            className="text-button-bg p-1 hover:bg-primary-text/5 rounded-full shrink-0 cursor-pointer border-0 bg-transparent"
-                            title="Mark as read"
+                      ) : (
+                        notifications.map((n) => (
+                          <div
+                            key={n.id}
+                            className={cn(
+                              "px-4 py-3 hover:bg-primary-text/5 transition-colors flex gap-3 items-start",
+                              !n.read && "bg-primary-text/[0.03]"
+                            )}
                           >
-                            <Check className="w-3.5 h-3.5" />
-                          </button>
-                        )}
-                      </div>
-                    ))
-                  )}
-                </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex justify-between items-baseline gap-2">
+                                <p
+                                  className={cn(
+                                    "text-xs truncate font-semibold",
+                                    n.read
+                                      ? "text-secondary-text"
+                                      : "text-primary-text"
+                                  )}
+                                >
+                                  {n.title}
+                                </p>
+                                <span className="text-[9px] text-muted-blue shrink-0">
+                                  {n.time}
+                                </span>
+                              </div>
+                              <p className="text-[11px] text-secondary-text mt-0.5 line-clamp-2">
+                                {n.description}
+                              </p>
+                            </div>
+                            {!n.read && (
+                              <button
+                                type="button"
+                                onClick={() => markAsRead(n.id)}
+                                className="text-button-bg p-1 hover:bg-primary-text/5 rounded-full shrink-0 cursor-pointer border-0 bg-transparent"
+                                title="Mark as read"
+                              >
+                                <Check className="w-3.5 h-3.5" />
+                              </button>
+                            )}
+                          </div>
+                        ))
+                      )}
+                    </div>
 
-                <div className="border-t border-border mt-1 pt-1.5 px-3">
-                  <button
-                    type="button"
-                    onClick={openAllNotifications}
-                    className="w-full text-center text-xs font-semibold text-secondary-text hover:text-button-bg py-1.5 hover:bg-primary-text/5 rounded-lg transition-colors cursor-pointer border-0 bg-transparent"
-                  >
-                    View all notifications
-                  </button>
-                </div>
+                    <div className="border-t border-border mt-1 pt-1.5 px-3">
+                      <button
+                        type="button"
+                        onClick={openAllNotifications}
+                        className="w-full text-center text-xs font-semibold text-secondary-text hover:text-button-bg py-1.5 hover:bg-primary-text/5 rounded-lg transition-colors cursor-pointer border-0 bg-transparent"
+                      >
+                        View all notifications
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
 
-          </>
+            </>
           )}
 
           {isReports && (
@@ -822,7 +822,9 @@ const Header = ({
                 variant="secondary"
                 size="sm"
                 className="h-9 rounded border-transparent bg-[#3b82f6] px-4 text-sm font-bold normal-case tracking-normal text-white hover:bg-[#3b82f6]/90"
-                rightIcon={<Sparkles className="size-3.5" />}
+                rightIcon={<svg xmlns="http://www.w3.org/2000/svg" width="15" height="12" viewBox="0 0 15 12" fill="none">
+                  <path d="M13.5854 6.27395C14.9096 4.94973 14.9096 2.8052 13.5854 1.48098C12.4135 0.309106 10.5666 0.156762 9.21894 1.12004L9.18145 1.14582C8.84394 1.38723 8.7666 1.85598 9.00801 2.19114C9.24941 2.52629 9.71816 2.60598 10.0533 2.36457L10.0908 2.33879C10.8432 1.80207 11.8721 1.88645 12.5236 2.54036C13.2619 3.27864 13.2619 4.47395 12.5236 5.21223L9.89394 7.84661C9.15566 8.58489 7.96035 8.58489 7.22207 7.84661C6.56816 7.1927 6.48379 6.16379 7.02051 5.41379L7.04629 5.37629C7.28769 5.03879 7.20801 4.57004 6.87285 4.33098C6.53769 4.09192 6.0666 4.16926 5.82754 4.50442L5.80176 4.54192C4.83613 5.88723 4.98848 7.73411 6.16035 8.90598C7.48457 10.2302 9.6291 10.2302 10.9533 8.90598L13.5854 6.27395ZM1.40723 5.72551C0.0830078 7.04973 0.0830078 9.19426 1.40723 10.5185C2.5791 11.6904 4.42598 11.8427 5.77363 10.8794L5.81113 10.8536C6.14863 10.6122 6.22598 10.1435 5.98457 9.80833C5.74316 9.47317 5.27441 9.39348 4.93926 9.63489L4.90176 9.66067C4.14941 10.1974 3.12051 10.113 2.46895 9.45911C1.73066 8.71848 1.73066 7.52317 2.46895 6.78489L5.09863 4.15286C5.83691 3.41457 7.03223 3.41457 7.77051 4.15286C8.42441 4.80676 8.50879 5.83567 7.97207 6.58801L7.94629 6.62551C7.70488 6.96301 7.78457 7.43176 8.11973 7.67083C8.45488 7.90989 8.92598 7.83254 9.16504 7.49739L9.19082 7.45989C10.1564 6.11223 10.0041 4.26536 8.83223 3.09348C7.50801 1.76926 5.36348 1.76926 4.03926 3.09348L1.40723 5.72551Z" fill="white" />
+                </svg>}
                 title="Generate Link"
                 onClick={() => sendLinkForm("generate")}
               />

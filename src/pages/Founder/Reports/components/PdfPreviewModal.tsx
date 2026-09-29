@@ -1,9 +1,23 @@
 import { Printer } from "lucide-react";
 import Button from "@/ui/Button";
 import ModalShell from "@/pages/Founder/_shared/ModalShell";
-import { TEMPLATE_SECTIONS, type PdfConfig, type TemplateSectionId } from "../data";
+import {
+  TEMPLATE_SECTIONS,
+  templateAudienceMeta,
+  type PdfConfig,
+  type TemplateAudience,
+  type TemplateSectionId,
+} from "../data";
 
-export type PreviewDocument = { id: string; title: string; subtitle: string };
+export type PreviewDocument = {
+  id: string;
+  title: string;
+  subtitle: string;
+  purpose?: string;
+  audience?: TemplateAudience;
+  version?: string;
+  sections?: TemplateSectionId[];
+};
 
 const PdfPreviewModal = ({
   doc,
@@ -19,14 +33,17 @@ const PdfPreviewModal = ({
   onPrint: () => void;
 }) => {
   const [headingFont, bodyFont] = config.typography.split(" / ");
-  const bodySections = TEMPLATE_SECTIONS.filter((s) => s.id !== "cover" && sections.includes(s.id));
+  const shown = doc.sections?.length ? doc.sections : sections;
+  const bodySections = TEMPLATE_SECTIONS.filter((s) => s.id !== "cover" && shown.includes(s.id));
+  const audience = doc.audience ? templateAudienceMeta[doc.audience].label : null;
 
   return (
     <ModalShell
       open
       onClose={onClose}
-      title="PDF Style Preview"
-      description={`${config.typography} · ${sections.length} section${sections.length === 1 ? "" : "s"} enabled`}
+      panelClassName="max-w-3xl"
+      title={doc.title}
+      description={[doc.version, audience, doc.subtitle].filter(Boolean).join(" · ")}
       footer={
         <>
           <Button
@@ -48,11 +65,11 @@ const PdfPreviewModal = ({
       }
     >
       <div
-        className="relative mx-auto aspect-[1/1.414] w-full max-w-sm overflow-hidden rounded-md bg-white p-6 text-[#111] shadow-xl"
+        className="relative mx-auto w-full max-w-xl overflow-hidden rounded-md bg-white px-8 py-7 text-[#111] shadow-xl"
         style={{ fontFamily: `"${bodyFont}", Inter, sans-serif` }}
       >
         {config.watermark && (
-          <span className="pointer-events-none absolute inset-0 flex -rotate-30 items-center justify-center text-4xl font-extrabold text-black/[0.05]">
+          <span className="pointer-events-none absolute inset-0 flex -rotate-30 items-center justify-center text-5xl font-extrabold text-black/[0.04]">
             FAR CONFIDENTIAL
           </span>
         )}
@@ -67,38 +84,47 @@ const PdfPreviewModal = ({
               FAR
             </span>
           )}
-          <span className="text-[8px] font-bold uppercase tracking-wider" style={{ color: config.accentColor }}>
+          <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: config.accentColor }}>
             {doc.id}
           </span>
         </div>
-        {sections.includes("cover") ? (
-          <div className="py-6">
-            <p className="text-[8px] font-bold uppercase tracking-wider" style={{ color: config.accentColor }}>
-              FAR Platform Report
-            </p>
-            <p className="mt-1 text-lg font-bold leading-tight" style={{ fontFamily: `"${headingFont}", Inter, sans-serif` }}>
-              {doc.title}
-            </p>
-            <p className="mt-1 text-[9px] text-black/50">{doc.subtitle}</p>
-          </div>
-        ) : (
-          <p className="pt-4 pb-2 text-sm font-bold">{doc.title}</p>
-        )}
-        <div className="flex flex-col gap-2">
-          {bodySections.map((s) => (
-            <div key={s.id} className="border-t border-black/10 pt-2">
-              <p className="text-[9px] font-bold" style={{ color: config.primaryColor }}>
-                {s.title}
-              </p>
-              <div className="mt-1 h-1 w-full rounded bg-black/10" />
-              <div className="mt-1 h-1 w-3/4 rounded bg-black/10" />
-            </div>
-          ))}
+
+        <div className="py-5">
+          <p className="text-[10px] font-bold uppercase tracking-wider" style={{ color: config.accentColor }}>
+            {audience ?? "FAR Platform Report"}
+          </p>
+          <p
+            className="mt-1 text-2xl font-bold leading-tight"
+            style={{ fontFamily: `"${headingFont}", Inter, sans-serif` }}
+          >
+            {doc.title}
+          </p>
+          <p className="mt-2 text-xs leading-5 text-black/55">{doc.subtitle}</p>
         </div>
+
+        {doc.purpose ? (
+          <div className="border-t border-black/10 py-4">
+            <p className="text-[11px] font-bold uppercase tracking-wide" style={{ color: config.primaryColor }}>
+              Purpose
+            </p>
+            <p className="mt-1.5 text-[13px] leading-5 text-black/80">{doc.purpose}</p>
+          </div>
+        ) : null}
+
+        {bodySections.map((section) => (
+          <div key={section.id} className="border-t border-black/10 py-4">
+            <p className="text-[11px] font-bold uppercase tracking-wide" style={{ color: config.primaryColor }}>
+              {section.title}
+            </p>
+            <p className="mt-1.5 text-[13px] leading-5 text-black/70">{section.description}</p>
+          </div>
+        ))}
+
         {config.pageNumbering && (
-          <span className="absolute inset-x-0 bottom-2 text-center text-[8px] text-black/40">
-            Page 1 of {Math.max(1, bodySections.length)}
-          </span>
+          <p className="border-t border-black/10 pt-3 text-center text-[10px] text-black/40">
+            {doc.id}
+            {doc.version ? ` · ${doc.version}` : ""} · Page 1
+          </p>
         )}
       </div>
     </ModalShell>

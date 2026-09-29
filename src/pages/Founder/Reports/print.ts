@@ -8,6 +8,8 @@ export type PrintableDocument = {
   title: string;
   subtitle: string;
   meta: [label: string, value: string][];
+  /** When present, these blocks are the document. Generic section filler is omitted. */
+  narrative?: { heading: string; body: string }[];
 };
 
 /**
@@ -23,11 +25,24 @@ export const openPrintableReport = (
   if (!win) return false;
 
   const [headingFont] = config.typography.split(" / ");
-  const sectionHtml = TEMPLATE_SECTIONS.filter((s) => s.id !== "cover" && sections.includes(s.id))
-    .map(
-      (s) => `<section><h2>${escapeHtml(s.title)}</h2><p>${escapeHtml(s.description)}</p></section>`
-    )
+  const narrativeHtml = (doc.narrative ?? [])
+    .filter((block) => block.body.trim())
+    .map((block) => {
+      const lines = block.body.split("\n").map((line) => line.trim()).filter(Boolean);
+      const body =
+        lines.length > 1
+          ? `<ul>${lines.map((line) => `<li>${escapeHtml(line)}</li>`).join("")}</ul>`
+          : `<p>${escapeHtml(lines[0] ?? "")}</p>`;
+      return `<section><h2>${escapeHtml(block.heading)}</h2>${body}</section>`;
+    })
     .join("");
+  const sectionHtml = narrativeHtml
+    ? narrativeHtml
+    : TEMPLATE_SECTIONS.filter((s) => s.id !== "cover" && sections.includes(s.id))
+        .map(
+          (s) => `<section><h2>${escapeHtml(s.title)}</h2><p>${escapeHtml(s.description)}</p></section>`
+        )
+        .join("");
   const logo = config.logoUrl
     ? `<img src="${config.logoUrl}" alt="" style="height:40px" />`
     : `<strong style="color:${config.primaryColor};letter-spacing:4px">FAR</strong>`;
@@ -45,7 +60,9 @@ export const openPrintableReport = (
   dt { color:#777; }
   section { border-top: 1px solid #eee; padding: 16px 0; }
   section h2 { font-size: 16px; margin: 0 0 4px; color: ${config.primaryColor}; }
-  section p { margin: 0; color: #444; font-size: 13px; }
+  section p, section li { margin: 0; color: #444; font-size: 13px; line-height: 1.5; }
+  section ul { margin: 0; padding-left: 18px; }
+  section li + li { margin-top: 6px; }
   .watermark { position: fixed; inset: 0; display:flex; align-items:center; justify-content:center; font-size: 96px; font-weight: 800; color: rgba(0,0,0,0.04); transform: rotate(-30deg); pointer-events:none; }
   footer { position: fixed; bottom: 0; left: 0; right: 0; text-align: center; font-size: 11px; color: #999; }
 </style></head><body>
