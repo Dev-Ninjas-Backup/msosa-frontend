@@ -539,6 +539,7 @@ export type ProductDraft = {
   // Step 2 — Reflection
   reflectionName: string;
   reflectionDescription: string;
+  reflectionAudio: string;
   reflectionVersion: string;
   estimatedDuration: string;
   voiceSupport: boolean;
@@ -629,6 +630,7 @@ export const emptyDraft = (): ProductDraft => ({
   // Step 2
   reflectionName: "",
   reflectionDescription: "",
+  reflectionAudio: "",
   reflectionVersion: "1.0.0",
   estimatedDuration: "30 Days",
   voiceSupport: false,

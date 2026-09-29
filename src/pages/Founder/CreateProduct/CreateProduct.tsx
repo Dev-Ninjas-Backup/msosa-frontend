@@ -73,11 +73,15 @@ const CreateProduct = () => {
 
   const openVoicePrompt = () => setVoicePromptOpen(true);
 
-  const applyVoiceText = (text: string) => {
+  const applyVoiceText = (text: string, audioUrl?: string) => {
     setVoicePromptOpen(false);
     if (step === 1) setDraft({ description: text });
-    else if (step === 2) setDraft({ reflectionDescription: text });
-    else if (step === 5) setDraft({ aiPrompt: text });
+    else if (step === 2) {
+      setDraft({
+        reflectionDescription: text || draft.reflectionDescription,
+        reflectionAudio: audioUrl || draft.reflectionAudio,
+      });
+    } else if (step === 5) setDraft({ aiPrompt: text });
   };
 
   const voiceSeed =
@@ -226,8 +230,8 @@ const CreateProduct = () => {
         <VoiceToTextModal
           open={voicePromptOpen}
           initialValue={voiceSeed}
+          initialAudio={step === 2 ? draft.reflectionAudio : ""}
           onSend={applyVoiceText}
-          onType={() => setVoicePromptOpen(false)}
           onClose={() => setVoicePromptOpen(false)}
         />
       )}

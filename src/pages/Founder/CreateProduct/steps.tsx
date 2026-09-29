@@ -375,6 +375,14 @@ export const StepReflection = ({ draft, setDraft }: StepProps) => (
       <p className="text-right text-[11px] text-white/60">
         {draft.reflectionDescription.length} / 500 characters
       </p>
+      {draft.reflectionAudio ? (
+        <div className="rounded-xl border border-white/10 bg-black/40 p-3">
+          <p className="mb-2 text-[11px] font-medium uppercase tracking-[0.2em] text-white/50">
+            Voice recording
+          </p>
+          <audio controls src={draft.reflectionAudio} className="h-10 w-full" />
+        </div>
+      ) : null}
     </Field>
     <div className="grid gap-4 sm:grid-cols-2">
       <Field

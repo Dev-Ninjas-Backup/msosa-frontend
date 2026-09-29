@@ -182,13 +182,13 @@ export const founderRoutes = [
             icon: <FileBarChart />,
             name: "Reports™",
             path: "reports",
-            // element: <Reports />,
-            element: <NotFound />
+            element: <Reports />,
+            // element: <NotFound />
           },
           {
             path: "reports/templates",
-            // element: <ReportTemplates />,
-            element: <NotFound />
+            element: <ReportTemplates />,
+            // element: <NotFound />
           },
           {
             icon: <Sparkles />,
