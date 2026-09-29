@@ -129,8 +129,8 @@ export const founderRoutes = [
             icon: <Columns />,
             name: "Create Product™",
             path: "create-product",
-            // element: <CreateProduct />,
-            element: <NotFound />
+            element: <CreateProduct />,
+            // element: <NotFound />
           },
           {
             icon: <LayoutGrid />,
@@ -158,20 +158,20 @@ export const founderRoutes = [
             icon: <BookOpen />,
             name: "Protocol Library™",
             path: "protocol-library",
-            // element: <ProtocolLibrary />,
-            element: <NotFound />
+            element: <ProtocolLibrary />,
+            // element: <NotFound />
           },
           {
             icon: <Users2 />,
             name: "User Management™",
             path: "user-management",
-            // element: <UserManagement />,
-            element: <NotFound />
+            element: <UserManagement />,
+            // element: <NotFound />
           },
           {
             path: "user-management/:userId",
-            // element: <UserProfile />,
-            element: <NotFound />
+            element: <UserProfile />,
+            // element: <NotFound />
           },
         ],
       },

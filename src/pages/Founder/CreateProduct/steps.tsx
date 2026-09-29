@@ -154,7 +154,9 @@ const UploadBox = ({
       </>
     ) : (
       <>
-        <CloudUpload className="size-5 text-white/70" />
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="18" viewBox="0 0 25 18" fill="none">
+          <path d="M5.625 17.5C2.51953 17.5 0 14.9805 0 11.875C0 9.42188 1.57031 7.33594 3.75781 6.56641C3.75391 6.46094 3.75 6.35547 3.75 6.25C3.75 2.79688 6.54688 0 10 0C12.3164 0 14.3359 1.25781 15.418 3.13281C16.0117 2.73438 16.7305 2.5 17.5 2.5C19.5703 2.5 21.25 4.17969 21.25 6.25C21.25 6.72656 21.1602 7.17969 21 7.60156C23.2812 8.0625 25 10.082 25 12.5C25 15.2617 22.7617 17.5 20 17.5H5.625ZM8.71094 9.02344C8.34375 9.39062 8.34375 9.98438 8.71094 10.3477C9.07812 10.7109 9.67188 10.7148 10.0352 10.3477L11.5586 8.82422V14.0625C11.5586 14.582 11.9766 15 12.4961 15C13.0156 15 13.4336 14.582 13.4336 14.0625V8.82422L14.957 10.3477C15.3242 10.7148 15.918 10.7148 16.2812 10.3477C16.6445 9.98047 16.6484 9.38672 16.2812 9.02344L13.1562 5.89844C12.7891 5.53125 12.1953 5.53125 11.832 5.89844L8.70703 9.02344H8.71094Z" fill="white" />
+        </svg>
         <span className="text-sm text-white">
           Drag & drop or <span className="text-[#fbbf24]">click to upload</span>
         </span>
@@ -223,7 +225,7 @@ export const StepBasic = ({ draft, setDraft }: StepProps) => (
             }
           />
         </Field>
-        <Field label="Cover Image">
+        <Field label="Cover Image" className="flex-1 h-20">
           <UploadBox
             label="Cover Image"
             preview={draft.coverUrl}
@@ -234,7 +236,7 @@ export const StepBasic = ({ draft, setDraft }: StepProps) => (
         </Field>
       </div>
 
-      <div className="space-y-1.5">
+      {/* <div className="space-y-1.5">
         <p className="text-xs font-bold tracking-[0.7px] text-white">Colors</p>
         <div className="grid gap-3 sm:grid-cols-2">
           <ColorSwatch
@@ -258,7 +260,7 @@ export const StepBasic = ({ draft, setDraft }: StepProps) => (
             onChange={(v) => setDraft({ buttonText: v })}
           />
         </div>
-      </div>
+      </div> */}
     </div>
 
     <div className="h-fit space-y-5 rounded-xl border border-white/10 bg-black p-5">
@@ -294,7 +296,9 @@ export const StepBasic = ({ draft, setDraft }: StepProps) => (
               {draft.iconUrl ? (
                 <img src={draft.iconUrl} alt="" className="size-full object-cover" />
               ) : (
-                <ImageIcon className="size-3.5 opacity-60" />
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="14" viewBox="0 0 13 14" fill="none">
+                  <path d="M1.38633 1.59961L0 4.375H5.6875V0.875H2.56211C2.06445 0.875 1.61055 1.15664 1.38633 1.59961ZM6.5625 4.375H12.25L10.8637 1.59961C10.6395 1.15664 10.1855 0.875 9.68789 0.875H6.5625V4.375ZM12.25 5.25H0V11.375C0 12.3402 0.784766 13.125 1.75 13.125H10.5C11.4652 13.125 12.25 12.3402 12.25 11.375V5.25Z" fill="white" />
+                </svg>
               )}
             </span>
             <h3 className="truncate text-base font-semibold">
