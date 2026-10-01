@@ -85,7 +85,7 @@ const ActiveReflectionCard = ({
           type="button"
           className="w-full h-11 rounded-xl bg-[#FBBF24] hover:bg-[#e5a820] text-black text-sm font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer border-0"
         >
-          Continue Reflection
+          Continue Products
           <ArrowRight className="size-4" />
         </button>
       </Link>

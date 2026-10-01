@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   ChevronDown,
@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { cn } from "@/lib/utils";
+import AudioPlayer from "./AudioPlayer";
 import TypeEditor from "./TypeEditor";
 import {
   copy,
@@ -75,6 +76,13 @@ const ReflectionRoom = ({
   const [seconds, setSeconds] = useState(0);
   const [notes, setNotes] = useState("");
   const [toast, setToast] = useState<string | null>(null);
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const mediaRef = useRef<MediaRecorder | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const chunksRef = useRef<Blob[]>([]);
+  const audioUrlRef = useRef<string | null>(null);
+  const playerRef = useRef<HTMLAudioElement | null>(null);
+  const playWhenReady = useRef(false);
 
   const t = copy[language];
   const headline = isProduct
@@ -100,44 +108,159 @@ const ReflectionRoom = ({
     return () => window.clearTimeout(id);
   }, [toast]);
 
+  useEffect(() => {
+    if (!playWhenReady.current || !audioUrl) return;
+    playWhenReady.current = false;
+    const player = playerRef.current;
+    if (!player) return;
+    player.currentTime = 0;
+    void player.play();
+  }, [audioUrl]);
+
+  useEffect(() => {
+    return () => {
+      const recorder = mediaRef.current;
+      if (recorder) {
+        recorder.onstop = null;
+        recorder.ondataavailable = null;
+        if (recorder.state !== "inactive") recorder.stop();
+      }
+      streamRef.current?.getTracks().forEach((track) => track.stop());
+      if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
+      playerRef.current?.pause();
+    };
+  }, []);
+
   const showToast = (msg: string) => setToast(msg);
 
-  const startRecording = () => {
+  const rememberAudio = (url: string) => {
+    if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
+    audioUrlRef.current = url;
+    setAudioUrl(url);
+  };
+
+  const releaseStream = () => {
+    streamRef.current?.getTracks().forEach((track) => track.stop());
+    streamRef.current = null;
+  };
+
+  const startRecording = async () => {
+    playerRef.current?.pause();
+    const previous = mediaRef.current;
+    if (previous && previous.state !== "inactive") {
+      previous.ondataavailable = null;
+      previous.onstop = null;
+      previous.stop();
+    }
+    releaseStream();
+
+    let stream: MediaStream;
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    } catch {
+      showToast(
+        language === "en"
+          ? "Allow microphone access to record."
+          : "Permite el micrófono para grabar."
+      );
+      return;
+    }
+
+    chunksRef.current = [];
+    setSeconds(0);
+    if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
+    audioUrlRef.current = null;
+    setAudioUrl(null);
+
+    const mime = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
+      ? "audio/webm;codecs=opus"
+      : MediaRecorder.isTypeSupported("audio/webm")
+        ? "audio/webm"
+        : "";
+    const recorder = new MediaRecorder(stream, mime ? { mimeType: mime } : undefined);
+    recorder.ondataavailable = (event) => {
+      if (event.data.size > 0) chunksRef.current.push(event.data);
+    };
+    recorder.onstop = () => {
+      const blob = new Blob(chunksRef.current, {
+        type: recorder.mimeType || "audio/webm",
+      });
+      if (blob.size > 0) rememberAudio(URL.createObjectURL(blob));
+      releaseStream();
+      mediaRef.current = null;
+      setPhase("recorded");
+      showToast(language === "en" ? "Recording saved" : "Grabación guardada");
+    };
+    mediaRef.current = recorder;
+    streamRef.current = stream;
+    recorder.start();
     setInputMode("voice");
     setPhase("recording");
   };
 
   const toggleMic = () => {
-    if (phase === "idle" || phase === "recorded") {
-      startRecording();
+    const recorder = mediaRef.current;
+    if (phase === "idle" || phase === "recorded" || !recorder) {
+      void startRecording();
       return;
     }
-    setPhase((p) => (p === "recording" ? "paused" : "recording"));
+    if (phase === "recording" && recorder.state === "recording") {
+      try {
+        recorder.pause();
+        setPhase("paused");
+      } catch {
+        recorder.stop();
+      }
+      return;
+    }
+    if (recorder.state === "paused") {
+      recorder.resume();
+      setPhase("recording");
+    }
   };
 
   const noRecordMsg =
     language === "en" ? "There is no record" : "No hay grabación";
 
   const hasAudio =
+    Boolean(audioUrl) ||
     phase === "recorded" ||
     phase === "paused" ||
     (phase === "recording" && seconds > 0);
 
-  const requireAudio = (action: () => void) => {
-    if (!hasAudio) {
-      showToast(noRecordMsg);
+  const stopRecording = () => {
+    const recorder = mediaRef.current;
+    if (!recorder || recorder.state === "inactive") {
+      if (!audioUrl) showToast(noRecordMsg);
       return;
     }
-    action();
+    try {
+      recorder.stop();
+    } catch {
+      /* already stopping */
+    }
   };
 
-  const stopRecording = () => {
-    if (phase !== "recording" && phase !== "paused") {
+  const replayAnswer = () => {
+    if (phase === "recording" || phase === "paused") {
+      playWhenReady.current = true;
+      stopRecording();
+      return;
+    }
+    const player = playerRef.current;
+    if (!audioUrl || !player) {
       showToast(noRecordMsg);
       return;
     }
-    setPhase("recorded");
-    showToast(language === "en" ? "Recording saved" : "Grabación guardada");
+    player.currentTime = 0;
+    void player.play().then(
+      () =>
+        showToast(language === "en" ? "Playing your answer" : "Reproduciendo…"),
+      () =>
+        showToast(
+          language === "en" ? "Could not play the recording" : "No se pudo reproducir"
+        )
+    );
   };
 
   const rerecord = () => {
@@ -145,10 +268,8 @@ const ReflectionRoom = ({
       showToast(noRecordMsg);
       return;
     }
-    setSeconds(0);
     setNotes("");
-    setPhase("recording");
-    setInputMode("voice");
+    void startRecording();
   };
 
   const submitReflection = () => {
@@ -248,6 +369,14 @@ const ReflectionRoom = ({
               :{(seconds % 60).toString().padStart(2, "0")}
             </p>
           )}
+          {audioUrl && phase === "recorded" && (
+            <div className="mt-4 min-w-72 md:w-120 rounded-2xl border border-white/15 bg-black/55 px-4 py-3 text-left">
+              <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/55 text-center">
+                {language === "en" ? "Listen before you submit" : "Escucha antes de enviar"}
+              </p>
+              <AudioPlayer ref={playerRef} src={audioUrl} />
+            </div>
+          )}
         </div>
       ) : (
         <div className="mt-4 sm:mt-6 md:mt-8 xl:mt-6 w-full max-w-2xl">
@@ -305,13 +434,7 @@ const ReflectionRoom = ({
           icon={<Play className="size-4 fill-current" />}
           title={t.replay}
           subtitle={t.answer}
-          onClick={() =>
-            requireAudio(() =>
-              showToast(
-                language === "en" ? "Replaying answer…" : "Reproduciendo…"
-              )
-            )
-          }
+          onClick={replayAnswer}
         />
         <ToolbarAction
           icon={<RotateCcw className="size-4" />}

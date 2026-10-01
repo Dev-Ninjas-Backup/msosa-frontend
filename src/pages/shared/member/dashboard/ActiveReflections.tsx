@@ -82,7 +82,7 @@ const ActiveReflections = () => {
                 type="button"
                 className="w-full h-11 rounded-xl bg-[#F5C542] hover:bg-[#e8b93a] text-black text-sm font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer border-0"
               >
-                Continue Reflection
+                Continue Products
                 <ArrowRight className="size-4" />
               </button>
             </Link>
