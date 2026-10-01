@@ -15,7 +15,7 @@ const ActiveReflections = () => (
     >
       <div className="flex items-center justify-between gap-3 mb-6">
         <h3 className="text-xl font-semibold text-white font-playfair">
-          Active Reflections™
+          Active Enterprise Products™
         </h3>
         <SectionLink to="/enterprise/blueprint-management">
           View All Tools

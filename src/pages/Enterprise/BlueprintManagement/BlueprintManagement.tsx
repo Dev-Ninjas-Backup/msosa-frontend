@@ -74,7 +74,7 @@ const AvailableCard = ({ bp }: { bp: BlueprintCard }) => (
         to={`/enterprise/blueprint-management/${bp.id}`}
         className="inline-flex items-center justify-center gap-2"
       >
-        Purchase Reflection
+        Purchase Products
         <ArrowRight className="size-4" />
       </Link>
     </Button>

@@ -6,13 +6,17 @@ import { useMemberPortal } from "@/pages/shared/member/MemberPortalContext";
 
 const ActiveReflections = () => {
   const { path } = useMemberPortal();
+  const location = window.location.pathname;
+
+  const isConsumerDashboard = location.includes("/consumer/dashboard");
+  console.log("isConsumerDashboard", isConsumerDashboard);
 
   return (
     <AnimatedContainer delay={0.1}>
       <Card className="p-5 sm:p-6">
         <div className="flex items-center gap-2 mb-5">
           <h2 className="font-playfair text-xl text-primary-text">
-            Active Reflections
+           Active {isConsumerDashboard ? "Consumer" : "Enterprise"} Products
           </h2>
           <Info className="size-4.5 text-black fill-[#FFFFFF99]" />
         </div>

@@ -1,6 +1,5 @@
 import Layout from "./Layout/PublicLayout/Layout"
 
-
 function App() {
 
   return (

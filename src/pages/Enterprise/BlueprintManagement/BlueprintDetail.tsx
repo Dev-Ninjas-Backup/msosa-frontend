@@ -132,7 +132,7 @@ const BlueprintDetail = () => {
             }
           >
             {bp.status === "available"
-              ? "Purchase Reflection"
+              ? "Purchase Products"
               : "Manage Purchase"}
           </Button>
         </Card>
