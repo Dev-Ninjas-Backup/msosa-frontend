@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useSyncExternalStore } from "react";
 import { Link } from "react-router-dom";
 import {
   AlertTriangle,
@@ -24,97 +24,19 @@ import Input from "@/ui/Input";
 import Card from "@/ui/Card";
 import { cn } from "@/lib/utils";
 import { useMemberPortal } from "@/pages/shared/member/MemberPortalContext";
-
-type NotifTag =
-  | "ACTION REQUIRED"
-  | "PINNED"
-  | "REPORTS"
-  | "CONTINUUM"
-  | "ORGANIZATION"
-  | "SYSTEM";
-type Priority = "High" | "Medium" | "Low";
-
-type NotificationItem = {
-  id: string;
-  title: string;
-  body: string;
-  time: string;
-  priority: Priority;
-  tags: NotifTag[];
-  unread: boolean;
-  icon: "alert" | "report" | "milestone" | "announce" | "system";
-  actionLabel?: string;
-  actionHref?: string;
-  actionVariant?: "primary" | "secondary" | "ghost";
-};
-
-const INITIAL: NotificationItem[] = [
-  {
-    id: "1",
-    title: "Reflection Due Soon: Leadership Growth",
-    body: "Your Q3 Leadership Reflection milestone is approaching its deadline in 2 days. Complete your self-reflection to stay on track for the annual review cycle.",
-    time: "Today, 09:45 AM",
-    priority: "High",
-    tags: ["ACTION REQUIRED", "PINNED"],
-    unread: true,
-    icon: "alert",
-    actionLabel: "Take Action",
-    actionHref: "reflection-room",
-    actionVariant: "primary",
-  },
-  {
-    id: "2",
-    title: "Report Ready: Cycle 2 Leadership Development",
-    body: "The comprehensive analysis of the Cycle 2 Leadership program has been finalized. Your personal growth metrics are now available for review.",
-    time: "Yesterday, 04:20 PM",
-    priority: "Medium",
-    tags: ["REPORTS"],
-    unread: true,
-    icon: "report",
-    actionLabel: "View Report",
-    actionHref: "report",
-    actionVariant: "secondary",
-  },
-  {
-    id: "3",
-    title: "New Milestone Achieved: 5 Reflections Completed",
-    body: "Congratulations Sarah! You've maintained a 5-week streak of deep reflections. This milestone has been added to your Employee Continuum™ profile.",
-    time: "Oct 24, 11:30 AM",
-    priority: "Medium",
-    tags: ["CONTINUUM"],
-    unread: true,
-    icon: "milestone",
-    actionLabel: "Dismiss",
-    actionVariant: "ghost",
-  },
-  {
-    id: "4",
-    title: "HR Announcement: New Training Schedule",
-    body: "ABC Healthcare has released the new mandatory training modules for the upcoming quarter. Please review and sync your calendar.",
-    time: "Oct 22, 09:15 AM",
-    priority: "Low",
-    tags: ["ORGANIZATION"],
-    unread: false,
-    icon: "announce",
-    actionLabel: "Details",
-    actionVariant: "ghost",
-  },
-  {
-    id: "5",
-    title: "Platform Update: Version 2.4 Now Live",
-    body: "We've introduced enhanced analytics in Reports and a smoother interface for Reflections. Explore the new features now.",
-    time: "Oct 20, 02:45 PM",
-    priority: "Low",
-    tags: ["SYSTEM"],
-    unread: false,
-    icon: "system",
-    actionLabel: "What's New",
-    actionVariant: "ghost",
-  },
-];
+import {
+  archiveAllMemberNotices,
+  dismissMemberNotice,
+  getMemberNotices,
+  markAllMemberNoticesRead,
+  subscribeMemberNotices,
+  type MemberNotice,
+  type MemberNoticePriority,
+  type MemberNoticeTag,
+} from "@/pages/shared/member/notifications/data";
 
 const iconStyles: Record<
-  NotificationItem["icon"],
+  MemberNotice["icon"],
   { bg: string; color: string; Icon: typeof Mail }
 > = {
   alert: { bg: "bg-rose-500/15", color: "text-rose-400", Icon: MapPinned  },
@@ -138,7 +60,7 @@ const iconStyles: Record<
 
 
 
-const tagClass = (tag: NotifTag) => {
+const tagClass = (tag: MemberNoticeTag) => {
   switch (tag) {
     case "ACTION REQUIRED":
       return "bg-amber-500/15 text-amber-300 border-amber-500/25";
@@ -157,7 +79,7 @@ const tagClass = (tag: NotifTag) => {
   }
 };
 
-const priorityDot = (p: Priority) =>
+const priorityDot = (p: MemberNoticePriority) =>
   p === "High"
     ? "bg-rose-400"
     : p === "Medium"
@@ -166,7 +88,7 @@ const priorityDot = (p: Priority) =>
 
 const Notifications = () => {
   const { path } = useMemberPortal();
-  const [items, setItems] = useState(INITIAL);
+  const items = useSyncExternalStore(subscribeMemberNotices, getMemberNotices);
   const [query, setQuery] = useState("");
 
   const filtered = useMemo(() => {
@@ -183,11 +105,8 @@ const Notifications = () => {
     n.tags.includes("ACTION REQUIRED")
   ).length;
 
-  const markAllRead = () =>
-    setItems((prev) => prev.map((n) => ({ ...n, unread: false })));
-
-  const dismiss = (id: string) =>
-    setItems((prev) => prev.filter((n) => n.id !== id));
+  const markAllRead = () => markAllMemberNoticesRead();
+  const dismiss = (id: string) => dismissMemberNotice(id);
 
   return (
     <div className="pb-6">
@@ -413,7 +332,7 @@ const Notifications = () => {
                 <li>
                   <button
                     type="button"
-                    onClick={() => setItems([])}
+                    onClick={archiveAllMemberNotices}
                     className="w-full flex items-center justify-between gap-3 rounded-xl px-3 py-2.5 text-sm text-primary-text hover:bg-white/5 border-0 bg-transparent cursor-pointer text-left"
                   >
                     <span className="inline-flex items-center gap-3">
