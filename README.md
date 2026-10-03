@@ -78,7 +78,7 @@ An enterprise administrator runs FAR Systems for one organization.
 
 These two roles share one journey. A consumer arrives on their own. An employee arrives through an organization. Both are here to reflect and to see what came of it.
 
-- A home that shows the journey, active reflections, finished reports, and what to do next.
+- A home that shows the journey, active Products™, finished reports, and what to do next.
 - A place to choose a Reflection or product.
 - A blueprint that explains the path before it begins.
 - Checkout when a Reflection is purchased.

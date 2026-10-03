@@ -21,7 +21,7 @@ const ActiveBlueprints = () => (
   <AnimatedContainer delay={0.14}>
     <Card className="p-6 space-y-4">
       <div className="flex items-center justify-between gap-2">
-        <h3 className="text-lg font-bold text-white">Active Reflection</h3>
+        <h3 className="text-lg font-bold text-white">Active Products™</h3>
         <Link
           to="/enterprise/blueprint-management"
           className="inline-flex items-center gap-1 text-xs text-white/50 hover:text-white"

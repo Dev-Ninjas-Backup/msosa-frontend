@@ -10,7 +10,7 @@ Two catalogs exist, and they are not the same list.
 
 **Widget Library** (`Founder → Widget Library`, and Create Widget) is the catalog of reusable definitions. It holds charts, KPI strips, grids, timelines, and configuration tools. Creating, editing, publishing, and deploying all happen here. The cards you see are prebuilt examples so the library is not empty. They are sample records, not live connections to revenue, users, or audits.
 
-**Dashboard layout** (`Founder → Founder Control Center`, while editing the layout) is a second, smaller catalog: Continuum Growth, Active Reflections, Quick Actions, AI Recommendations, and similar cards. Adding one of those places a copy on the founder home. That copy is stored in the browser. It is not a row from the Widget Library, and creating a widget in the library does not make it appear on the dashboard.
+**Dashboard layout** (`Founder → Founder Control Center`, while editing the layout) is a second, smaller catalog: Continuum Growth, Active Products™, Quick Actions, AI Recommendations, and similar cards. Adding one of those places a copy on the founder home. That copy is stored in the browser. It is not a row from the Widget Library, and creating a widget in the library does not make it appear on the dashboard.
 
 Until those two are one catalog, a widget published in the library is a definition waiting to be placed. It does not yet drive a live dashboard.
 

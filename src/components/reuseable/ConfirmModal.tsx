@@ -81,7 +81,7 @@ export default function ConfirmModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/80 backdrop-blur-xs transition-opacity duration-300"
+        className="absolute inset-0 bg-black/30 backdrop-blur-xs transition-opacity duration-300"
         onClick={onClose}
       />
 

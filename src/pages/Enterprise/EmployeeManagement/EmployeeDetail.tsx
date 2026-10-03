@@ -308,7 +308,7 @@ const EmployeeDetail = () => {
                   </span>
                 </div>
                 <p className="mt-1 text-xs text-white/50">
-                  Active Reflection • FAR Systems™
+                  Active Products™ • FAR Systems™
                 </p>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">

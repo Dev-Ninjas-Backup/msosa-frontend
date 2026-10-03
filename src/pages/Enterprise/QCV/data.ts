@@ -10,7 +10,7 @@ export const QCV_META = [
   "Organization: Encounters Corporation",
   "Current Quarter: Q3 2026",
   "Previous Quarter: Q2 2026",
-  "Comparison Period: Q2–Q3 2026",
+  "Comparison Period: Q2-Q3 2026",
   "Last Updated: Jun 2, 2026",
 ] as const;
 
@@ -58,7 +58,7 @@ export const QCV_KPIS = [
   {
     label: "Comparison Status",
     value: "Done",
-    sub: "Q2–Q3 2026",
+    sub: "Q2-Q3 2026",
     badge: "Completed",
     badgeTone: "teal" as const,
     icon: "check",

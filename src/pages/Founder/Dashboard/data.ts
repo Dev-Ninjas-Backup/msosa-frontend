@@ -241,7 +241,7 @@ export const WIDGET_TEMPLATES: WidgetTemplate[] = [
   },
   {
     id: "active-reflections",
-    title: "Active Reflections",
+    title: "Active Products™",
     description:
       "Track progress of your current active coaching and reflection paths.",
     category: "progress",

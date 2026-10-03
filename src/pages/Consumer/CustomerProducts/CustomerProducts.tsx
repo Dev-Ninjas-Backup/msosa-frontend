@@ -88,7 +88,7 @@ const CustomerProducts = () => {
         </div>
       </AnimatedContainer>
 
-      {/* Active Reflections */}
+      {/* Active Cunsumer Products */}
       <AnimatedContainer delay={0.1}>
         <div>
           <h2 className="font-playfair text-xl text-primary-text mb-4">

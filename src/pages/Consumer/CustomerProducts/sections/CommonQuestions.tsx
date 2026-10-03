@@ -8,7 +8,7 @@ const FAQS = [
   {
     question: "How long does each Reflection take?",
     answer:
-      "Most Reflections are designed to be completed in 15-30 minutes of active reflection. However, the quality of insight often depends on your depth of engagement rather than speed.",
+      "Most Reflections are designed to be completed in 15-30 minutes of active Products™. However, the quality of insight often depends on your depth of engagement rather than speed.",
   },
   {
     question: "Can I pause a Reflection once I've started?",
