@@ -1,7 +1,8 @@
 # Founder Dashboard Customizer — What the Client Wants
 
-**Source:** Mike (msosa29), Sept 30 — “Founder Dashboard – Dashboard Customizer”; confirmed in item 10 (Founder Dashboard / Product Dashboard Builder).  
-**Status:** Confirmed and aligned. The current Edit Dashboard / Layout Customizer (personal Dashboard 1–4) does not match this intent.
+**Source:** Mike (msosa29), Sept 30 — “Founder Dashboard – Dashboard Customizer”; confirmed in item 10 (Founder Dashboard / Product Dashboard Builder); Oct 2–3 reuse / assign-to-product notes.  
+**Status:** Confirmed product-level intent (Option A). Audience-per-product (Option C) is not confirmed — use `product-dashboard-clarification.md` for the client Q&A.  
+**Note:** The current Edit Dashboard / Layout Customizer (personal Dashboard 1–4) does not match this intent.
 
 ## One-sentence answer
 
