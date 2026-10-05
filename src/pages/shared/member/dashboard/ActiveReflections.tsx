@@ -16,7 +16,7 @@ const ActiveReflections = () => {
       <Card className="p-5 sm:p-6">
         <div className="flex items-center gap-2 mb-5">
           <h2 className="font-playfair text-xl text-primary-text">
-           Active {isConsumerDashboard ? "Consumer" : "Enterprise"} Products
+            Active {isConsumerDashboard ? "Consumer" : "Enterprise"} Products
           </h2>
           <Info className="size-4.5 text-black fill-[#FFFFFF99]" />
         </div>
@@ -82,7 +82,7 @@ const ActiveReflections = () => {
                 type="button"
                 className="w-full h-11 rounded-xl bg-[#F5C542] hover:bg-[#e8b93a] text-black text-sm font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer border-0"
               >
-                Continue Products
+                Continue Product
                 <ArrowRight className="size-4" />
               </button>
             </Link>

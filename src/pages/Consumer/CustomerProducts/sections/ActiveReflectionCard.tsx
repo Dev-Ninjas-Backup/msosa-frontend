@@ -36,9 +36,9 @@ const ActiveReflectionCard = ({
 
       <div className="flex items-start justify-between gap-2 mb-2">
         <div className="flex items-center gap-2">
-          
+
           <Card className="p-2 rounded-lg flex flex-col bg-[#FFFFFF]" borderColor="#FFFFFF1A" >
-            <LayoutPanelTop  className="size-4 text-white  shrink-0 fill-[#FFFFFF99]" />
+            <LayoutPanelTop className="size-4 text-white  shrink-0 fill-[#FFFFFF99]" />
           </Card>
 
 
@@ -85,7 +85,7 @@ const ActiveReflectionCard = ({
           type="button"
           className="w-full h-11 rounded-xl bg-[#FBBF24] hover:bg-[#e5a820] text-black text-sm font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer border-0"
         >
-          Continue Products
+          Continue Product
           <ArrowRight className="size-4" />
         </button>
       </Link>

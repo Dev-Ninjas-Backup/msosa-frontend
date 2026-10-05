@@ -18,7 +18,7 @@ The promise on the platform is simple: speak naturally, see clearly, and move fo
 
 ## How it works
 
-1. **A product is designed.** The founder defines a Reflection: who it is for, the voice protocol, the steps of the journey, how AI behaves, what the report looks like, who may use it, and what it costs. Publishing makes it available.
+1. **A product is designed.** The founder defines a Reflection: who it is for, the voice protocol, the steps of the journey, how AI behaves, what the report looks like, the product’s own dashboard and widgets, who may use it, and what it costs. Publishing makes it available.
 2. **An organization adopts it.** An enterprise invites people, assigns Reflections, and watches who has started, finished, or fallen behind.
 3. **A person reflects.** A consumer or an employee enters the Reflection Room, completes the session, and receives a report.
 4. **A refiner reviews.** Generated knowledge waits in a review queue. A refiner checks it, and completed reviews stay in history.
@@ -44,9 +44,11 @@ A visitor can learn what FAR Systems is before they sign in. Signing in, creatin
 
 The Founder Control Center is the operating system of the FAR Platform Engine™.
 
-**Products.** A ten-part design: basic information, the Reflection itself, the voice protocol, the workflow, AI behavior, the report, the dashboard, permissions, pricing, and publish. Safeguards include content filtering, protection of personal information, and an audit of AI activity.
+**Products.** A ten-part design: basic information, the Reflection itself, the voice protocol, the workflow, AI behavior, the report, the product dashboard, permissions, pricing, and publish. Safeguards include content filtering, protection of personal information, and an audit of AI activity.
 
-**Building blocks.** The Widget Library holds the pieces of every dashboard, with drafts, versions, and a published release. The Protocol Library holds the voice and behavior schemas those products rely on.
+**Product dashboards.** Each product gets its own dashboard: a layout and a set of widgets chosen for that product, then assigned and published with it. Enterprise and other products can ship different dashboards. The Widget Library supplies reusable widgets; the builder lives in product create and configure, not as a personal rearrange of the Founder’s control-center home.
+
+**Building blocks.** The Widget Library holds the pieces of every product dashboard, with drafts, versions, and a published release. The Protocol Library holds the voice and behavior schemas those products rely on.
 
 **People.** User Management covers identity, the products and subscriptions a person holds, their access, their security, and an audit of what they have done.
 

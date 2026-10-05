@@ -88,11 +88,11 @@ const CustomerProducts = () => {
         </div>
       </AnimatedContainer>
 
-      {/* Active Cunsumer Products */}
+      {/* Active Consumer Products */}
       <AnimatedContainer delay={0.1}>
         <div>
           <h2 className="font-playfair text-xl text-primary-text mb-4">
-            Active Cunsumer Products
+            Active Consumer Products
             <sup className="text-[#10B7BA] text-sm">™</sup>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -103,11 +103,11 @@ const CustomerProducts = () => {
         </div>
       </AnimatedContainer>
 
-      {/* All Reflections */}
+      {/* All Products™ */}
       <AnimatedContainer delay={0.15}>
         <div>
           <h2 className="font-playfair text-xl text-primary-text mb-4">
-            All Reflections
+            All Products™
             <sup className="text-[#10B7BA] text-sm">™</sup>
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-5">

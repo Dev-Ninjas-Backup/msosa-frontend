@@ -1,7 +1,7 @@
 # Founder Dashboard Customizer — What the Client Wants
 
-**Source:** Mike (msosa29), Sept 30 — “Founder Dashboard – Dashboard Customizer”  
-**Status:** Clarification of intent. The current Edit Dashboard / Layout Customizer does not match this intent.
+**Source:** Mike (msosa29), Sept 30 — “Founder Dashboard – Dashboard Customizer”; confirmed in item 10 (Founder Dashboard / Product Dashboard Builder).  
+**Status:** Confirmed and aligned. The current Edit Dashboard / Layout Customizer (personal Dashboard 1–4) does not match this intent.
 
 ## One-sentence answer
 
@@ -18,6 +18,12 @@ Mike wants a **product dashboard builder**: the Founder chooses the layout and w
    - the dashboard layout for that product
    - the widgets that belong to that product’s dashboard
 5. He marked this as **very important** and asked for confirmation.
+
+### Confirmed workflow (item 10)
+
+Create Product™ → Configure Product → Select/Create Dashboard → Add/Select Widgets from Widget Library™ → Assign Dashboard to Product → Publish.
+
+The Widget Library™ does not need a redesign. The work is connecting it to this product configuration flow.
 
 ## What that means in product terms
 

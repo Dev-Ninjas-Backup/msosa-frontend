@@ -80,7 +80,7 @@ export const consumerRoutes = [
         element: <Dashboard />,
       },
       {
-        name: "Cunsumer Products",
+        name: "Consumer Products",
         path: "customer-products",
         icon: <Columns />,
         element: <CustomerProducts />,

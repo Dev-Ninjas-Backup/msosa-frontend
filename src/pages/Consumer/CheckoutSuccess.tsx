@@ -86,8 +86,8 @@ const CheckoutSuccess = () => {
           <div className="relative z-10 ">
             <div className="mx-auto size-20 border border-[#FBBF2410] p-4 rounded-full bg-[#FBBF240] backdrop-filter backdrop-blur-sm flex items-center justify-center mb-6 shadow-[0_0_40px_rgba(251,191,36,0.45)]">
               <div className="mx-auto size-12 my-auto rounded-full bg-[#FBBF24] flex items-center justify-center mb-6 shadow-[0_0_40px_rgba(251,191,36,0.45)]">
-              <Check className="size-8 text-black" strokeWidth={3} />
-            </div>
+                <Check className="size-8 text-black" strokeWidth={3} />
+              </div>
             </div>
 
 
@@ -128,7 +128,7 @@ const CheckoutSuccess = () => {
                 to={path("customer-products")}
                 className="text-sm text-secondary-text hover:text-primary-text transition-colors"
               >
-                View All Reflections →
+                View All Products™ →
               </Link>
             </div>
           </div>

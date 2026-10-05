@@ -10,13 +10,13 @@ const pageMeta: Record<string, { title: string; description: string }> = {
     title: "Welcome back, Sarah.",
     description: "You are currently working on FuturePath Blueprint™.",
   },
-  "Cunsumer Products": {
-    title: "Cunsumer Products",
+  "Consumer Products": {
+    title: "Consumer Products",
     description:
       "  ",
   },
   Blueprints: {
-    title: "Cunsumer Products MarketPlace",
+    title: "Consumer Products MarketPlace",
     description:
       "Discover guided reflection experiences for deeper self-awareness and clarity.",
   },

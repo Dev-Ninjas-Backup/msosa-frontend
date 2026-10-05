@@ -283,7 +283,7 @@ export const JOURNEY_TAG_TONE: Record<string, string> = {
 
 export const COMPLETION_TRIGGERS = [
   "Product completed",
-  "All reflections submitted",
+  "All Products™ submitted",
   "Manual founder approval",
   "Time elapsed",
 ];
