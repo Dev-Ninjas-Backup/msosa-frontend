@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { Filter, MoreVertical, Pencil, Trash2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Filter, LayoutDashboard, MoreVertical, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import Button from "@/ui/Button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/ui/Popover";
+import { useAppSelector } from "@/hooks/useRedux";
 import {
   PRODUCT_KPI,
-  PRODUCT_LIST,
   PRODUCT_TOTAL,
   type ListedProduct,
   type ProductStatus,
@@ -55,10 +56,20 @@ const ProductList = ({
   onStatusFilter,
   onEdit,
 }: ProductListProps) => {
+  const navigate = useNavigate();
+  const products = useAppSelector((s) => s.founderProducts.products);
   const [page, setPage] = useState(1);
   const [filterOpen, setFilterOpen] = useState(false);
 
-  const filtered = PRODUCT_LIST.filter((p) => {
+  const openDetails = (p: ListedProduct, tab: "overview" | "dashboard" = "overview") => {
+    navigate(
+      tab === "dashboard"
+        ? `/founder/create-product/${p.id}/dashboard`
+        : `/founder/create-product/${p.id}`
+    );
+  };
+
+  const filtered = products.filter((p) => {
     const q = query.trim().toLowerCase();
     const matchQ =
       !q ||
@@ -157,7 +168,13 @@ const ProductList = ({
                     {i + 1}
                   </td>
                   <td className="px-3 py-3.5 text-sm font-medium text-white whitespace-nowrap">
-                    {p.name}
+                    <button
+                      type="button"
+                      onClick={() => openDetails(p)}
+                      className="bg-transparent border-0 p-0 text-sm font-medium text-white hover:text-[#fbbf24] cursor-pointer"
+                    >
+                      {p.name}
+                    </button>
                   </td>
                   <td className="px-3 py-3.5 text-xs text-white/55">{p.id}</td>
                   <td className="px-3 py-3.5 text-xs text-white/55 max-w-[140px]">
@@ -200,15 +217,31 @@ const ProductList = ({
                       </PopoverTrigger>
                       <PopoverContent
                         align="end"
-                        className="w-40 bg-[#121212] border-white/10 p-1.5"
+                        className="w-48 bg-[#121212] border-white/10 p-1.5"
                       >
+                        <button
+                          type="button"
+                          className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-white/80 hover:bg-white/5 border-0 bg-transparent cursor-pointer"
+                          onClick={() => openDetails(p)}
+                        >
+                          <Pencil className="size-3.5" />
+                          Product Details
+                        </button>
+                        <button
+                          type="button"
+                          className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-white/80 hover:bg-white/5 border-0 bg-transparent cursor-pointer"
+                          onClick={() => openDetails(p, "dashboard")}
+                        >
+                          <LayoutDashboard className="size-3.5" />
+                          Dashboard
+                        </button>
                         <button
                           type="button"
                           className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-white/80 hover:bg-white/5 border-0 bg-transparent cursor-pointer"
                           onClick={() => onEdit?.(p)}
                         >
                           <Pencil className="size-3.5" />
-                          Edit
+                          Edit wizard
                         </button>
                         <button
                           type="button"

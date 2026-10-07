@@ -2,14 +2,22 @@ import { Link } from "react-router-dom";
 import { ArrowRight, FileText, ImageIcon, Info, Plus } from "lucide-react";
 import AnimatedContainer from "@/common/AnimatedContainer";
 import Card from "@/ui/Card";
+import { useAppSelector } from "@/hooks/useRedux";
 import { useMemberPortal } from "@/pages/shared/member/MemberPortalContext";
 
 const ActiveReflections = () => {
   const { path } = useMemberPortal();
   const location = window.location.pathname;
+  const firstProduct = useAppSelector((s) =>
+    s.founderProducts.products.find(
+      (p) => p.status === "Published" || p.status === "Active"
+    )
+  );
 
   const isConsumerDashboard = location.includes("/consumer/dashboard");
-  console.log("isConsumerDashboard", isConsumerDashboard);
+  const productHref = firstProduct
+    ? path(`customer-products/${firstProduct.id}`)
+    : path("customer-products");
 
   return (
     <AnimatedContainer delay={0.1}>
@@ -77,12 +85,12 @@ const ActiveReflections = () => {
               <span className="text-primary-text">~11 Minutes</span>
             </p>
 
-            <Link to={path("reflection-room")} className="mt-auto">
+            <Link to={productHref} className="mt-auto">
               <button
                 type="button"
                 className="w-full h-11 rounded-xl bg-[#F5C542] hover:bg-[#e8b93a] text-black text-sm font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer border-0"
               >
-                Continue Product
+                Open Product Dashboard
                 <ArrowRight className="size-4" />
               </button>
             </Link>

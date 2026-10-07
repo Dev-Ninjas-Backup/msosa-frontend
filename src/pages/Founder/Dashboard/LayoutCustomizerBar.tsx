@@ -30,10 +30,10 @@ const LayoutCustomizerBar = ({
         </span>
         <div className="min-w-0 flex flex-col gap-1">
           <p className="text-sm font-bold uppercase tracking-[1.2px] text-primary-text leading-none">
-            Layout Customizer
+            Founder Layout
           </p>
           <p className="text-sm font-light text-secondary-text truncate leading-none">
-            Founder • Dashboard Framework™
+            Personal control-center layout — not Product Dashboard Builder™
           </p>
         </div>
       </div>

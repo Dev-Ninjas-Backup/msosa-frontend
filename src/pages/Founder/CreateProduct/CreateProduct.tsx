@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import { toast } from "sonner";
 import AnimatedContainer from "@/common/AnimatedContainer";
 import ReflectionRoom from "@/pages/Consumer/ReflectionRoom/ReflectionRoom";
+import { useAppDispatch } from "@/hooks/useRedux";
+import { upsertProduct } from "@/store/features/FounderProducts/founderProductsSlice";
+import { emptyProductDashboard } from "./productDashboard/defaults";
 import ProductList from "./ProductList";
 import WizardShell from "./WizardShell";
 import { SuccessModal } from "./Modals";
@@ -32,6 +36,7 @@ import StepPublish from "./StepPublish";
 type View = "list" | "reflect" | "processing" | "wizard" | "success";
 
 const CreateProduct = () => {
+  const dispatch = useAppDispatch();
   const [view, setView] = useState<View>("list");
   const [step, setStep] = useState<WizardStepId>(1);
   const [draft, setDraftState] = useState<ProductDraft>(emptyDraft);
@@ -145,9 +150,43 @@ const CreateProduct = () => {
     setDraftState(emptyDraft());
   };
 
+  const publishProduct = () => {
+    const id = draft.code.trim() || `PRD-${Date.now().toString(36).toUpperCase()}`;
+    const today = new Date().toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+    dispatch(
+      upsertProduct({
+        id,
+        name: draft.name.trim() || "Untitled Product™",
+        division:
+          draft.pricingType === "enterprise"
+            ? "Enterprise™"
+            : "Consumer Products™",
+        type: "Reflection",
+        version: draft.reflectionVersion || "v1.0",
+        status: "Published",
+        price: draft.price
+          ? draft.price.startsWith("$")
+            ? draft.price
+            : `$${draft.price}`
+          : "Free",
+        created: today,
+        updated: today,
+        publishedBy: "Mike D.",
+        dashboard: draft.productDashboard ?? emptyProductDashboard(),
+        draft: { ...draft, code: id },
+      })
+    );
+    toast.success("Product published with Product Dashboard");
+    setView("success");
+  };
+
   const continueWizard = () => {
     if (step >= 10) {
-      setView("success");
+      publishProduct();
       return;
     }
     setStep((s) => (s + 1) as WizardStepId);

@@ -32,7 +32,12 @@ export const VISIBILITY_RULES = [
 ] as const;
 export type VisibilityRule = (typeof VISIBILITY_RULES)[number]["id"];
 
-export const PREVIEW_ROLES = ["Founder Account", "Enterprise Admin", "Consumer User"] as const;
+export const PREVIEW_ROLES = [
+  "Founder Account",
+  "Enterprise Admin",
+  "Consumer User",
+  "Employee User",
+] as const;
 export type PreviewRole = (typeof PREVIEW_ROLES)[number];
 
 export const COLOR_THEMES = ["#EAB308", "#3B82F6", "#10B981", "#EF4444"] as const;
@@ -223,6 +228,11 @@ export const widgetDivisions = (w: Pick<Widget, "environments" | "visibility">) 
 export const isVisibleTo = (w: Pick<Widget, "visibility" | "environments">, role: PreviewRole) => {
   if (role === "Founder Account") return true;
   if (w.visibility === "Founder") return false;
+  // Employees span consumer + enterprise product surfaces (non-Founder widgets).
+  if (role === "Employee User") {
+    if (w.environments.length === 0) return false;
+    return w.visibility === "All" || w.visibility === "Consumer" || w.visibility === "Enterprise";
+  }
   const env: WidgetEnvironment = role === "Enterprise Admin" ? "Enterprise" : "Consumer";
   if (!w.environments.includes(env)) return false;
   return w.visibility === "All" || w.visibility === env;

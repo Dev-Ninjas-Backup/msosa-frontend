@@ -1,3 +1,8 @@
+import type { ProductDashboardConfig } from "./productDashboard/types";
+import { emptyProductDashboard } from "./productDashboard/defaults";
+
+export type { ProductDashboardConfig };
+
 export const WIZARD_STEPS = [
   {
     id: 1,
@@ -50,9 +55,9 @@ export const WIZARD_STEPS = [
     id: 7,
     key: "dashboard",
     label: "Dashboard",
-    title: "Step 7 — Dashboard Configuration",
+    title: "Step 7 — Product Dashboard Builder",
     description:
-      "Select and configure reusable dashboard widgets for your product",
+      "Choose a layout template, assign Widget Library™ widgets, and style this Product Dashboard",
   },
   {
     id: 8,
@@ -344,75 +349,6 @@ export const RECOMMENDATION_STYLES = [
   "Priority Matrix",
 ] as const;
 
-// ── Dashboard widgets (Step 7) ──────────────────────────────────────────────
-export type DashboardWidgetId =
-  | "progress"
-  | "kpi"
-  | "charts"
-  | "notifications"
-  | "reports"
-  | "timeline"
-  | "recommendations"
-  | "recent";
-
-export type DashboardWidget = {
-  id: DashboardWidgetId;
-  name: string;
-  description: string;
-  enabled: boolean;
-};
-
-export const DEFAULT_DASHBOARD_WIDGETS: DashboardWidget[] = [
-  {
-    id: "progress",
-    name: "Progress Widget",
-    description: "Track goal completion and milestones",
-    enabled: true,
-  },
-  {
-    id: "kpi",
-    name: "KPI Cards",
-    description: "Key performance indicators at a glance",
-    enabled: true,
-  },
-  {
-    id: "charts",
-    name: "Charts",
-    description: "Visual data representations and analytics",
-    enabled: true,
-  },
-  {
-    id: "notifications",
-    name: "Notifications",
-    description: "Recent alerts and system messages",
-    enabled: true,
-  },
-  {
-    id: "reports",
-    name: "Reports",
-    description: "Quick access to generated reports",
-    enabled: false,
-  },
-  {
-    id: "timeline",
-    name: "Timeline",
-    description: "Activity and event chronological view",
-    enabled: true,
-  },
-  {
-    id: "recommendations",
-    name: "Recommendations",
-    description: "AI-powered suggestions and insights",
-    enabled: false,
-  },
-  {
-    id: "recent",
-    name: "Recent Activities",
-    description: "Latest actions and interactions log",
-    enabled: true,
-  },
-];
-
 // ── Permissions (Step 8) ────────────────────────────────────────────────────
 export type PermissionKey = "editing" | "dashboard" | "reports" | "analytics";
 
@@ -597,9 +533,8 @@ export type ProductDraft = {
   // Legacy
   reportTemplate: string;
 
-  // Step 7 — Dashboard
-  dashboardWidgets: DashboardWidget[];
-  dashboardLayout: string;
+  // Step 7 — Product Dashboard Builder
+  productDashboard: ProductDashboardConfig;
 
   // Step 8 — Permissions
   rolePermissions: RolePermission[];
@@ -688,9 +623,8 @@ export const emptyDraft = (): ProductDraft => ({
   // Legacy
   reportTemplate: "Standard Narrative",
 
-  // Step 7 — Dashboard
-  dashboardWidgets: DEFAULT_DASHBOARD_WIDGETS.map((w) => ({ ...w })),
-  dashboardLayout: "Consumer Default",
+  // Step 7 — Product Dashboard Builder
+  productDashboard: emptyProductDashboard(),
 
   // Step 8 — Permissions
   rolePermissions: DEFAULT_ROLE_PERMISSIONS.map((r) => ({

@@ -99,6 +99,7 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
   const location = useLocation();
   const founderUsers = useAppSelector((s) => s.founderUsers.users);
   const founderWidgets = useAppSelector((s) => s.founderWidgets.widgets);
+  const founderProducts = useAppSelector((s) => s.founderProducts.products);
 
   useEffect(() => {
     bootDashboardTheme();
@@ -225,8 +226,46 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
         { label: widgetCrumb },
       ]
     : undefined;
+  const productDetailMatch = location.pathname.match(
+    /^\/founder\/create-product\/([^/]+)(?:\/(dashboard)(?:\/(preview))?)?$/
+  );
+  const routeProduct = productDetailMatch
+    ? founderProducts.find((p) => p.id === productDetailMatch[1])
+    : undefined;
+  const isProductDashboard = productDetailMatch?.[2] === "dashboard";
+  const isProductDashboardPreview = productDetailMatch?.[3] === "preview";
+  const productBreadcrumbs = routeProduct
+    ? isProductDashboardPreview
+      ? [
+          { label: "Create Product™", to: "/founder/create-product" },
+          {
+            label: routeProduct.name,
+            to: `/founder/create-product/${routeProduct.id}`,
+          },
+          {
+            label: "Dashboard",
+            to: `/founder/create-product/${routeProduct.id}/dashboard`,
+          },
+          { label: "User Preview" },
+        ]
+      : isProductDashboard
+        ? [
+            { label: "Create Product™", to: "/founder/create-product" },
+            {
+              label: routeProduct.name,
+              to: `/founder/create-product/${routeProduct.id}`,
+            },
+            { label: "Dashboard" },
+          ]
+        : [
+            { label: "Create Product™", to: "/founder/create-product" },
+            { label: routeProduct.name },
+          ]
+    : undefined;
   const breadcrumbs = widgetBreadcrumbs
     ? widgetBreadcrumbs
+    : productBreadcrumbs
+    ? productBreadcrumbs
     : isInvoices
     ? [
         { label: "Financial Center™", to: "/founder/financial-center" },
@@ -279,6 +318,12 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
     ? "Edit Widget Configuration"
     : widgetDetailId
     ? "Widget Details & History"
+    : isProductDashboardPreview
+    ? "Product Dashboard User Preview™"
+    : isProductDashboard
+    ? "Product Dashboard Builder™"
+    : routeProduct
+    ? "Product Details™"
     : userProfileMatch
     ? "User Profile & Configuration"
     : isReportTemplates
@@ -322,6 +367,12 @@ const DashboardLayout = ({ config }: { config: any[] }) => {
     ? "Update logic and visual layers. Published widgets need a redeploy to push changes live."
     : widgetDetailId
     ? "Preview live states, manage versions, and analyze deployment metrics."
+    : isProductDashboardPreview && routeProduct
+    ? `Read-only Founder preview of ${routeProduct.name} as users would see it. No consumer or employee login required.`
+    : isProductDashboard && routeProduct
+    ? `Configure the Product Dashboard for ${routeProduct.name}. Layout templates, Widget Library™ widgets, and styling — without recreating the product.`
+    : routeProduct
+    ? `${routeProduct.id} · ${routeProduct.division} · Manage product identity and its assigned Product Dashboard.`
     : isFounderNotifications
     ? ""
     : isFounderProfile

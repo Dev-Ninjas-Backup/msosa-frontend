@@ -1,10 +1,10 @@
-// src/pages/consumer/sections/ActiveReflectionCard.tsx
 import { Link } from "react-router-dom";
-import { ArrowRight, FileText, ImageIcon, LayoutPanelTop } from "lucide-react";
-import Card from "@/ui/Card"; // or relative path
+import { ArrowRight, ImageIcon, LayoutPanelTop } from "lucide-react";
+import Card from "@/ui/Card";
 import { useMemberPortal } from "@/pages/shared/member/MemberPortalContext";
 
 type ActiveReflectionCardProps = {
+  productId: string;
   title: string;
   description: string;
   progress: number;
@@ -14,6 +14,7 @@ type ActiveReflectionCardProps = {
 };
 
 const ActiveReflectionCard = ({
+  productId,
   title,
   description,
   progress,
@@ -24,9 +25,7 @@ const ActiveReflectionCard = ({
   const { path } = useMemberPortal();
 
   return (
-    <Card className="p-4 sm:p-5 flex flex-col " borderColor="#FFFFFF1A" >
-
-      {/* Cover */}
+    <Card className="p-4 sm:p-5 flex flex-col " borderColor="#FFFFFF1A">
       <div className="w-full h-28 rounded-xl bg-black/40 border border-white/10 flex items-center justify-center mb-4">
         <div className="flex flex-col items-center gap-1.5 text-white/50">
           <ImageIcon className="size-6 opacity-60" />
@@ -36,11 +35,12 @@ const ActiveReflectionCard = ({
 
       <div className="flex items-start justify-between gap-2 mb-2">
         <div className="flex items-center gap-2">
-
-          <Card className="p-2 rounded-lg flex flex-col bg-[#FFFFFF]" borderColor="#FFFFFF1A" >
-            <LayoutPanelTop className="size-4 text-white  shrink-0 fill-[#FFFFFF99]" />
+          <Card
+            className="p-2 rounded-lg flex flex-col bg-[#FFFFFF]"
+            borderColor="#FFFFFF1A"
+          >
+            <LayoutPanelTop className="size-4 text-white shrink-0 fill-[#FFFFFF99]" />
           </Card>
-
 
           <h3 className="text-base font-medium text-white">
             {title}
@@ -54,7 +54,6 @@ const ActiveReflectionCard = ({
 
       <p className="text-sm text-white/60 leading-relaxed mb-4">{description}</p>
 
-      {/* Progress */}
       <div className="mb-6 space-y-4">
         <div className="flex items-center justify-between text-xs mb-1.5">
           <span className="text-white/50">Progress</span>
@@ -80,12 +79,12 @@ const ActiveReflectionCard = ({
         EST. REMAINING: <span className="text-white">{remaining}</span>
       </p>
 
-      <Link to={path("reflection-room")} className="mt-auto">
+      <Link to={path(`customer-products/${productId}`)} className="mt-auto">
         <button
           type="button"
           className="w-full h-11 rounded-xl bg-[#FBBF24] hover:bg-[#e5a820] text-black text-sm font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer border-0"
         >
-          Continue Product
+          Open Product Dashboard
           <ArrowRight className="size-4" />
         </button>
       </Link>

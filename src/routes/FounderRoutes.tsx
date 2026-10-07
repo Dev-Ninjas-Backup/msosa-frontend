@@ -27,6 +27,16 @@ const CreateProduct = Loadable(
   lazy(() => import("@/pages/Founder/CreateProduct/CreateProduct")),
   AdminSkeleton
 );
+const ProductDetails = Loadable(
+  lazy(() => import("@/pages/Founder/CreateProduct/ProductDetails")),
+  AdminSkeleton
+);
+const ProductDashboardUserPreview = Loadable(
+  lazy(
+    () => import("@/pages/Founder/CreateProduct/ProductDashboardUserPreview")
+  ),
+  AdminSkeleton
+);
 const WidgetLibrary = Loadable(
   lazy(() => import("@/pages/Founder/WidgetLibrary/WidgetLibrary")),
   AdminSkeleton
@@ -129,6 +139,18 @@ export const founderRoutes = [
             name: "Create Product™",
             path: "create-product",
             element: <CreateProduct />,
+          },
+          {
+            path: "create-product/:productId",
+            element: <ProductDetails />,
+          },
+          {
+            path: "create-product/:productId/dashboard",
+            element: <ProductDetails />,
+          },
+          {
+            path: "create-product/:productId/dashboard/preview",
+            element: <ProductDashboardUserPreview />,
           },
           {
             icon: <LayoutGrid />,

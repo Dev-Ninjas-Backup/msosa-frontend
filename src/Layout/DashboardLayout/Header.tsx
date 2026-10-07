@@ -954,7 +954,7 @@ const Header = ({
                     size="sm"
                     className="inline-flex h-12! rounded-xl! px-4! sm:px-[30px]! text-sm font-medium"
                     onClick={openLayoutEdit}
-                    title="Edit Dashboard"
+                    title="Edit Founder Layout"
                   />
                 </>
               )}

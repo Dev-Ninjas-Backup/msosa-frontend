@@ -3,6 +3,7 @@ import authReducer from "./features/AuthSlice/authSlice";
 import founderUsersReducer from "./features/FounderUsers/founderUsersSlice";
 import founderReportsReducer from "./features/FounderReports/founderReportsSlice";
 import founderWidgetsReducer from "./features/FounderWidgets/founderWidgetsSlice";
+import founderProductsReducer from "./features/FounderProducts/founderProductsSlice";
 
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
@@ -21,6 +22,7 @@ export const store = configureStore({
     founderUsers: founderUsersReducer,
     founderReports: founderReportsReducer,
     founderWidgets: founderWidgetsReducer,
+    founderProducts: founderProductsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
