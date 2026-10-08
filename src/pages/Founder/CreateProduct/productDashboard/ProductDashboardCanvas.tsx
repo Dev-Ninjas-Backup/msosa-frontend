@@ -4,15 +4,15 @@ import type { Widget } from "@/pages/Founder/WidgetLibrary/data";
 import {
   isVisibleTo,
   type PreviewRole,
-  WIDGET_TYPE_META,
 } from "@/pages/Founder/WidgetLibrary/data";
+import WidgetLiveContent from "@/pages/Founder/WidgetLibrary/components/WidgetLiveContent";
 import type {
   DashboardLayoutTemplate,
   ProductAudience,
   ProductDashboardConfig,
   ProductDashboardWidget,
 } from "./types";
-import { widgetCardStyle } from "./widgetStyleCss";
+import { resolveFontFamily, widgetCardStyle } from "./widgetStyleCss";
 
 type Props = {
   config: ProductDashboardConfig;
@@ -53,12 +53,10 @@ const ProductDashboardCanvas = ({
   const byId = new Map(library.map((w) => [w.id, w]));
 
   const visible = config.widgets.filter((inst) => {
-    // Keep disabled widgets on the edit canvas (dimmed) so they can be re-enabled.
     if (!inst.enabled && !editable) return false;
     const lib = byId.get(inst.widgetLibraryId);
     if (!lib) return editable;
     const visibility = inst.visibility ?? lib.visibility;
-    // Audience preview: hide widgets that role cannot see (even while editing).
     return isVisibleTo({ ...lib, visibility }, role);
   });
 
@@ -69,7 +67,6 @@ const ProductDashboardCanvas = ({
       widget: visible[i] ?? null,
     }));
 
-  // Extra widgets beyond slot count still render in a fluid row
   const overflow = visible.slice(slots.length);
 
   return (
@@ -81,7 +78,7 @@ const ProductDashboardCanvas = ({
               <div
                 key={`empty-${i}`}
                 className={cn(
-                  "min-h-[120px] rounded-xl border border-dashed border-white/10 bg-white/[0.02] flex items-center justify-center",
+                  "min-h-[160px] rounded-xl border border-dashed border-white/10 bg-white/[0.02] flex items-center justify-center",
                   spanClass(cell.slotSpan)
                 )}
               >
@@ -117,15 +114,18 @@ const ProductDashboardCanvas = ({
       </div>
       {visible.length === 0 && (
         <p className="text-sm text-white/40 text-center py-8">
-          No widgets assigned for this view. Add widgets from the Widget Library™.
+          No widgets assigned for this view. Add widgets from the Widget
+          Library™.
         </p>
       )}
       {(editable || config.widgets.some((w) => w.enabled)) &&
         visible.length <
           config.widgets.filter((w) => w.enabled || editable).length && (
           <p className="text-[11px] text-white/35 text-center">
-            Some widgets are hidden for <span className="text-white/55">{audience}</span> by
-            Widget Library™ visibility. Switch preview audience or manage them in the assigned list.
+            Some widgets are hidden for{" "}
+            <span className="text-white/55">{audience}</span> by Widget Library™
+            visibility. Switch preview audience or manage them in the assigned
+            list.
           </p>
         )}
     </div>
@@ -149,71 +149,54 @@ const WidgetTile = ({
   onStyle?: (id: string) => void;
   onRemove?: (id: string) => void;
 }) => {
-  const title = instance.title || library?.title || library?.name || "Widget";
-  const subtitle = library?.subtitle || library?.description || "";
-  const typeLabel = library ? WIDGET_TYPE_META[library.type].detail : "Widget";
-
   return (
     <div
       className={cn(
-        "relative flex flex-col min-h-[140px] overflow-hidden transition-opacity",
+        "relative flex flex-col min-h-[220px] overflow-hidden transition-opacity",
         !instance.enabled && "opacity-50",
         className
       )}
       style={widgetCardStyle(instance.style)}
     >
-      <div className="flex items-start justify-between gap-2" style={{ gap: instance.style.gap }}>
-        <div className="min-w-0">
-          <p
-            className="text-[10px] font-bold uppercase tracking-[1px] truncate"
-            style={{ color: instance.style.descriptionColor }}
+      {editable && (
+        <div className="absolute top-3 right-3 z-10 flex items-center gap-1">
+          <button
+            type="button"
+            title="Style"
+            onClick={() => onStyle?.(instance.id)}
+            className="size-8 rounded-lg bg-black/50 border border-white/10 text-white/80 hover:text-[#fbbf24] cursor-pointer flex items-center justify-center"
           >
-            {typeLabel}
-          </p>
-          <h3
-            className="mt-1 font-medium truncate"
-            style={{
-              color: instance.style.titleColor,
-              fontFamily: instance.style.fontFamily,
-              fontSize: instance.style.fontSize + 2,
-            }}
-          >
-            {title}
-          </h3>
-        </div>
-        {editable && (
-          <div className="flex items-center gap-1 shrink-0">
-            <button
-              type="button"
-              title="Style"
-              onClick={() => onStyle?.(instance.id)}
-              className="size-8 rounded-lg bg-black/40 border border-white/10 text-white/80 hover:text-[#fbbf24] cursor-pointer flex items-center justify-center"
-            >
-              <Settings2 className="size-3.5" />
-            </button>
-          </div>
-        )}
-      </div>
-      <p
-        className="mt-2 text-xs leading-relaxed line-clamp-3"
-        style={{ color: instance.style.descriptionColor }}
-      >
-        {subtitle}
-      </p>
-      {library && (
-        <div
-          className="mt-auto pt-3 flex items-center gap-2 text-[10px] uppercase tracking-[0.5px]"
-          style={{ color: instance.style.descriptionColor, opacity: 0.7 }}
-        >
-          <span
-            className="size-2 rounded-full"
-            style={{ backgroundColor: library.color }}
-          />
-          {library.id}
+            <Settings2 className="size-3.5" />
+          </button>
         </div>
       )}
+
+      {library ? (
+        <div
+          className="min-w-0 flex-1"
+          style={{
+            color: instance.style.titleColor,
+            fontFamily: resolveFontFamily(instance.style.fontFamily),
+          }}
+        >
+          <WidgetLiveContent
+            widget={library}
+            density="dashboard"
+            titleOverride={instance.title || undefined}
+            fontFamily={resolveFontFamily(instance.style.fontFamily)}
+          />
+        </div>
+      ) : (
+        <div className="flex flex-1 flex-col items-center justify-center gap-1 text-center py-8">
+          <p className="text-sm text-white/70">Widget unavailable</p>
+          <p className="text-xs text-white/35 font-mono">
+            {instance.widgetLibraryId}
+          </p>
+        </div>
+      )}
+
       {editable && (
-        <div className="mt-3 flex items-center gap-2">
+        <div className="mt-3 flex items-center gap-3 pt-1 border-t border-white/10">
           <button
             type="button"
             onClick={() => onToggle?.(instance.id)}
@@ -228,6 +211,9 @@ const WidgetTile = ({
           >
             Remove
           </button>
+          <span className="ml-auto text-[10px] text-white/30 font-mono">
+            {instance.widgetLibraryId}
+          </span>
         </div>
       )}
     </div>

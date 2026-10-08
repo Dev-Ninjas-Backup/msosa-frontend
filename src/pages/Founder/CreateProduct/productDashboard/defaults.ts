@@ -78,11 +78,13 @@ export const STARTER_LAYOUT_TEMPLATES: DashboardLayoutTemplate[] = [
 
 export const FONT_OPTIONS = [
   "Playfair Display",
+  "Inter",
   "Georgia",
   "Merriweather",
-  "Source Serif Pro",
+  "Source Serif 4",
   "IBM Plex Sans",
   "DM Sans",
+  "Cormorant Garamond",
 ] as const;
 
 const instanceId = () =>

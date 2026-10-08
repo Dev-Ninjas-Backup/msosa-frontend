@@ -5,7 +5,11 @@ import Input from "@/ui/Input";
 import { Label } from "@/ui/Label";
 import { FONT_OPTIONS, DEFAULT_WIDGET_STYLE } from "./defaults";
 import type { ProductDashboardWidget, ProductWidgetStyle } from "./types";
-import { cropFromPosition, resolveBackgroundPosition } from "./widgetStyleCss";
+import {
+  cropFromPosition,
+  resolveBackgroundPosition,
+  resolveFontFamily,
+} from "./widgetStyleCss";
 
 type Props = {
   widget: ProductDashboardWidget;
@@ -110,16 +114,36 @@ const WidgetStyleEditor = ({ widget, onChange, onClose }: Props) => {
                   Font
                 </Label>
                 <select
-                  value={style.fontFamily}
+                  value={
+                    style.fontFamily === "Source Serif Pro"
+                      ? "Source Serif 4"
+                      : FONT_OPTIONS.includes(
+                            style.fontFamily as (typeof FONT_OPTIONS)[number]
+                          )
+                        ? style.fontFamily
+                        : "Inter"
+                  }
                   onChange={(e) => patchStyle({ fontFamily: e.target.value })}
                   className="w-full h-10 rounded-lg border border-white/10 bg-white/5 px-3 text-sm text-white outline-none"
+                  style={{ fontFamily: resolveFontFamily(style.fontFamily) }}
                 >
                   {FONT_OPTIONS.map((f) => (
-                    <option key={f} value={f} className="bg-[#121212]">
+                    <option
+                      key={f}
+                      value={f}
+                      className="bg-[#121212]"
+                      style={{ fontFamily: resolveFontFamily(f) }}
+                    >
                       {f}
                     </option>
                   ))}
                 </select>
+                <p
+                  className="text-xs text-white/50"
+                  style={{ fontFamily: resolveFontFamily(style.fontFamily) }}
+                >
+                  Preview: The quick brown fox jumps over the lazy dog.
+                </p>
               </div>
               <div className="space-y-2">
                 <Label className="text-[10px] font-bold uppercase tracking-[1px] text-white/50">

@@ -90,8 +90,8 @@ export const THEME_COLOR_FIELDS: {
 export const DEFAULT_DASHBOARD_THEME: DashboardTheme = {
   title: "Dashboard 1",
   subtitle: "FOUNDER OPERATING SYSTEM FOR THE FAR PLATFORM ENGINE™",
-  dashboardBackground: "#000307",
-  cardBackground: "#0f172a",
+  dashboardBackground: "#000000",
+  cardBackground: "#0A0A0A",
   cardBorder: "#FFFFFF1A",
   titleText: "#FFFFFF",
   descriptionText: "#9CA3AF",

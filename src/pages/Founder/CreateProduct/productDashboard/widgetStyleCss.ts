@@ -49,11 +49,24 @@ export const resolveBackgroundSize = (style: ProductWidgetStyle) => {
   return style.backgroundSize;
 };
 
+/** Quote multi-word families so CSS applies them correctly. */
+export const resolveFontFamily = (fontFamily: string): string => {
+  let name = fontFamily.trim() || "Inter";
+  // Legacy option renamed when Google Fonts moved to Source Serif 4
+  if (name === "Source Serif Pro") name = "Source Serif 4";
+  const quoted = name.includes(" ") ? `"${name.replace(/"/g, "")}"` : name;
+  const stack =
+    name === "Inter" || name === "DM Sans" || name === "IBM Plex Sans"
+      ? "sans-serif"
+      : "serif";
+  return `${quoted}, ${stack}`;
+};
+
 export const widgetCardStyle = (style: ProductWidgetStyle): CSSProperties => {
   const hasImage = Boolean(style.backgroundImage);
 
   return {
-    fontFamily: style.fontFamily,
+    fontFamily: resolveFontFamily(style.fontFamily),
     fontSize: style.fontSize,
     color: style.descriptionColor,
     backgroundColor: style.backgroundColor,
