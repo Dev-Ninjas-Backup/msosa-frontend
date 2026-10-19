@@ -3,10 +3,11 @@ import { ArrowRight, FileText, ImageIcon, Info, Plus } from "lucide-react";
 import AnimatedContainer from "@/common/AnimatedContainer";
 import Card from "@/ui/Card";
 import { useAppSelector } from "@/hooks/useRedux";
+import { continuePath } from "@/store/features/MemberJourney/memberJourneySlice";
 import { useMemberPortal } from "@/pages/shared/member/MemberPortalContext";
 
 const ActiveReflections = () => {
-  const { path } = useMemberPortal();
+  const { path, basePath } = useMemberPortal();
   const location = window.location.pathname;
   const firstProduct = useAppSelector((s) =>
     s.founderProducts.products.find(
@@ -15,9 +16,10 @@ const ActiveReflections = () => {
   );
 
   const isConsumerDashboard = location.includes("/consumer/dashboard");
-  const productHref = firstProduct
-    ? path(`customer-products/${firstProduct.id}`)
-    : path("customer-products");
+  const stage = useAppSelector(
+    (s) => s.memberJourney.stages.relationship
+  );
+  const productHref = continuePath(basePath, "relationship", stage);
 
   return (
     <AnimatedContainer delay={0.1}>
@@ -90,7 +92,7 @@ const ActiveReflections = () => {
                 type="button"
                 className="w-full h-11 rounded-xl bg-[#F5C542] hover:bg-[#e8b93a] text-black text-sm font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer border-0"
               >
-                Open Product Dashboard
+                Continue
                 <ArrowRight className="size-4" />
               </button>
             </Link>

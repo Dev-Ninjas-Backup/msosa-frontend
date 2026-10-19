@@ -14,7 +14,9 @@ import Select from "@/ui/Select";
 import { Textarea } from "@/ui/Textarea";
 import { Label } from "@/ui/Label";
 import Card from "@/ui/Card";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { useMemberPortalOptional } from "@/pages/shared/member/MemberPortalContext";
 
 const AVATAR =
   "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&h=200&q=80";
@@ -49,12 +51,21 @@ const Toggle = ({
 );
 
 const Profile = () => {
-  const [firstName, setFirstName] = useState("Masud");
-  const [lastName, setLastName] = useState("J");
-  const [displayName, setDisplayName] = useState("Masud J");
-  const [email, setEmail] = useState("liza.fernandes@Encounters.com");
-  const [phone, setPhone] = useState("+1 (555) 234-5678");
-  const [timezone, setTimezone] = useState("UTC-5 Eastern Time");
+  const isEmployee = useMemberPortalOptional()?.role === "employee";
+  const [firstName, setFirstName] = useState(isEmployee ? "Sarah" : "Masud");
+  const [lastName, setLastName] = useState(isEmployee ? "Johnson" : "J");
+  const [displayName, setDisplayName] = useState(
+    isEmployee ? "Sarah Johnson" : "Masud J"
+  );
+  const [email, setEmail] = useState(
+    isEmployee ? "s.johnson@abchealth.com" : "liza.fernandes@Encounters.com"
+  );
+  const [phone, setPhone] = useState(
+    isEmployee ? "+1 (555) 098-7654" : "+1 (555) 234-5678"
+  );
+  const [timezone, setTimezone] = useState(
+    isEmployee ? "Eastern Standard Time (EST)" : "UTC-5 Eastern Time"
+  );
   const [language, setLanguage] = useState("English (US)");
   const [country, setCountry] = useState("United States");
   const [bio, setBio] = useState(
@@ -107,12 +118,14 @@ const Profile = () => {
                 {displayName}
               </h2>
               <p className="mt-1 text-sm text-secondary-text">
-                Project Manager • ABC Healthcare
+                {isEmployee
+                  ? "Project Manager • ABC Healthcare"
+                  : "Individual Consumer"}
               </p>
               <div className="mt-3 flex flex-wrap items-center gap-2.5 text-xs">
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-emerald-400 font-medium">
                   <span className="size-1.5 rounded-full bg-emerald-400" />
-                  ACTIVE EMPLOYEE
+                  {isEmployee ? "ACTIVE EMPLOYEE" : "ACTIVE"}
                 </span>
                 <span className="text-secondary-text">
                   Member since January 2026
@@ -121,6 +134,11 @@ const Profile = () => {
             </div>
             <button
               type="button"
+              onClick={() =>
+                document
+                  .getElementById("personal-info")
+                  ?.scrollIntoView({ behavior: "smooth", block: "start" })
+              }
               className="h-10 px-5 rounded-xl bg-[#F5C542] hover:bg-[#e8b93a] text-black text-sm font-semibold transition-colors cursor-pointer border-0 shrink-0 self-start lg:self-center"
             >
               Edit Profile
@@ -170,7 +188,7 @@ const Profile = () => {
                 {displayName}
               </h3>
               <p className="mt-0.5 text-sm text-secondary-text">
-                Individual Consumer
+                {isEmployee ? "Project Manager" : "Individual Consumer"}
               </p>
               <span className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-[11px] text-emerald-400 font-medium">
                 <span className="size-1.5 rounded-full bg-emerald-400" />
@@ -189,19 +207,31 @@ const Profile = () => {
               </div>
               <div className="flex justify-between gap-3">
                 <dt className="text-secondary-text">Role</dt>
-                <dd className="text-[#F5C542]">Individual Consumer</dd>
+                <dd className="text-[#F5C542]">
+                  {isEmployee ? "Employee" : "Individual Consumer"}
+                </dd>
               </div>
             </dl>
 
             <div className="mt-6 space-y-2.5">
               <button
                 type="button"
+                onClick={() =>
+                  document
+                    .getElementById("personal-info")
+                    ?.scrollIntoView({ behavior: "smooth", block: "start" })
+                }
                 className="w-full h-10 rounded-xl bg-[#F5C542] hover:bg-[#e8b93a] text-black text-sm font-semibold transition-colors cursor-pointer border-0"
               >
                 Edit Profile
               </button>
               <button
                 type="button"
+                onClick={() =>
+                  document
+                    .getElementById("change-password")
+                    ?.scrollIntoView({ behavior: "smooth", block: "start" })
+                }
                 className="w-full h-10 rounded-xl border border-white/15 bg-white/5 hover:bg-white/10 text-primary-text text-sm font-medium transition-colors cursor-pointer"
               >
                 Change Password
@@ -212,7 +242,7 @@ const Profile = () => {
 
         {/* Personal Information */}
         <AnimatedContainer delay={0.1}>
-          <Card className="p-5 sm:p-6">
+          <Card id="personal-info" className="p-5 sm:p-6">
             <div className="mb-5">
               <h3 className="text-base font-medium text-primary-text">
                 Personal Information
@@ -283,6 +313,7 @@ const Profile = () => {
                 <Select
                   variant="soft"
                   options={[
+                    "Eastern Standard Time (EST)",
                     "UTC-5 Eastern Time",
                     "UTC-6 Central Time",
                     "UTC-7 Mountain Time",
@@ -339,6 +370,7 @@ const Profile = () => {
                 </button>
                 <button
                   type="button"
+                  onClick={() => toast.success("Profile saved on this device.")}
                   className="h-9 px-4 rounded-lg bg-[#F5C542] hover:bg-[#e8b93a] text-black text-xs font-semibold transition-colors cursor-pointer border-0"
                 >
                   Save Changes
@@ -348,6 +380,43 @@ const Profile = () => {
           </Card>
         </AnimatedContainer>
       </div>
+
+      {isEmployee && (
+        <AnimatedContainer delay={0.11}>
+          <Card className="p-5 sm:p-6">
+            <h3 className="text-base font-medium text-primary-text">
+              Organization Information
+            </h3>
+            <p className="mt-1 text-sm text-secondary-text">ABC Healthcare</p>
+            <dl className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 text-sm">
+              <div>
+                <dt className="text-[11px] uppercase tracking-wider text-secondary-text">
+                  Department
+                </dt>
+                <dd className="mt-1 text-primary-text">Product Development</dd>
+              </div>
+              <div>
+                <dt className="text-[11px] uppercase tracking-wider text-secondary-text">
+                  Employee ID
+                </dt>
+                <dd className="mt-1 text-primary-text">#EMP-2045</dd>
+              </div>
+              <div>
+                <dt className="text-[11px] uppercase tracking-wider text-secondary-text">
+                  Assigned Administrator
+                </dt>
+                <dd className="mt-1 text-primary-text">David Miller</dd>
+              </div>
+              <div>
+                <dt className="text-[11px] uppercase tracking-wider text-secondary-text">
+                  Org Email
+                </dt>
+                <dd className="mt-1 text-primary-text">admin@abchealth.com</dd>
+              </div>
+            </dl>
+          </Card>
+        </AnimatedContainer>
+      )}
 
       {/* Profile Photo */}
       <AnimatedContainer delay={0.12}>
@@ -546,7 +615,10 @@ const Profile = () => {
           </button>
 
           {/* Change Password Form */}
-          <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-5">
+          <div
+            id="change-password"
+            className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-5"
+          >
             <h4 className="text-sm font-medium text-primary-text mb-4">
               Change Password
             </h4>

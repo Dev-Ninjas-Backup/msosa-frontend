@@ -26,7 +26,7 @@ export const KPI_CARDS = [
     value: "18",
     label: "Organizations™",
     change: "5.6%",
-    tone: "flat" as TrendTone,
+    tone: "up" as TrendTone,
     iconSrc: kpi2,
   },
   {
@@ -148,20 +148,64 @@ export const LINK_ACTIONS = [
 ] as const;
 
 export const ACTIVITIES = [
-  { text: 'New organization "Apex Corp" registered', time: "5 min ago" },
-  { text: "Blueprint 1 report generated for user #4821", time: "12 min ago" },
-  { text: "Readiness Product 1 purchased — 3 seats", time: "18 min ago" },
-  { text: "Protocol #112 updated by admin", time: "25 min ago" },
-  { text: "Live Experience session ended", time: "35 min ago" },
+  {
+    text: 'New organization "Apex Corp" registered',
+    time: "5 min ago",
+    to: "/founder/user-management",
+  },
+  {
+    text: "Blueprint 1 report generated for user #4821",
+    time: "12 min ago",
+    to: "/founder/reports",
+  },
+  {
+    text: "Readiness Product 1 purchased — 3 seats",
+    time: "18 min ago",
+    to: "/founder/financial-center",
+  },
+  {
+    text: "Protocol #112 updated by admin",
+    time: "25 min ago",
+    to: "/founder/protocol-library",
+  },
+  {
+    text: "Live Experience session ended",
+    time: "35 min ago",
+    to: "/founder/analytics-insights",
+  },
 ] as const;
 
 export const ALERTS = [
-  { text: "Storage usage approaching 80% threshold", tone: "warn" as const },
-  { text: "API rate limit at 85% for endpoint /reports", tone: "warn" as const },
-  { text: "Payment gateway timeout — 3 failed txns", tone: "danger" as const },
-  { text: "Email delivery failure for 2 org accounts", tone: "danger" as const },
-  { text: "Backup completed successfully", tone: "ok" as const },
-  { text: "Platform update v1.0.1 available", tone: "info" as const },
+  {
+    text: "Storage usage approaching 80% threshold",
+    tone: "warn" as const,
+    to: "/founder/notifications?filter=System",
+  },
+  {
+    text: "API rate limit at 85% for endpoint /reports",
+    tone: "warn" as const,
+    to: "/founder/reports",
+  },
+  {
+    text: "Payment gateway timeout — 3 failed txns",
+    tone: "danger" as const,
+    to: "/founder/financial-center",
+  },
+  {
+    text: "Email delivery failure for 2 org accounts",
+    tone: "danger" as const,
+    to: "/founder/user-management",
+  },
+  {
+    text: "Backup completed successfully",
+    tone: "ok" as const,
+    to: "/founder/notifications?filter=System",
+  },
+  {
+    text: "Platform update v1.0.1 available",
+    tone: "info" as const,
+    to: "/founder/notifications?filter=System",
+  },
 ] as const;
 
 export const OPEN_DASHBOARD_SETTINGS_EVENT = "far:open-dashboard-settings";

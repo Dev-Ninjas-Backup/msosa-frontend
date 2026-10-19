@@ -1,9 +1,10 @@
-import { GitBranch, GripVertical, Lock, Plus } from "lucide-react";
+import { GitBranch, GripVertical, Lock, Plus, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Input from "@/ui/Input";
 import Select from "@/ui/Select";
 import {
   COMPLETION_TRIGGERS,
+  DEFAULT_JOURNEY,
   JOURNEY_TAG_TONE,
   type JourneyStep,
   type ProductDraft,
@@ -14,6 +15,8 @@ type StepWorkflowProps = {
   setDraft: (patch: Partial<ProductDraft>) => void;
 };
 
+const lockedIds = new Set(DEFAULT_JOURNEY.map((step) => step.id));
+
 const StepWorkflow = ({ draft, setDraft }: StepWorkflowProps) => {
   const steps = draft.workflowJourney;
 
@@ -23,6 +26,14 @@ const StepWorkflow = ({ draft, setDraft }: StepWorkflowProps) => {
       workflowSteps: steps
         .map((s) => (s.id === id ? name : s.name))
         .join(" → "),
+    });
+  };
+
+  const removeStep = (id: string) => {
+    const journey = steps.filter((step) => step.id !== id);
+    setDraft({
+      workflowJourney: journey,
+      workflowSteps: journey.map((step) => step.name).join(" → "),
     });
   };
 
@@ -72,9 +83,20 @@ const StepWorkflow = ({ draft, setDraft }: StepWorkflowProps) => {
                   <GitBranch className="size-2.5" />
                   Condition
                 </span>
-                <span className="flex size-7 items-center justify-center rounded-md border border-white/10 bg-white/[0.05] text-white/50">
-                  <Lock className="size-3" />
-                </span>
+                {lockedIds.has(step.id) ? (
+                  <span className="flex size-7 items-center justify-center rounded-md border border-white/10 bg-white/[0.05] text-white/50">
+                    <Lock className="size-3" />
+                  </span>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => removeStep(step.id)}
+                    className="flex size-7 items-center justify-center rounded-md border border-white/10 bg-white/[0.05] text-white/50 hover:border-red-400/40 hover:text-red-400 cursor-pointer"
+                    aria-label={`Delete ${step.name}`}
+                  >
+                    <Trash2 className="size-3" />
+                  </button>
+                )}
               </div>
               {i < steps.length - 1 && (
                 <div className="flex flex-col items-center py-1">

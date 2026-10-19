@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { GripVertical, Plus, Save, Settings2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -97,6 +97,8 @@ const ProductDashboardBuilder = ({
   const [libraryQuery, setLibraryQuery] = useState("");
   const [slotDraft, setSlotDraft] = useState<LayoutSlot[]>([]);
   const [renameDraft, setRenameDraft] = useState("");
+  const [dragId, setDragId] = useState<string | null>(null);
+  const dragIdRef = useRef<string | null>(null);
 
   const config = value;
   const template = templates.find((t) => t.id === config.templateId);
@@ -146,6 +148,20 @@ const ProductDashboardBuilder = ({
     const [item] = widgets.splice(idx, 1);
     widgets.splice(next, 0, item);
     patch({ widgets });
+  };
+
+  const dropWidget = (targetId: string) => {
+    const sourceId = dragIdRef.current;
+    if (!sourceId || sourceId === targetId) return;
+    const widgets = [...config.widgets];
+    const from = widgets.findIndex((w) => w.id === sourceId);
+    const to = widgets.findIndex((w) => w.id === targetId);
+    if (from < 0 || to < 0) return;
+    const [item] = widgets.splice(from, 1);
+    widgets.splice(to, 0, item);
+    patch({ widgets });
+    dragIdRef.current = null;
+    setDragId(null);
   };
 
   const addWidget = (libraryId: string, title: string) => {
@@ -491,14 +507,23 @@ const ProductDashboardBuilder = ({
               return (
                 <div
                   key={w.id}
+                  draggable
+                  aria-label={`Reorder ${w.title || lib?.name || "widget"}`}
+                  onDragStart={() => {
+                    dragIdRef.current = w.id;
+                    setDragId(w.id);
+                  }}
+                  onDragOver={(event) => event.preventDefault()}
+                  onDrop={() => dropWidget(w.id)}
                   className={cn(
                     "flex flex-wrap items-center gap-3 rounded-xl border px-3 py-3",
                     w.enabled
                       ? "border-white/10 bg-white/[0.03]"
-                      : "border-white/5 bg-white/[0.015] opacity-70"
+                      : "border-white/5 bg-white/[0.015] opacity-70",
+                    dragId === w.id && "opacity-50"
                   )}
                 >
-                  <div className="flex items-center gap-1 text-white/30">
+                  <div className="flex items-center gap-1 text-white/30 cursor-grab">
                     <GripVertical className="size-4" />
                     <span className="text-xs tabular-nums w-5">{index + 1}</span>
                   </div>

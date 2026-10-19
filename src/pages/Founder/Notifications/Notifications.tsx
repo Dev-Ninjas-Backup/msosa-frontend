@@ -1,5 +1,5 @@
 import { useMemo, useState, useSyncExternalStore, type ReactNode } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { AlertTriangle, ArrowUpDown, Bell, CheckCircle2, FileText, Megaphone, MoreVertical, RefreshCw, Search, Users } from "lucide-react";
 import { toast } from "sonner";
 import AnimatedContainer from "@/common/AnimatedContainer";
@@ -19,6 +19,10 @@ import {
 } from "./data";
 
 const FILTERS = ["All", "Unread", "Action Required", "Reflection Updates", "Reports", "Organization", "System"] as const;
+type NoticeView = (typeof FILTERS)[number];
+
+const isNoticeView = (value: string | null): value is NoticeView =>
+  value !== null && (FILTERS as readonly string[]).includes(value);
 
 const priorityTone = {
   "High Priority": "text-[#ef4444]",
@@ -36,9 +40,17 @@ const iconFor = (notice: FounderNotice) => {
 
 const Notifications = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const notices = useSyncExternalStore(subscribeNotices, getNotices);
   const [query, setQuery] = useState("");
-  const [filter, setFilter] = useState<(typeof FILTERS)[number]>("All");
+  const filterParam = searchParams.get("filter");
+  const filter: NoticeView = isNoticeView(filterParam) ? filterParam : "All";
+  const setFilter = (next: NoticeView) => {
+    const params = new URLSearchParams(searchParams);
+    if (next === "All") params.delete("filter");
+    else params.set("filter", next);
+    setSearchParams(params, { replace: true });
+  };
   const [newest, setNewest] = useState(true);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [expanded, setExpanded] = useState<string | null>(null);

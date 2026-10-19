@@ -839,23 +839,28 @@ const FounderDashboard = () => {
                 <h3 className="font-playfair text-lg text-primary-text">
                   Recent Activity
                 </h3>
-                <button
-                  type="button"
-                  className="text-xs text-button-bg hover:opacity-80 cursor-pointer border-0 bg-transparent"
+                <Link
+                  to="/founder/notifications"
+                  className="text-xs text-button-bg hover:opacity-80"
                 >
                   View All
-                </button>
+                </Link>
               </div>
-              <ul className="space-y-4">
+              <ul className="space-y-1">
                 {ACTIVITIES.map((item) => (
-                  <li key={item.text} className="flex gap-3">
-                    <span className="mt-1.5 size-2 rounded-full bg-button-bg shrink-0" />
-                    <div className="min-w-0">
-                      <p className="text-sm text-primary-text leading-snug">
-                        {item.text}
-                      </p>
-                      <p className="mt-0.5 text-xs text-muted-blue">{item.time}</p>
-                    </div>
+                  <li key={item.text}>
+                    <Link
+                      to={item.to}
+                      className="flex gap-3 rounded-lg px-1 py-2 hover:bg-white/5"
+                    >
+                      <span className="mt-1.5 size-2 rounded-full bg-button-bg shrink-0" />
+                      <div className="min-w-0">
+                        <p className="text-sm text-primary-text leading-snug">
+                          {item.text}
+                        </p>
+                        <p className="mt-0.5 text-xs text-muted-blue">{item.time}</p>
+                      </div>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -887,31 +892,33 @@ const FounderDashboard = () => {
               </div>
               <ul className="space-y-3">
                 {ALERTS.map((alert) => (
-                  <li
-                    key={alert.text}
-                    className={cn(
-                      "rounded-lg border px-3 py-2.5 text-xs leading-snug",
-                      alert.tone === "warn" &&
-                        "border-status-warning/20 bg-status-warning/5 text-status-warning",
-                      alert.tone === "danger" &&
-                        "border-status-danger/20 bg-status-danger/5 text-status-danger",
-                      alert.tone === "ok" &&
-                        "border-status-success/20 bg-status-success/5 text-status-success",
-                      alert.tone === "info" &&
-                        "border-light-blue/20 bg-light-blue/5 text-light-blue"
-                    )}
-                  >
-                    {alert.text}
+                  <li key={alert.text}>
+                    <Link
+                      to={alert.to}
+                      className={cn(
+                        "block rounded-lg border px-3 py-2.5 text-xs leading-snug hover:brightness-125",
+                        alert.tone === "warn" &&
+                          "border-status-warning/20 bg-status-warning/5 text-status-warning",
+                        alert.tone === "danger" &&
+                          "border-status-danger/20 bg-status-danger/5 text-status-danger",
+                        alert.tone === "ok" &&
+                          "border-status-success/20 bg-status-success/5 text-status-success",
+                        alert.tone === "info" &&
+                          "border-light-blue/20 bg-light-blue/5 text-light-blue"
+                      )}
+                    >
+                      {alert.text}
+                    </Link>
                   </li>
                 ))}
               </ul>
-              <button
-                type="button"
-                className="mt-4 inline-flex items-center gap-1.5 text-sm text-button-bg hover:opacity-80 cursor-pointer border-0 bg-transparent p-0"
+              <Link
+                to="/founder/notifications?filter=System"
+                className="mt-4 inline-flex items-center gap-1.5 text-sm text-button-bg hover:opacity-80"
               >
                 View All Alerts
                 <ArrowRight className="size-3" />
-              </button>
+              </Link>
             </Panel>
             </EditableWidgetShell>
           </AnimatedContainer>

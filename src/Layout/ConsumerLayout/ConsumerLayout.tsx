@@ -61,10 +61,11 @@ type ConsumerLayoutProps = {
 const ConsumerLayout = ({ config }: ConsumerLayoutProps) => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const location = useLocation();
-  const { basePath } = useMemberPortal();
+  const { basePath, role } = useMemberPortal();
   const menu = menuGenerator(config);
 
-  const isContinuum = location.pathname.includes("/continuum");
+  const isContinuum =
+    location.pathname.includes("/continuum") && role !== "employee";
 
   const findActiveItem = (items: any[]): any => {
     for (const item of items) {
@@ -96,20 +97,41 @@ const ConsumerLayout = ({ config }: ConsumerLayoutProps) => {
   const isReportDetail = /\/report\/[^/]+$/.test(location.pathname);
   const isProfile = location.pathname.includes("/profile");
   const isNotifications = location.pathname.includes("/notifications");
-  const headerMeta = isCheckoutSuccess
-    ? pageMeta["Checkout Success"]
-    : isCheckout
-      ? pageMeta.Checkout
-      : isReportDetail
-        ? {
-          title: "Report Details",
-          description: "Deep dive into your delivered Blueprint narrative.",
-        }
-        : isProfile
-          ? pageMeta.Profile
-          : isNotifications
-            ? pageMeta.Notifications
-            : meta;
+  const headerMeta = {
+    ...(isCheckoutSuccess
+      ? pageMeta["Checkout Success"]
+      : isCheckout
+        ? pageMeta.Checkout
+        : isReportDetail
+          ? {
+              title: "Report Details",
+              description: "Deep dive into your delivered Blueprint narrative.",
+            }
+          : isProfile
+            ? pageMeta.Profile
+            : isNotifications
+              ? pageMeta.Notifications
+              : meta),
+  };
+
+  if (role === "employee" && location.pathname.includes("/dashboard")) {
+    headerMeta.title = "Welcome back, Sarah.";
+    headerMeta.description =
+      "Organization: ABC Healthcare. You are currently completing the Leadership Blueprint™.";
+  }
+  if (
+    role === "employee" &&
+    location.pathname.includes("/customer-products") &&
+    !location.pathname.includes("/customer-products/")
+  ) {
+    headerMeta.title = "My Blueprints™";
+    headerMeta.description = "Sarah Johnson · ABC Healthcare";
+  }
+  if (role === "employee" && location.pathname.includes("/continuum")) {
+    headerMeta.title = "Professional Development Continuum™";
+    headerMeta.description =
+      "Tracking your evolution through every Leadership cycle.";
+  }
 
   const isReflectionRoom = location.pathname.includes("/reflection-room");
 

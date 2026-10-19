@@ -9,7 +9,7 @@ const BillingActions = () => (
         variant="primary"
         size="sm"
         className="rounded-lg! bg-[#FBBF24]! text-black! hover:bg-[#e8b93a]! h-9! px-[18px]! text-[13px]! font-bold!"
-        onClick={() => toast.message("Upgrade plan coming soon.")}
+        onClick={() => toast.success("Enterprise plan is already active in this demo.")}
       >
         Upgrade Plan
       </Button>

@@ -1,4 +1,8 @@
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { toast } from "sonner";
+import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
+import { setVibe } from "@/store/features/MemberJourney/memberJourneySlice";
 import {
   ArrowLeft,
   Calendar,
@@ -14,9 +18,18 @@ import Card from "@/ui/Card";
 import { cn } from "@/lib/utils";
 import { useMemberPortal } from "@/pages/shared/member/MemberPortalContext";
 
+const VERSIONS = [
+  { id: "v2", label: "V2", date: "March 15, 2026", note: "Delivered narrative" },
+  { id: "v1", label: "V1", date: "January 12, 2026", note: "Baseline reflection" },
+];
+
 const ReportDetail = () => {
   const { reportId } = useParams();
   const { path } = useMemberPortal();
+  const dispatch = useAppDispatch();
+  const vibe = useAppSelector((s) => s.memberJourney.vibe);
+  const [version, setVersion] = useState("v2");
+  const [historyOpen, setHistoryOpen] = useState(true);
 
   return (
     <div className="space-y-5 sm:space-y-6 pb-8">
@@ -75,6 +88,11 @@ const ReportDetail = () => {
           <div className="flex flex-wrap items-center gap-2 shrink-0">
             <button
               type="button"
+              onClick={() =>
+                toast.success(
+                  `PDF queued for ${reportId ?? "relationship-v2"} (${version.toUpperCase()}).`
+                )
+              }
               className="h-9 px-4 rounded-lg bg-[#F5C542] hover:bg-[#e8b93a] text-black text-xs font-semibold transition-colors cursor-pointer border-0 inline-flex items-center gap-1.5"
             >
               <Download className="size-3.5" />
@@ -82,6 +100,10 @@ const ReportDetail = () => {
             </button>
             <button
               type="button"
+              onClick={() => {
+                void navigator.clipboard?.writeText(window.location.href);
+                toast.success("Report link copied.");
+              }}
               className="h-9 w-9 rounded-lg border border-white/15 bg-white/5 hover:bg-white/10 text-primary-text transition-colors cursor-pointer flex items-center justify-center"
               aria-label="Share"
             >
@@ -89,6 +111,12 @@ const ReportDetail = () => {
             </button>
             <button
               type="button"
+              onClick={() => {
+                setHistoryOpen(true);
+                document
+                  .getElementById("version-history")
+                  ?.scrollIntoView({ behavior: "smooth", block: "center" });
+              }}
               className="h-9 px-4 rounded-lg border border-white/15 bg-white/5 hover:bg-white/10 text-primary-text text-xs font-medium transition-colors cursor-pointer"
             >
               VERSION HISTORY
@@ -244,6 +272,61 @@ const ReportDetail = () => {
                 </li>
               </ul>
             </div>
+          </AnimatedContainer>
+
+          {historyOpen && (
+            <AnimatedContainer delay={0.12}>
+              <Card id="version-history" className="p-5">
+                <h3 className="text-[11px] font-semibold tracking-[0.16em] text-secondary-text uppercase mb-4">
+                  Version History
+                </h3>
+                <div className="space-y-2">
+                  {VERSIONS.map((item) => (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => setVersion(item.id)}
+                      className={cn(
+                        "w-full rounded-xl border px-3 py-2 text-left cursor-pointer",
+                        version === item.id
+                          ? "border-[#F5C542] bg-[#F5C542]/10"
+                          : "border-white/10 bg-transparent"
+                      )}
+                    >
+                      <p className="text-sm text-primary-text">
+                        {item.label} · {item.date}
+                      </p>
+                      <p className="text-xs text-secondary-text">{item.note}</p>
+                    </button>
+                  ))}
+                </div>
+              </Card>
+            </AnimatedContainer>
+          )}
+
+          <AnimatedContainer delay={0.13}>
+            <Card className="p-5">
+              <h3 className="text-[11px] font-semibold tracking-[0.16em] text-secondary-text uppercase mb-4">
+                Music / Vibe
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {(["Calm", "Focus", "Night"] as const).map((name) => (
+                  <button
+                    key={name}
+                    type="button"
+                    onClick={() => dispatch(setVibe(name))}
+                    className={cn(
+                      "h-8 rounded-full border px-3 text-xs cursor-pointer",
+                      vibe === name
+                        ? "border-[#F5C542] bg-[#F5C542] text-black"
+                        : "border-white/15 bg-transparent text-secondary-text"
+                    )}
+                  >
+                    {name}
+                  </button>
+                ))}
+              </div>
+            </Card>
           </AnimatedContainer>
 
           {/* Reflection Highlights */}

@@ -90,15 +90,26 @@ const Notifications = () => {
   const { path } = useMemberPortal();
   const items = useSyncExternalStore(subscribeMemberNotices, getMemberNotices);
   const [query, setQuery] = useState("");
+  const [chip, setChip] = useState("All");
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return items;
-    return items.filter(
-      (n) =>
-        n.title.toLowerCase().includes(q) || n.body.toLowerCase().includes(q)
-    );
-  }, [items, query]);
+    return items.filter((n) => {
+      const matchQ =
+        !q ||
+        n.title.toLowerCase().includes(q) ||
+        n.body.toLowerCase().includes(q);
+      const matchChip =
+        chip === "All" ||
+        (chip === "Action Required" && n.tags.includes("ACTION REQUIRED")) ||
+        (chip === "Blueprint Updates" &&
+          (n.tags.includes("REPORTS") ||
+            /blueprint|reflection/i.test(n.title))) ||
+        (chip === "Organization" && n.tags.includes("ORGANIZATION")) ||
+        (chip === "System" && n.tags.includes("SYSTEM"));
+      return matchQ && matchChip;
+    });
+  }, [items, query, chip]);
 
   const unread = items.filter((n) => n.unread).length;
   const actionRequired = items.filter((n) =>
@@ -112,8 +123,14 @@ const Notifications = () => {
     <div className="pb-6">
       {/* Stats */}
       <AnimatedContainer delay={0.04}>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-5">
           {[
+            {
+              label: "Total",
+              value: items.length,
+              Icon: Mail,
+              tone: "text-sky-400 bg-sky-500/15",
+            },
             {
               label: "Unread",
               value: unread,
@@ -196,6 +213,31 @@ const Notifications = () => {
               </div>
                </Card>
           </AnimatedContainer>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs text-secondary-text">Filter By:</span>
+            {[
+              "All",
+              "Action Required",
+              "Blueprint Updates",
+              "Organization",
+              "System",
+            ].map((name) => (
+              <button
+                key={name}
+                type="button"
+                onClick={() => setChip(name)}
+                className={cn(
+                  "h-8 rounded-full border px-3 text-xs cursor-pointer",
+                  chip === name
+                    ? "border-[#FBBF24] bg-[#FBBF24] text-black"
+                    : "border-white/15 bg-transparent text-secondary-text"
+                )}
+              >
+                {name}
+              </button>
+            ))}
+          </div>
 
           {/* Notification list */}
           <div className="space-y-3">

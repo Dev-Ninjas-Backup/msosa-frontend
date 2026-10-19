@@ -217,6 +217,15 @@ export default function LoginPage() {
             </Link>
           </p>
         </div>
+        <p className="text-white/60 text-xs font-normal text-center">
+          Joining with a work email?{" "}
+          <Link
+            to="/employee/signup"
+            className="text-white font-medium hover:underline transition-colors"
+          >
+            Employee sign up
+          </Link>
+        </p>
 
         {/* Fast Routing to Dashboards */}
         <div className="pt-4 border-t border-white/10 flex flex-col gap-2.5 w-full">

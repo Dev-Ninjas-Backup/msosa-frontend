@@ -27,7 +27,7 @@ const ConsumerSidebar = ({
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { basePath, path, roleLabel } = useMemberPortal();
+  const { basePath, path, role, roleLabel } = useMemberPortal();
   const [accountOpen, setAccountOpen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(() => {
@@ -77,7 +77,7 @@ const ConsumerSidebar = ({
 
   const avatarSrc =
     "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&h=100&q=80";
-  const displayName = "Liza Fernandes";
+  const displayName = role === "employee" ? "Sarah Johnson" : "Liza Fernandes";
 
   const toggleCollapse = () => {
     const next = !isCollapsed;

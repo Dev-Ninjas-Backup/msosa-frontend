@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MoreVertical, Sparkles } from "lucide-react";
+import { toast } from "sonner";
 import AnimatedContainer from "@/common/AnimatedContainer";
 import {
   DataPanel,
@@ -18,7 +19,7 @@ const PROVIDERS = [
   {
     name: "ChatGPT",
     subtitle: "Primary Orchestrator",
-    status: "Connected" as const,
+    status: "Connected" as "Connected" | "Paused",
     apiKey: "sk-••••••••8291",
     models: 12,
     usage: "4.2M Tokens",
@@ -27,7 +28,7 @@ const PROVIDERS = [
   {
     name: "Claude",
     subtitle: "Advanced Reasoning",
-    status: "Connected" as const,
+    status: "Connected" as "Connected" | "Paused",
     apiKey: "sk-••••••••8291",
     models: 8,
     usage: "1.8M Tokens",
@@ -36,7 +37,7 @@ const PROVIDERS = [
   {
     name: "Google Gemini",
     subtitle: "Multimodal Search",
-    status: "Connected" as const,
+    status: "Connected" as "Connected" | "Paused",
     apiKey: "sk-••••••••8291",
     models: 4,
     usage: "142K Tokens",
@@ -47,6 +48,7 @@ const PROVIDERS = [
 const PROMPTS = [
   {
     name: "Executive Summary Generator",
+    category: "Summary",
     product: "FAR Engine™",
     purpose: "Generates high-level summaries for founders",
     version: "v2.4",
@@ -55,6 +57,7 @@ const PROMPTS = [
   },
   {
     name: "Reflection Analyzer",
+    category: "Analysis",
     product: "Knowledge Processing™",
     purpose: "Analyzes user reflections for key insights",
     version: "v1.8",
@@ -63,6 +66,7 @@ const PROMPTS = [
   },
   {
     name: "Coaching Content Draft",
+    category: "Coaching",
     product: "Illumination Bridge™",
     purpose: "Draft coaching responses based on protocol",
     version: "v0.9",
@@ -71,6 +75,7 @@ const PROMPTS = [
   },
   {
     name: "Organizational Health Check",
+    category: "Analysis",
     product: "Analytics & Insights™",
     purpose: "Assesses organizational health metrics",
     version: "v3.1",
@@ -79,6 +84,7 @@ const PROMPTS = [
   },
   {
     name: "Recommendation Engine v2",
+    category: "Summary",
     product: "Product Protocol™",
     purpose: "Provides strategic recommendations",
     version: "v2.0",
@@ -154,15 +160,19 @@ const AIServices = () => {
   const [productFilter, setProductFilter] = useState("All Products");
   const [categoryFilter, setCategoryFilter] = useState("All Categories");
   const [statusFilter, setStatusFilter] = useState("Any");
+  const [providers, setProviders] = useState(PROVIDERS);
+  const [providerMenu, setProviderMenu] = useState<string | null>(null);
+  const [selectedPrompt, setSelectedPrompt] = useState<string | null>(null);
 
   const promptRows = useMemo(
     () =>
       PROMPTS.filter(
         (p) =>
           (productFilter === "All Products" || p.product === productFilter) &&
+          (categoryFilter === "All Categories" || p.category === categoryFilter) &&
           (statusFilter === "Any" || p.status === statusFilter)
       ),
-    [productFilter, statusFilter]
+    [productFilter, categoryFilter, statusFilter]
   );
 
   return (
@@ -227,7 +237,7 @@ const AIServices = () => {
               </tr>
             </thead>
             <tbody>
-              {PROVIDERS.map((p) => (
+              {providers.map((p) => (
                 <tr
                   key={p.name}
                   className="border-b border-white/5 hover:bg-white/[0.03]"
@@ -251,6 +261,10 @@ const AIServices = () => {
                     <div className="flex items-center gap-1">
                       <button
                         type="button"
+                        onClick={() => {
+                          void navigator.clipboard.writeText(p.apiKey);
+                          toast.success(`${p.name} key copied`);
+                        }}
                         className="rounded p-1 text-white/40 hover:bg-white/10 hover:text-white border-0 bg-transparent cursor-pointer"
                         aria-label="Copy"
                       >
@@ -268,11 +282,40 @@ const AIServices = () => {
                       </button>
                       <button
                         type="button"
+                        onClick={() =>
+                          setProviderMenu((current) =>
+                            current === p.name ? null : p.name
+                          )
+                        }
                         className="rounded p-1 text-white/40 hover:bg-white/10 hover:text-white border-0 bg-transparent cursor-pointer"
                         aria-label="Actions"
                       >
                         <MoreVertical className="size-4" />
                       </button>
+                      {providerMenu === p.name && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setProviders((rows) =>
+                              rows.map((row) =>
+                                row.name === p.name
+                                  ? {
+                                      ...row,
+                                      status:
+                                        row.status === "Connected"
+                                          ? "Paused"
+                                          : "Connected",
+                                    }
+                                  : row
+                              )
+                            );
+                            setProviderMenu(null);
+                          }}
+                          className="rounded px-2 py-1 text-[11px] text-white/70 border border-white/10 bg-black/40 cursor-pointer"
+                        >
+                          {p.status === "Connected" ? "Pause" : "Reconnect"}
+                        </button>
+                      )}
                     </div>
                   </td>
                 </tr>
@@ -415,16 +458,22 @@ const AIServices = () => {
                   className="border-b border-white/5 hover:bg-white/[0.03]"
                 >
                   <td className="px-4 py-3.5">
-                    <span
+                    <button
+                      type="button"
+                      onClick={() => setSelectedPrompt(p.name)}
                       className={cn(
-                        "font-medium",
+                        "border-0 bg-transparent p-0 font-medium cursor-pointer",
                         p.status === "Active"
                           ? "text-[#fbbf24]"
-                          : "text-white"
+                          : "text-white",
+                        selectedPrompt === p.name && "underline"
                       )}
                     >
                       {p.name}
-                    </span>
+                    </button>
+                    {selectedPrompt === p.name && (
+                      <p className="mt-1 text-xs text-white/50">{p.purpose}</p>
+                    )}
                   </td>
                   <td className="px-4 py-3.5 text-white/70">{p.product}</td>
                   <td className="px-4 py-3.5 max-w-[220px] truncate text-white/55">

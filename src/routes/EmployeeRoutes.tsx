@@ -18,8 +18,8 @@ const Dashboard = Loadable(
   lazy(() => import("@/pages/Employee/Dashboard/Dashboard")),
   AdminSkeleton
 );
-const CustomerProducts = Loadable(
-  lazy(() => import("@/pages/Consumer/CustomerProducts/CustomerProducts")),
+const MyBlueprints = Loadable(
+  lazy(() => import("@/pages/Employee/Blueprints/MyBlueprints")),
   AdminSkeleton
 );
 const ProductDashboardView = Loadable(
@@ -47,7 +47,7 @@ const ReportDetail = Loadable(
   AdminSkeleton
 );
 const Continuum = Loadable(
-  lazy(() => import("@/pages/Consumer/Continuum/Continuum")),
+  lazy(() => import("@/pages/Employee/Continuum/EmployeeContinuum")),
   AdminSkeleton
 );
 const Profile = Loadable(
@@ -85,10 +85,10 @@ export const employeeRoutes = [
         element: <Dashboard />,
       },
       {
-        name: "Consumer Products",
+        name: "Blueprints",
         path: "customer-products",
         icon: <Columns />,
-        element: <CustomerProducts />,
+        element: <MyBlueprints />,
       },
       {
         path: "customer-products/:productId",

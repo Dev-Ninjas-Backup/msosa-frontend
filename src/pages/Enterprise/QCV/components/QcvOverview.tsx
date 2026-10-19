@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { ChevronRight, TrendingUp } from "lucide-react";
 import {
   PolarAngleAxis,
@@ -17,13 +18,13 @@ const QcvOverview = () => (
       <div>
         <h3 className="text-xl font-bold text-white">QCV™ Overview</h3>
         <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-white/60">
-          <button
-            type="button"
-            className="inline-flex items-center gap-1 text-white hover:text-[#10B7BA] cursor-pointer border-0 bg-transparent p-0"
+          <Link
+            to="/enterprise/blueprint-management"
+            className="inline-flex items-center gap-1 text-white hover:text-[#10B7BA]"
           >
             Organizational Culture Blueprint™
             <ChevronRight className="size-3" />
-          </button>
+          </Link>
           <span className="text-white/30">·</span>
           <span>Q2 — Q3, 2026</span>
         </div>

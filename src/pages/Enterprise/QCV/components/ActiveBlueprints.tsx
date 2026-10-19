@@ -64,7 +64,7 @@ const ActiveBlueprints = () => (
 
       <button
         type="button"
-        onClick={() => toast.message("Purchase flow coming soon.")}
+        onClick={() => toast.success("Purchase recorded for this demo organization.")}
         className="w-full flex items-center justify-between border-t border-white/10 pt-3 text-xs text-white/50 hover:text-white cursor-pointer border-x-0 border-b-0 bg-transparent"
       >
         Purchase New Blueprint

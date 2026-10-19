@@ -145,9 +145,10 @@ const NotificationsTable = ({
                         </button>
                         <button
                           type="button"
-                          onClick={() =>
-                            toast.message(`More actions: ${row.title}`)
-                          }
+                          onClick={() => {
+                            toast.success(`Marked “${row.title}” as read.`);
+                            onOpen(row.id);
+                          }}
                           className="text-white/40 hover:text-white cursor-pointer border-0 bg-transparent p-0"
                         >
                           <MoreVertical className="size-3.5" />

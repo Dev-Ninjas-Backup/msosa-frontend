@@ -4,6 +4,7 @@ import founderUsersReducer from "./features/FounderUsers/founderUsersSlice";
 import founderReportsReducer from "./features/FounderReports/founderReportsSlice";
 import founderWidgetsReducer from "./features/FounderWidgets/founderWidgetsSlice";
 import founderProductsReducer from "./features/FounderProducts/founderProductsSlice";
+import memberJourneyReducer from "./features/MemberJourney/memberJourneySlice";
 
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
@@ -14,7 +15,16 @@ const persistConfig = {
   storage,
 };
 
+const journeyPersistConfig = {
+  key: "memberJourney",
+  storage,
+};
+
 const persistedAuthReducer = persistReducer(persistConfig, authReducer);
+const persistedJourneyReducer = persistReducer(
+  journeyPersistConfig,
+  memberJourneyReducer
+);
 export const store = configureStore({
   reducer: {
     [baseApi.reducerPath]: baseApi.reducer,
@@ -23,6 +33,7 @@ export const store = configureStore({
     founderReports: founderReportsReducer,
     founderWidgets: founderWidgetsReducer,
     founderProducts: founderProductsReducer,
+    memberJourney: persistedJourneyReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

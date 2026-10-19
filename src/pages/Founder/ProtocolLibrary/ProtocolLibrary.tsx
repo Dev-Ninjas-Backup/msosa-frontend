@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { BookOpen, Plus, MoreVertical, Shield } from "lucide-react";
+import { toast } from "sonner";
 import AnimatedContainer from "@/common/AnimatedContainer";
 import {
   DataPanel,
@@ -75,19 +76,26 @@ const tone = {
 const ProtocolLibrary = () => {
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("All");
+  const [category, setCategory] = useState("All");
+  const [protocols, setProtocols] = useState(PROTOCOLS);
+  const [creating, setCreating] = useState(false);
+  const [draftName, setDraftName] = useState("");
+  const [draftCategory, setDraftCategory] = useState("Founder");
+  const [menuId, setMenuId] = useState<string | null>(null);
 
   const rows = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return PROTOCOLS.filter((p) => {
+    return protocols.filter((p) => {
       const matchQ =
         !q ||
         p.name.toLowerCase().includes(q) ||
         p.id.toLowerCase().includes(q) ||
         p.category.toLowerCase().includes(q);
       const matchS = status === "All" || p.status === status;
-      return matchQ && matchS;
+      const matchC = category === "All" || p.category === category;
+      return matchQ && matchS && matchC;
     });
-  }, [query, status]);
+  }, [protocols, query, status, category]);
 
   return (
     <AnimatedContainer className="space-y-6 pb-8">
@@ -96,8 +104,31 @@ const ProtocolLibrary = () => {
           Manage voice intelligence protocols and behavioral schemas across the FAR Platform Engine™.
         </p>
         <div className="flex flex-wrap gap-2">
-          <GhostAction title="Import Protocol" />
-          <PrimaryAction title="Create Protocol" leftIcon={<Plus className="size-4" />} />
+          <GhostAction
+            title="Import Protocol"
+            onClick={() => {
+              const id = `PRT-${Date.now().toString().slice(-3)}`;
+              setProtocols((current) => [
+                {
+                  id,
+                  name: "Imported Protocol",
+                  category: "Ops",
+                  version: "v0.1.0",
+                  status: "Draft",
+                  products: 0,
+                  updated: "Today",
+                  owner: "Local import",
+                },
+                ...current,
+              ]);
+              toast.success("Protocol imported into this browser.");
+            }}
+          />
+          <PrimaryAction
+            title="Create Protocol"
+            leftIcon={<Plus className="size-4" />}
+            onClick={() => setCreating((open) => !open)}
+          />
         </div>
       </div>
 
@@ -122,12 +153,66 @@ const ProtocolLibrary = () => {
         filters={
           <>
             <FilterSelect label="Status" value={status} options={["All", "Published", "Active", "Draft"]} onChange={setStatus} />
-            <FilterSelect label="Category" value="All" options={["All", "Founder", "Growth", "Reflection", "Ops", "Security"]} onChange={() => { }} />
+            <FilterSelect label="Category" value={category} options={["All", "Founder", "Growth", "Reflection", "Ops", "Security"]} onChange={setCategory} />
           </>
         }
       />
 
-      <DataPanel footer={`Showing ${rows.length} of ${PROTOCOLS.length} protocols`}>
+      {creating && (
+        <form
+          className="flex flex-wrap items-end gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4"
+          onSubmit={(e) => {
+            e.preventDefault();
+            const name = draftName.trim();
+            if (!name) return;
+            setProtocols((current) => [
+              {
+                id: `PRT-${Date.now().toString().slice(-3)}`,
+                name,
+                category: draftCategory,
+                version: "v0.1.0",
+                status: "Draft",
+                products: 0,
+                updated: "Today",
+                owner: "You",
+              },
+              ...current,
+            ]);
+            setDraftName("");
+            setCreating(false);
+            toast.success("Protocol saved locally.");
+          }}
+        >
+          <label className="text-xs text-white/60">
+            Name
+            <input
+              value={draftName}
+              onChange={(e) => setDraftName(e.target.value)}
+              className="mt-1 block rounded-lg border border-white/15 bg-black/30 px-3 py-2 text-sm text-white"
+            />
+          </label>
+          <label className="text-xs text-white/60">
+            Category
+            <select
+              value={draftCategory}
+              onChange={(e) => setDraftCategory(e.target.value)}
+              className="mt-1 block rounded-lg border border-white/15 bg-black/30 px-3 py-2 text-sm text-white"
+            >
+              {["Founder", "Growth", "Reflection", "Ops", "Security"].map((item) => (
+                <option key={item}>{item}</option>
+              ))}
+            </select>
+          </label>
+          <button
+            type="submit"
+            className="h-10 rounded-lg bg-[#FBBF24] px-4 text-sm font-semibold text-black border-0 cursor-pointer"
+          >
+            Save Protocol
+          </button>
+        </form>
+      )}
+
+      <DataPanel footer={`Showing ${rows.length} of ${protocols.length} protocols`}>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[900px] text-left text-sm">
             <thead>
@@ -158,9 +243,53 @@ const ProtocolLibrary = () => {
                   <td className="px-4 py-3 text-white/60">{p.owner}</td>
                   <td className="px-4 py-3 text-white/60">{p.updated}</td>
                   <td className="px-4 py-3">
-                    <button type="button" className="text-white/40 hover:text-white cursor-pointer border-0 bg-transparent" aria-label="Actions">
-                      <MoreVertical className="size-4" />
-                    </button>
+                    <div className="relative">
+                      <button
+                        type="button"
+                        onClick={() => setMenuId((current) => (current === p.id ? null : p.id))}
+                        className="text-white/40 hover:text-white cursor-pointer border-0 bg-transparent"
+                        aria-label="Actions"
+                      >
+                        <MoreVertical className="size-4" />
+                      </button>
+                      {menuId === p.id && (
+                        <div className="absolute right-0 z-10 mt-1 min-w-[140px] rounded-lg border border-white/10 bg-[#111] py-1 shadow-xl">
+                          <button
+                            type="button"
+                            className="block w-full px-3 py-2 text-left text-xs text-white/80 hover:bg-white/5 border-0 bg-transparent cursor-pointer"
+                            onClick={() => {
+                              setProtocols((current) => [
+                                {
+                                  ...p,
+                                  id: `${p.id}-copy`,
+                                  name: `${p.name} Copy`,
+                                  status: "Draft",
+                                },
+                                ...current,
+                              ]);
+                              setMenuId(null);
+                            }}
+                          >
+                            Duplicate
+                          </button>
+                          <button
+                            type="button"
+                            className="block w-full px-3 py-2 text-left text-xs text-white/80 hover:bg-white/5 border-0 bg-transparent cursor-pointer"
+                            onClick={() => {
+                              setProtocols((current) =>
+                                current.map((row) =>
+                                  row.id === p.id ? { ...row, status: "Draft" } : row
+                                )
+                              );
+                              setMenuId(null);
+                              toast.success("Protocol archived as draft.");
+                            }}
+                          >
+                            Archive
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}

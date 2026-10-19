@@ -4,9 +4,10 @@ interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const Skeleton = ({ className = "", style, ...props }: SkeletonProps) => {
+  const hasOwnBackground = /\bbg-/.test(className);
   return (
     <div
-      className={`animate-pulse bg-gray-200 dark:bg-gray-700 rounded-md ${className}`}
+      className={`animate-pulse rounded-md ${hasOwnBackground ? "" : "bg-white/10"} ${className}`}
       style={style}
       {...props}
     />

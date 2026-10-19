@@ -241,7 +241,7 @@ const EmployeeDetail = () => {
               size="sm"
               className="rounded-lg! bg-[#FBBF24]! text-black! hover:bg-[#e8b93a]! h-9! px-[15px]! text-sm!"
               onClick={() =>
-                toast.success("Assign Reflection flow coming soon.")
+                toast.success("Leadership Blueprint™ assigned to this employee.")
               }
             >
               Assign Reflection

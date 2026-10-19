@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { ArrowRight, ImageIcon, LayoutPanelTop } from "lucide-react";
 import Card from "@/ui/Card";
 import { useMemberPortal } from "@/pages/shared/member/MemberPortalContext";
+import { useAppSelector } from "@/hooks/useRedux";
+import { continuePath } from "@/store/features/MemberJourney/memberJourneySlice";
 
 type ActiveReflectionCardProps = {
   productId: string;
@@ -22,7 +24,8 @@ const ActiveReflectionCard = ({
   lastActivity,
   remaining,
 }: ActiveReflectionCardProps) => {
-  const { path } = useMemberPortal();
+  const { basePath } = useMemberPortal();
+  const stage = useAppSelector((s) => s.memberJourney.stages[productId]);
 
   return (
     <Card className="p-4 sm:p-5 flex flex-col " borderColor="#FFFFFF1A">
@@ -79,12 +82,12 @@ const ActiveReflectionCard = ({
         EST. REMAINING: <span className="text-white">{remaining}</span>
       </p>
 
-      <Link to={path(`customer-products/${productId}`)} className="mt-auto">
+          <Link to={continuePath(basePath, productId, stage)} className="mt-auto">
         <button
           type="button"
           className="w-full h-11 rounded-xl bg-[#FBBF24] hover:bg-[#e5a820] text-black text-sm font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer border-0"
         >
-          Open Product Dashboard
+          Continue
           <ArrowRight className="size-4" />
         </button>
       </Link>

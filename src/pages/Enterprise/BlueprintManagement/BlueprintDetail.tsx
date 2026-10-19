@@ -29,6 +29,7 @@ const BlueprintDetail = () => {
   const [billing, setBilling] = useState<"monthly" | "annual">("monthly");
   const [subscriptionOn, setSubscriptionOn] = useState(true);
   const [assignOpen, setAssignOpen] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
 
   const unit = bp?.pricePerSeat ?? 12;
   const monthly = useMemo(() => seats * unit, [seats, unit]);
@@ -146,11 +147,16 @@ const BlueprintDetail = () => {
               variant="primary"
               size="sm"
               className="rounded-[10px]! bg-[#FBBF24]! text-black! hover:bg-[#e8b93a]! px-[22px]! py-3! text-[15px]! h-auto!"
-              onClick={() => toast.message("Preview coming soon.")}
+              onClick={() => setPreviewOpen((open) => !open)}
             >
-              Preview
+              {previewOpen ? "Hide Preview" : "Preview"}
             </Button>
           </div>
+          {previewOpen && (
+            <p className="px-5 pb-2 text-sm text-[#9CA3AF]">
+              Preview: {bp.purpose}
+            </p>
+          )}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 p-6 pt-2">
             <div className="space-y-3">
               <div className="rounded-xl border border-[#FFFFFF14] bg-[#0D1117] p-5 space-y-3">

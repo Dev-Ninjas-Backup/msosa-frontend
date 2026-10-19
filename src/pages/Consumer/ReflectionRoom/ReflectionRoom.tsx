@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   ChevronDown,
   ChevronRight,
@@ -7,6 +7,7 @@ import {
   Globe,
   Keyboard,
   Menu,
+  Music,
   Pause,
   Play,
   RotateCcw,
@@ -29,6 +30,12 @@ import {
 } from "./types";
 import { useMemberPortalOptional } from "@/pages/shared/member/MemberPortalContext";
 import { ToolbarAction } from "./ToolbarAction";
+import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
+import {
+  setBranding,
+  setStage,
+  setVibe,
+} from "@/store/features/MemberJourney/memberJourneySlice";
 
 export type ReflectionRoomProps = {
   /** Product-creation mode reuses the same room UI without member portal. */
@@ -45,7 +52,14 @@ const ReflectionRoom = ({
   onExit,
 }: ReflectionRoomProps = {}) => {
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const dispatch = useAppDispatch();
+  const vibe = useAppSelector((s) => s.memberJourney.vibe);
+  const stages = useAppSelector((s) => s.memberJourney.stages);
+  const branding = useAppSelector((s) => s.memberJourney.branding);
   const portal = useMemberPortalOptional();
+  const [vibeOpen, setVibeOpen] = useState(false);
+  const [brandingOpen, setBrandingOpen] = useState(false);
   const isProduct = variant === "product-creation";
 
   const exitTo = () => {
@@ -55,6 +69,18 @@ const ReflectionRoom = ({
     }
     if (portal) navigate(portal.path("dashboard"));
     else navigate("/founder/create-product");
+  };
+
+  const saveJourney = () => {
+    if (isProduct) return;
+    const id = params.get("blueprint") || "relationship";
+    const current = stages[id] ?? "reflection";
+    dispatch(
+      setStage({
+        id,
+        stage: current === "reflection" ? "processing" : "report",
+      })
+    );
   };
 
   const completeTo = () => {
@@ -284,6 +310,7 @@ const ReflectionRoom = ({
       return;
     }
     setPhase("submitted");
+    saveJourney();
     showToast(
       language === "en"
         ? isProduct
@@ -300,7 +327,14 @@ const ReflectionRoom = ({
         {headline}
       </h1>
       <p className="mt-1.5 sm:mt-2 xl:mt-3 text-sm sm:text-base xl:text-lg text-white/75">
-        {subhead}
+        {inputMode === "type" && !isProduct
+          ? language === "en"
+            ? "A moment of stillness"
+            : "Un momento de quietud"
+          : subhead}
+      </p>
+      <p className="mt-2 text-xs uppercase tracking-[0.16em] text-[#FBBF24]">
+        Music / Vibe · {vibe}
       </p>
 
       {inputMode === "voice" ? (
@@ -459,6 +493,7 @@ const ReflectionRoom = ({
               );
               return;
             }
+            saveJourney();
             showToast(language === "en" ? "Progress saved" : "Progreso guardado");
             completeTo();
           }}
@@ -627,10 +662,10 @@ const ReflectionRoom = ({
               <img src={logo} alt="FAR Systems" className="size-9 sm:size-10 xl:size-11 object-contain" />
               <span className="hidden sm:flex flex-col items-start text-left">
                 <span className="text-sm xl:text-base font-medium text-white tracking-tight">
-                  Reflection Room™
+                  {branding.title}
                 </span>
                 <span className="text-[11px] text-white/60 font-light">
-                  A private space for clarity, insight, and personal growth.
+                  {branding.subtitle}
                 </span>
               </span>
             </button>
@@ -707,6 +742,51 @@ const ReflectionRoom = ({
             <div className="relative">
               <button
                 type="button"
+                onClick={() => {
+                  setVibeOpen((o) => !o);
+                  setLangOpen(false);
+                  setMenuOpen(false);
+                }}
+                className="inline-flex items-center gap-2 h-10 xl:h-11 px-3 xl:px-4 rounded-full border border-white/20 xl:border-[#FBBF24]/55 bg-black/35 backdrop-blur-md text-sm text-white/90 hover:bg-black/50 cursor-pointer"
+              >
+                <Music className="size-4" style={{ color: branding.accent }} />
+                <span className="hidden sm:inline">Music / Vibe</span>
+              </button>
+              {vibeOpen && (
+                <>
+                  <button
+                    type="button"
+                    className="fixed inset-0 z-20 border-0 bg-transparent cursor-default"
+                    aria-label="Close vibe"
+                    onClick={() => setVibeOpen(false)}
+                  />
+                  <div className="absolute right-0 mt-2 z-30 min-w-[140px] overflow-hidden rounded-xl border border-white/15 bg-black/85 backdrop-blur-xl shadow-xl">
+                    {(["Calm", "Focus", "Night"] as const).map((name) => (
+                      <button
+                        key={name}
+                        type="button"
+                        onClick={() => {
+                          dispatch(setVibe(name));
+                          setVibeOpen(false);
+                        }}
+                        className={cn(
+                          "block w-full px-4 py-2.5 text-left text-sm border-0 cursor-pointer",
+                          vibe === name
+                            ? "bg-white/10 text-white"
+                            : "bg-transparent text-white/70 hover:bg-white/5"
+                        )}
+                      >
+                        {name}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+
+            <div className="relative">
+              <button
+                type="button"
                 aria-label="Open menu"
                 onClick={() => {
                   setMenuOpen((o) => !o);
@@ -726,16 +806,28 @@ const ReflectionRoom = ({
                   />
                   <div className="absolute right-0 mt-2 z-30 min-w-[180px] overflow-hidden rounded-xl border border-white/15 bg-black/85 backdrop-blur-xl shadow-xl">
                     {isProduct ? (
-                      <button
-                        type="button"
-                        className="block w-full px-4 py-2.5 text-left text-sm text-white/80 hover:bg-white/5 hover:text-white border-0 bg-transparent cursor-pointer"
-                        onClick={() => {
-                          setMenuOpen(false);
-                          exitTo();
-                        }}
-                      >
-                        Exit to Product List
-                      </button>
+                      <>
+                        <button
+                          type="button"
+                          className="block w-full px-4 py-2.5 text-left text-sm text-white/80 hover:bg-white/5 hover:text-white border-0 bg-transparent cursor-pointer"
+                          onClick={() => {
+                            setMenuOpen(false);
+                            setBrandingOpen(true);
+                          }}
+                        >
+                          Reflection Branding
+                        </button>
+                        <button
+                          type="button"
+                          className="block w-full px-4 py-2.5 text-left text-sm text-white/80 hover:bg-white/5 hover:text-white border-0 bg-transparent cursor-pointer"
+                          onClick={() => {
+                            setMenuOpen(false);
+                            exitTo();
+                          }}
+                        >
+                          Exit to Product List
+                        </button>
+                      </>
                     ) : (
                       <>
                         <Link
@@ -840,6 +932,69 @@ const ReflectionRoom = ({
       {toast && (
         <div className="fixed bottom-24 sm:bottom-28 left-1/2 z-[100] -translate-x-1/2 rounded-full border border-white/15 bg-black/80 px-4 py-2 text-xs text-white backdrop-blur">
           {toast}
+        </div>
+      )}
+
+      {brandingOpen && (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/70 px-4">
+          <form
+            className="w-full max-w-md rounded-2xl border border-white/15 bg-[#111] p-5 space-y-4"
+            onSubmit={(e) => {
+              e.preventDefault();
+              const data = new FormData(e.currentTarget);
+              dispatch(
+                setBranding({
+                  title: String(data.get("title") || branding.title),
+                  subtitle: String(data.get("subtitle") || branding.subtitle),
+                  accent: String(data.get("accent") || branding.accent),
+                })
+              );
+              setBrandingOpen(false);
+              showToast("Branding saved");
+            }}
+          >
+            <h2 className="text-lg font-semibold">Reflection Branding</h2>
+            <label className="block text-xs text-white/60">
+              Product Title
+              <input
+                name="title"
+                defaultValue={branding.title}
+                className="mt-1 w-full rounded-lg border border-white/15 bg-black/40 px-3 py-2 text-sm text-white"
+              />
+            </label>
+            <label className="block text-xs text-white/60">
+              Subtitle
+              <input
+                name="subtitle"
+                defaultValue={branding.subtitle}
+                className="mt-1 w-full rounded-lg border border-white/15 bg-black/40 px-3 py-2 text-sm text-white"
+              />
+            </label>
+            <label className="block text-xs text-white/60">
+              Theme Color
+              <input
+                name="accent"
+                type="color"
+                defaultValue={branding.accent}
+                className="mt-1 h-10 w-full bg-transparent"
+              />
+            </label>
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setBrandingOpen(false)}
+                className="h-9 rounded-lg border border-white/15 px-3 text-sm cursor-pointer bg-transparent text-white"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="h-9 rounded-lg bg-[#FBBF24] px-3 text-sm font-semibold text-black cursor-pointer border-0"
+              >
+                Save Changes
+              </button>
+            </div>
+          </form>
         </div>
       )}
     </div>

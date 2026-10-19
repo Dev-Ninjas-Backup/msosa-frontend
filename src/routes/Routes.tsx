@@ -33,6 +33,7 @@ const App = lazy(() => import("../App"));
 const Login = lazy(() => import("@/pages/Auth/Login"));
 const Register = lazy(() => import("@/pages/Auth/Register"));
 const ForgotPassword = lazy(() => import("@/pages/Auth/ForgotPassword"));
+const EmployeeSignup = lazy(() => import("@/pages/Auth/EmployeeSignup"));
 const Form = lazy(() => import("@/pages/Form"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 
@@ -83,6 +84,14 @@ const routes = createBrowserRouter([
     element: (
       <Suspense fallback={<AuthSkeleton />}>
         <ForgotPassword />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/employee/signup",
+    element: (
+      <Suspense fallback={<AuthSkeleton />}>
+        <EmployeeSignup />
       </Suspense>
     ),
   },
