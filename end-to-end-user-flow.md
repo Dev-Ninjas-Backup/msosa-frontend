@@ -574,3 +574,30 @@ Still absent, so a backend cannot be inferred from a working request:
 - Marketing links in the navbar have no pages.
 - Admin screens under `src/pages/Admin/` have no routes.
 - The defined `/user/signin`, `/user/signup`, refresh, and profile endpoints are not called.
+
+## 15. Phase 3 boundary
+
+Phase 3 uses the same routes. It adds the server behind them. It does not add screens, and it does not include the paused layout work.
+
+The client-facing list is `phase-2-screen-checklist.md`, sheet Phase 3 in `phase-2-delivery-checklist.xlsx`.
+
+Phase 3:
+
+1. Real account session, emailed verification code, and role-limited portals.
+2. Continue stage stored on the server, including another device or a cleared browser.
+3. Reflection audio and text stored against the continued product and shown on that product dashboard.
+4. The six journey circles move from the real assignment.
+5. Continue opens that assignment's report.
+6. Widgets read that product's live data.
+7. Product permissions enforced, including private reflection text.
+8. Refiner approval publishes the member report.
+9. Real PDF generation and delivery.
+10. Two protocols routing to live data.
+11. Enterprise employees, assignments, invitations, participation, purchases, and invoices persisted.
+12. Employee signup bound to the organization's invitation token.
+13. Founder products, widgets, protocols, users, prompts, and links persisted.
+14. Real checkout payment and enterprise subscription.
+15. Notifications loaded for the signed-in account.
+16. Server-side illumination processing connected to the AI choices already in Create Product.
+
+Outside both Phase 2 and Phase 3: widget resize, layout copy without customer data, tables, schedules, announcements, awards, custom appearance from reference images, AI that creates or changes a layout, image-and-instruction revisions, and a saved template library.

@@ -34,25 +34,36 @@ Run the source with `npm install`, then `npm run dev`.
 
 Continue’s stage stays in this browser after a refresh. Product and dashboard edits still live in memory. Nothing is reloaded from a server.
 
-## Phase 3 — not built now
+## Phase 3 — server work on the same screens
 
-These stay unfinished until the API exists. A button or a new static screen cannot save a stage, separate customers, or generate a real file.
+Clarified 20 October 2026. Phase 3 does not add a new screen list. The screens in `phase-2-screen-checklist.md` stay the delivery. Phase 3 stores and enforces what those screens already demonstrate.
 
-| Item | Why not now | When |
+The client copy of this boundary is the Phase 3 sheet in `phase-2-delivery-checklist.xlsx`.
+
+| Item | What this delivery does | What Phase 3 adds |
 | --- | --- | --- |
-| Continue survives a different device or a cleared browser | The stage is stored in this browser only. | Phase 3, when the session is stored on the server. |
-| Reflection Room audio and answers reach the correct product dashboard | Audio stays in the browser. It is not sent anywhere. | Phase 3. The API stores the session against the product the person continued. |
-| Widgets show live product data | Widgets use local sample data. | Phase 3. |
-| Permissions, customer isolation, approvals | There is no account service. | Phase 3. |
-| Real PDF generation and delivery | Export and PDF controls toast or preview. They do not create a file. | Phase 3. |
-| Two protocols prove real routing | The wizard can select a protocol in the UI. Routing to live data is not running. | Phase 3. |
-| Enterprise, AI, and Protocol records on a server | The buttons now update local demo state or open an existing page. They do not create an employee assignment, invoice, or protocol on a server. | Phase 3, on the existing screens. |
-| Founder Notification Center List | `/founder/notifications` matches the Employee Notifications frame, not the separate Center List header (Last Updated, All 148, Unread 18). | Phase 3 only if notifications are loaded per account. A second static header is not part of this delivery. |
-| Refiner profile card name | The app uses Masud J, Refiner, FAR Systems. One Figma profile card still shows Liza Fernandes, Acme, Admin. The Figma sidebar on that screen is already Masud J. | Left as the sidebar identity. Not a Phase 3 build. |
+| Account session | Sign in, register, employee signup, and forgot password accept the form and open a portal. Any complete code works. No email is sent. | A real session, a code sent by email, and each portal limited to its own role. |
+| Continue | The stage stays in this browser: Reflection Room, then the product dashboard, then the report. | The same stage is stored on the server and survives another device or a cleared browser. |
+| Reflection answers | Voice and text stay in the browser. | Audio and text are stored against the product the person continued, and that product dashboard shows them. |
+| Journey tracker | The six circles show a fixed demo stage for the selected product. | The circles move from that person's real assignment. |
+| Report opened by Continue | The report stop opens `relationship-v2`. | Continue opens the report for that assignment. |
+| Widgets | Widgets show sample data. | Widgets show that product's live data. |
+| Permissions | Permission flags can be set in Create Product. The portals do not enforce them. | An enterprise user does not see an employee's private reflection text unless that product allows it. |
+| Refiner approval | Approve confirms on the refiner screen. | Approval publishes the report to the member. |
+| PDF | Export and download controls confirm the action. They do not create a file. | A real PDF is generated and delivered. |
+| Protocols | The wizard and Protocol Library can select and edit a protocol in the browser. | Two protocols route to live data on the same architecture. |
+| Enterprise records | Add, assign, invite, purchase, and invoice confirm on the page. A refresh restores the demo. | Employees, assignments, invitations, participation, purchases, and invoices persist. |
+| Employee signup | A work email and any code open the employee dashboard. | The signup requires the invitation email and token sent by the organization. |
+| Founder records | Publish, widgets, protocols, users, prompts, and links last until refresh. | Those records are stored on the server. |
+| Payment | Checkout opens the success page. No charge is made. | Checkout takes payment and grants access. Enterprise billing is a real subscription. |
+| Notifications | Each portal has its own notice list in the page. | Notices are loaded for the signed-in account. The founder page does not gain a second static header. |
+| Illumination processing | The processing step is a demo state. No model is called. | The server processes the submitted reflection. The AI choices in Create Product connect to that processing. |
+
+Refiner profile card name stays Masud J. One Figma profile card still shows Liza Fernandes. That difference is not a Phase 3 build.
 
 ## Not in Version 1
 
-The client paused extra paid work. These are not in the $7,000 build and are not scheduled.
+The client paused extra paid work. These are not in the $7,000 build, they are not scheduled, and they are not Phase 3.
 
 - Resize widgets
 - Copy a layout without customer data
